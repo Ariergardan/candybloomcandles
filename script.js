@@ -101,14 +101,19 @@ function addToCart(e){
   openCart();
 }
 
-function saveCart(){
+function saveCart(shouldRender = true){
   localStorage.setItem('candy_cart', JSON.stringify(cart));
-  renderCart();
+  if (shouldRender) renderCart();
 }
 
-function updateCartItem(id, updates){
+function updateCartItem(id, updates, shouldRender = true){
   cart = cart.map(item => item.id == id ? {...item, ...updates} : item);
-  saveCart();
+  saveCart(shouldRender);
+}
+
+
+function updateHiddenOrderFields(){
+  updateHiddenOrderFields();
 }
 
 function renderCart(){
@@ -211,9 +216,10 @@ function renderCart(){
   );
 
   items.querySelectorAll('.cart-custom-color').forEach(input =>
-    input.addEventListener('input', e =>
-      updateCartItem(e.target.dataset.id, {customColor: e.target.value})
-    )
+    input.addEventListener('input', e => {
+      updateCartItem(e.target.dataset.id, {customColor: e.target.value}, false);
+      updateHiddenOrderFields();
+    })
   );
 
   items.querySelectorAll('.cart-scent').forEach(select =>
@@ -226,27 +232,13 @@ function renderCart(){
   );
 
   items.querySelectorAll('.cart-custom-scent').forEach(input =>
-    input.addEventListener('input', e =>
-      updateCartItem(e.target.dataset.id, {customScent: e.target.value})
-    )
+    input.addEventListener('input', e => {
+      updateCartItem(e.target.dataset.id, {customScent: e.target.value}, false);
+      updateHiddenOrderFields();
+    })
   );
 
-  const total = cart.reduce((sum,i)=>sum+i.price*i.qty,0);
-  document.getElementById('cartTotal').textContent = money(total);
-
-  document.getElementById('cartData').value = cart.map(i => {
-    const colorText = i.colorChoice === 'Zapytaj o kolor'
-      ? `Zapytaj o kolor: ${i.customColor || 'brak wpisanego koloru'}`
-      : i.colorChoice;
-
-    const scentText = i.scent === 'Zapytaj o zapach'
-      ? `Zapytaj o zapach: ${i.customScent || 'brak wpisanego zapachu'}`
-      : i.scent;
-
-    return `${i.name} | kolor: ${colorText} | zapach: ${scentText} | ilość: ${i.qty} | cena: ${money(i.price*i.qty)}`;
-  }).join('\n');
-
-  document.getElementById('cartAmount').value = money(total);
+  updateHiddenOrderFields();
 }
 
 function openCart(){

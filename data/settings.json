@@ -9,7 +9,8 @@
     "Evergreen",
     "Lychee & Mango",
     "Magnolia & Peach",
-    "Świeża Bawełna"
+    "Świeża Bawełna",
+    "Zapytaj o zapach"
   ],
   "categories": [
     "Miłosne",
@@ -17,5 +18,9 @@
     "Dekoracyjne",
     "Podziękowania dla gości",
     "Zestawy prezentowe"
+  ],
+  "colorOptions": [
+    "Domyślny (jak na zdjęciu)",
+    "Zapytaj o kolor"
   ]
 }

@@ -1,8 +1,50 @@
 <!doctype html>
-<html>
-<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Panel CandyBloomCandles</title></head>
+<html lang="pl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Panel podglądu — CandyBloomCandles</title>
+  <link rel="stylesheet" href="/style.css">
+  <style>
+    .admin-wrap{padding:40px 6vw;max-width:1200px;margin:auto}
+    .admin-card{background:var(--paper);border:1px solid var(--line);border-radius:28px;padding:24px;box-shadow:var(--shadow);margin-bottom:24px}
+    .admin-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+    .admin-preview{border:1px solid var(--line);border-radius:22px;overflow:hidden;background:#fff}
+    .admin-preview img{width:100%;height:260px;object-fit:contain;background:#f8f4ed;padding:10px}
+    .admin-preview div{padding:16px}
+    .admin-note{color:var(--muted);line-height:1.7}
+    @media(max-width:900px){.admin-grid{grid-template-columns:1fr}}
+  </style>
+</head>
 <body>
-<script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
-<script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
+  <header class="site-header">
+    <a class="logo" href="/">CandyBloomCandles</a>
+    <nav><a href="/">Wróć do strony</a></nav>
+  </header>
+  <main class="admin-wrap">
+    <section class="admin-card">
+      <p class="eyebrow">Panel pomocniczy</p>
+      <h1>Podgląd produktów</h1>
+      <p class="admin-note">Tutaj możesz sprawdzić, jak zdjęcia produktów będą wyglądały na stronie. Ten panel jest podglądem — edycję cen, nazw i zdjęć robisz na razie w plikach <strong>data/products.json</strong> i folderze <strong>assets/images</strong>.</p>
+    </section>
+    <section class="admin-grid" id="adminGrid"></section>
+  </main>
+  <script>
+    fetch('/data/products.json')
+      .then(r => r.json())
+      .then(data => {
+        document.getElementById('adminGrid').innerHTML = data.products.map(p => `
+          <article class="admin-preview">
+            <img src="${p.image}" alt="${p.name}">
+            <div>
+              <p class="eyebrow">${p.category}</p>
+              <h3>${p.name}</h3>
+              <p>${p.description || ''}</p>
+              <strong>${p.price} zł</strong>
+            </div>
+          </article>
+        `).join('');
+      });
+  </script>
 </body>
 </html>

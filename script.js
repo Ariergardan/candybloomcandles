@@ -52,7 +52,7 @@ function renderProducts(){
 
   grid.innerHTML = filtered.map((p) => `
     <article class="product">
-      <div class="product-image"><img src="${p.image}" alt="${p.name}"></div>
+      <div class="product-image"><img src="${p.image}" alt="${p.name}" style="object-position:${p.imagePosition || 'center center'}; transform:scale(${p.imageZoom || 1});"></div>
       <div class="product-body">
         <p class="eyebrow">${p.category}</p>
         <h3>${p.name}</h3>
@@ -87,6 +87,8 @@ function addToCart(e){
       name: p.name,
       price: Number(p.price),
       image: p.image,
+      imagePosition: p.imagePosition || 'center center',
+      imageZoom: p.imageZoom || 1,
       scent: 'Bez zapachu',
       customScent: '',
       colorChoice: 'Domyślny (jak na zdjęciu)',
@@ -122,7 +124,7 @@ function renderCart(){
 
       return `
         <div class="cart-item premium-cart-item">
-          <img class="cart-thumb" src="${i.image || '/assets/images/hero.png'}" alt="${i.name}">
+          <img class="cart-thumb" src="${i.image || '/assets/images/hero.png'}" alt="${i.name}" style="object-position:${i.imagePosition || 'center center'}; transform:scale(${i.imageZoom || 1});">
           <div class="cart-info">
             <div class="cart-topline">
               <div>

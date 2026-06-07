@@ -1,13 +1,94 @@
 {
   "products": [
-    {"name":"Świeca sojowa miłosna","category":"Miłosne","price":25,"image":"/assets/images/swieca-1.png","description":"Ręcznie wykonana świeca sojowa idealna na romantyczny prezent.","visible":true},
-    {"name":"Róża świecowa","category":"Kwiaty","price":25,"image":"/assets/images/swieca-2.png","description":"Delikatna świeca w kwiatowej formie, tworzona z dbałością o detal.","visible":true},
-    {"name":"Kompozycja kwiatowa","category":"Kwiaty","price":25,"image":"/assets/images/swieca-3.png","description":"Elegancka świeca dekoracyjna inspirowana kwiatami.","visible":true},
-    {"name":"Świeca dekoracyjna","category":"Dekoracyjne","price":25,"image":"/assets/images/swieca-4.png","description":"Minimalistyczna forma, która pięknie ozdobi wnętrze.","visible":true},
-    {"name":"Prezentowa świeca sojowa","category":"Zestawy prezentowe","price":25,"image":"/assets/images/swieca-5.png","description":"Świeca idealna jako drobny, elegancki prezent.","visible":true},
-    {"name":"Świeca dla gości","category":"Podziękowania dla gości","price":25,"image":"/assets/images/swieca-6.png","description":"Mała świeca jako podziękowanie dla gości na wyjątkową okazję.","visible":true},
-    {"name":"Świeca ozdobna","category":"Dekoracyjne","price":25,"image":"/assets/images/swieca-7.png","description":"Ręcznie tworzona świeca z naturalnego wosku sojowego.","visible":true},
-    {"name":"Kwiatowa świeca sojowa","category":"Kwiaty","price":25,"image":"/assets/images/swieca-8.png","description":"Subtelna kwiatowa forma do dekoracji lub na prezent.","visible":true},
-    {"name":"Zestaw CandyBloom","category":"Zestawy prezentowe","price":25,"image":"/assets/images/swieca-9.png","description":"Elegancki zestaw świec wykonywany ręcznie na zamówienie.","visible":true}
+    {
+      "name": "Świeca sojowa miłosna",
+      "category": "Miłosne",
+      "price": 25,
+      "image": "/assets/images/swieca-1.png",
+      "description": "Ręcznie wykonana świeca sojowa idealna na romantyczny prezent.",
+      "visible": true,
+      "imagePosition": "center center",
+      "imageZoom": 1
+    },
+    {
+      "name": "Róża świecowa",
+      "category": "Kwiaty",
+      "price": 25,
+      "image": "/assets/images/swieca-2.png",
+      "description": "Delikatna świeca w kwiatowej formie, tworzona z dbałością o detal.",
+      "visible": true,
+      "imagePosition": "center center",
+      "imageZoom": 1
+    },
+    {
+      "name": "Kompozycja kwiatowa",
+      "category": "Kwiaty",
+      "price": 25,
+      "image": "/assets/images/swieca-3.png",
+      "description": "Elegancka świeca dekoracyjna inspirowana kwiatami.",
+      "visible": true,
+      "imagePosition": "center center",
+      "imageZoom": 1
+    },
+    {
+      "name": "Świeca dekoracyjna",
+      "category": "Dekoracyjne",
+      "price": 25,
+      "image": "/assets/images/swieca-4.png",
+      "description": "Minimalistyczna forma, która pięknie ozdobi wnętrze.",
+      "visible": true,
+      "imagePosition": "center center",
+      "imageZoom": 1
+    },
+    {
+      "name": "Prezentowa świeca sojowa",
+      "category": "Zestawy prezentowe",
+      "price": 25,
+      "image": "/assets/images/swieca-5.png",
+      "description": "Świeca idealna jako drobny, elegancki prezent.",
+      "visible": true,
+      "imagePosition": "center center",
+      "imageZoom": 1
+    },
+    {
+      "name": "Świeca dla gości",
+      "category": "Podziękowania dla gości",
+      "price": 25,
+      "image": "/assets/images/swieca-6.png",
+      "description": "Mała świeca jako podziękowanie dla gości na wyjątkową okazję.",
+      "visible": true,
+      "imagePosition": "center center",
+      "imageZoom": 1
+    },
+    {
+      "name": "Świeca ozdobna",
+      "category": "Dekoracyjne",
+      "price": 25,
+      "image": "/assets/images/swieca-7.png",
+      "description": "Ręcznie tworzona świeca z naturalnego wosku sojowego.",
+      "visible": true,
+      "imagePosition": "center center",
+      "imageZoom": 1
+    },
+    {
+      "name": "Kwiatowa świeca sojowa",
+      "category": "Kwiaty",
+      "price": 25,
+      "image": "/assets/images/swieca-8.png",
+      "description": "Subtelna kwiatowa forma do dekoracji lub na prezent.",
+      "visible": true,
+      "imagePosition": "center center",
+      "imageZoom": 1
+    },
+    {
+      "name": "Zestaw CandyBloom",
+      "category": "Zestawy prezentowe",
+      "price": 25,
+      "image": "/assets/images/swieca-9.png",
+      "description": "Elegancki zestaw świec wykonywany ręcznie na zamówienie.",
+      "visible": true,
+      "imagePosition": "center center",
+      "imageZoom": 1
+    }
   ]
 }

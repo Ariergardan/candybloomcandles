@@ -29,15 +29,6 @@ function renderProducts(){
         <h3>${p.name}</h3>
         <p>${p.description || ''}</p>
         <div class="price">${money(p.price)}</div>
-        <label>Zapach
-          <select id="scent-${i}">${settings.scentOptions.map(s => `<option>${s}</option>`).join('')}</select>
-        </label>
-        <label>Kolor na zamówienie
-          <input id="color-${i}" placeholder="Np. kremowy, pudrowy róż, beżowy">
-        </label>
-        <label>Ilość
-          <input id="qty-${i}" type="number" min="1" value="1">
-        </label>
         <button class="add" data-index="${products.indexOf(p)}" data-local="${i}">Dodaj do koszyka</button>
       </div>
     </article>`).join('');
@@ -46,7 +37,7 @@ function renderProducts(){
 function addToCart(e){
   const local = e.target.dataset.local;
   const p = products[e.target.dataset.index];
-  const item = {id: Date.now(), name:p.name, price:Number(p.price), scent:document.getElementById(`scent-${local}`).value, color:document.getElementById(`color-${local}`).value || 'Do ustalenia', qty:Number(document.getElementById(`qty-${local}`).value || 1)};
+  const item = {id: Date.now(), name:p.name, price:Number(p.price), scent:'Bez zapachu', color:'', qty:1};
   cart.push(item); saveCart(); openCart();
 }
 function saveCart(){localStorage.setItem('candy_cart', JSON.stringify(cart)); renderCart();}

@@ -218,3 +218,53 @@
     justify-content: flex-start;
   }
 }
+
+
+/* CandyBloom v4.1 — emoji nav + thank you page */
+nav a {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.thanks-box {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 30px;
+  padding: 28px;
+  box-shadow: var(--shadow);
+  margin: 26px 0;
+  max-width: 720px;
+  width: 100%;
+}
+
+.thanks-box h2 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 34px;
+  margin: 0 0 10px;
+}
+
+.copy-card {
+  margin-top: 22px;
+  background: var(--cream);
+  border: 1px solid var(--line);
+  border-radius: 22px;
+  padding: 18px;
+  text-align: left;
+}
+
+.copy-card textarea {
+  min-height: 120px;
+  resize: vertical;
+}
+
+.copy-btn {
+  margin-top: 12px;
+}
+
+.thanks-actions {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}

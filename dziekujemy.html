@@ -1,1 +1,53 @@
-<!doctype html><html lang="pl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Dziękujemy — CandyBloomCandles</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="/style.css"></head><body><main class="thanks"><p class="eyebrow">Dziękujemy</p><h1>Zamówienie zostało wysłane 🤍</h1><p>Skontaktujemy się w celu potwierdzenia szczegółów realizacji, płatności i dostawy.</p><a class="primary" href="https://instagram.com/candybloom_candles" target="_blank" rel="noreferrer">Potwierdź zamówienie na Instagramie</a><a class="secondary" href="/">Wróć na stronę</a></main></body></html>
+<!doctype html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Dziękujemy za zamówienie — CandyBloomCandles</title>
+  <meta name="description" content="Dziękujemy za zamówienie w CandyBloomCandles." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+  <main class="thanks">
+    <p class="eyebrow">CandyBloomCandles</p>
+    <h1>Dziękujemy za zamówienie! 🕯️</h1>
+    <p>Twoje zamówienie zostało wysłane pomyślnie. Skontaktujemy się z Tobą w celu potwierdzenia realizacji, szczegółów oraz płatności.</p>
+
+    <div class="thanks-box">
+      <h2>Przyspiesz realizację zamówienia</h2>
+      <p>Napisz do nas na Instagramie i daj znać, że zamówienie zostało złożone.</p>
+      <a class="primary" href="https://instagram.com/candybloom_candles" target="_blank" rel="noreferrer">📸 Potwierdź na Instagramie</a>
+
+      <div class="copy-card">
+        <p class="small-note">Możesz skopiować tę wiadomość:</p>
+        <textarea id="igMessage" readonly>Cześć 😊
+Właśnie złożyłam/złożyłem zamówienie na stronie CandyBloomCandles.
+Proszę o potwierdzenie otrzymania zamówienia.</textarea>
+        <button class="secondary copy-btn" type="button" onclick="copyMessage()">📋 Kopiuj wiadomość</button>
+      </div>
+    </div>
+
+    <div class="thanks-actions">
+      <a class="secondary" href="/">Wróć do sklepu</a>
+      <a class="secondary" href="mailto:zamowienia@candybloomcandles.pl">✉ zamowienia@candybloomcandles.pl</a>
+    </div>
+  </main>
+
+  <script>
+    function copyMessage(){
+      const el = document.getElementById('igMessage');
+      el.select();
+      el.setSelectionRange(0, 99999);
+      navigator.clipboard.writeText(el.value).then(() => {
+        alert('Wiadomość skopiowana 🤍');
+      }).catch(() => {
+        document.execCommand('copy');
+        alert('Wiadomość skopiowana 🤍');
+      });
+    }
+  </script>
+</body>
+</html>

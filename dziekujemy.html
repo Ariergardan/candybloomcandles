@@ -4,7 +4,6 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Dziękujemy za zamówienie — CandyBloomCandles</title>
-  <meta name="description" content="Dziękujemy za zamówienie w CandyBloomCandles." />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -14,17 +13,27 @@
   <main class="thanks">
     <p class="eyebrow">CandyBloomCandles</p>
     <h1>Dziękujemy za zamówienie! 🕯️</h1>
-    <p>Twoje zamówienie zostało wysłane pomyślnie. Skontaktujemy się z Tobą w celu potwierdzenia realizacji, szczegółów oraz płatności.</p>
+    <p>Twoje zamówienie zostało wysłane pomyślnie. Skontaktujemy się z Tobą w celu potwierdzenia realizacji, płatności oraz wysyłki.</p>
 
     <div class="thanks-box">
-      <h2>Przyspiesz realizację zamówienia</h2>
-      <p>Napisz do nas na Instagramie i daj znać, że zamówienie zostało złożone.</p>
-      <a class="primary" href="https://instagram.com/candybloom_candles" target="_blank" rel="noreferrer">📸 Potwierdź na Instagramie</a>
+      <h2>Numer zamówienia</h2>
+      <p class="order-number" id="lastOrderNumber">CB-...</p>
+      <p class="small-note">Status początkowy: <strong>Nowe</strong>. Po potwierdzeniu realizacji prześlemy sposób płatności i informacje o wysyłce.</p>
+    </div>
+
+    <div class="thanks-box">
+      <h2>Potwierdź zamówienie</h2>
+      <p>Możesz napisać do nas na Instagramie albo Facebooku, żeby szybciej potwierdzić szczegóły.</p>
+      <div class="thanks-actions">
+        <a class="primary" href="https://instagram.com/candybloom_candles" target="_blank" rel="noreferrer">📸 Potwierdź na Instagramie</a>
+        <a class="secondary" href="https://www.facebook.com/profile.php?id=61590554766575&locale=pl_PL" target="_blank" rel="noreferrer">📘 Napisz na Facebooku</a>
+      </div>
 
       <div class="copy-card">
         <p class="small-note">Możesz skopiować tę wiadomość:</p>
         <textarea id="igMessage" readonly>Cześć 😊
 Właśnie złożyłam/złożyłem zamówienie na stronie CandyBloomCandles.
+Numer zamówienia:
 Proszę o potwierdzenie otrzymania zamówienia.</textarea>
         <button class="secondary copy-btn" type="button" onclick="copyMessage()">📋 Kopiuj wiadomość</button>
       </div>
@@ -32,18 +41,22 @@ Proszę o potwierdzenie otrzymania zamówienia.</textarea>
 
     <div class="thanks-actions">
       <a class="secondary" href="/">Wróć do sklepu</a>
+      <a class="secondary" href="/status.html">Sprawdź status zamówienia</a>
       <a class="secondary" href="mailto:zamowienia@candybloomcandles.pl">✉ zamowienia@candybloomcandles.pl</a>
     </div>
   </main>
 
   <script>
+    const orderNumber = localStorage.getItem('candy_last_order_number') || 'CB-...';
+    document.getElementById('lastOrderNumber').textContent = orderNumber;
+    const msg = document.getElementById('igMessage');
+    msg.value = msg.value.replace('Numer zamówienia:', 'Numer zamówienia: ' + orderNumber);
+
     function copyMessage(){
       const el = document.getElementById('igMessage');
       el.select();
       el.setSelectionRange(0, 99999);
-      navigator.clipboard.writeText(el.value).then(() => {
-        alert('Wiadomość skopiowana 🤍');
-      }).catch(() => {
+      navigator.clipboard.writeText(el.value).then(() => alert('Wiadomość skopiowana 🤍')).catch(() => {
         document.execCommand('copy');
         alert('Wiadomość skopiowana 🤍');
       });

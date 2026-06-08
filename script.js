@@ -241,6 +241,15 @@ function renderCart(){
   updateHiddenOrderFields();
 }
 
+function generateOrderNumber(){
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = String(now.getMonth() + 1).padStart(2, '0');
+  const day = String(now.getDate()).padStart(2, '0');
+  const random = Math.floor(1000 + Math.random() * 9000);
+  return `CB-${year}${month}${day}-${random}`;
+}
+
 function openCart(){
   document.getElementById('cartPanel').classList.add('open');
   document.getElementById('cartPanel').setAttribute('aria-hidden','false');
@@ -261,7 +270,14 @@ document.getElementById('orderForm').addEventListener('submit', e => {
     return;
   }
 
-  renderCart();
+  const orderNumber = generateOrderNumber();
+  const orderNumberField = document.getElementById('orderNumber');
+  if(orderNumberField) orderNumberField.value = orderNumber;
+
+  localStorage.setItem('candy_last_order_number', orderNumber);
+  localStorage.setItem('candy_last_order_total', document.getElementById('cartAmount').value || '0 zł');
+
+  updateHiddenOrderFields();
   localStorage.removeItem('candy_cart');
 });
 

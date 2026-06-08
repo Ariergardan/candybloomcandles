@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Status zamówienia — CandyBloomCandles</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+  <main class="thanks">
+    <p class="eyebrow">CandyBloomCandles</p>
+    <h1>Sprawdź status zamówienia</h1>
+    <p>Wpisz numer zamówienia, który pojawił się po złożeniu zamówienia.</p>
+
+    <div class="thanks-box">
+      <label>Numer zamówienia
+        <input id="statusOrderNumber" placeholder="Np. CB-20260608-1234">
+      </label>
+      <button class="primary full" type="button" onclick="checkStatus()">Sprawdź status</button>
+      <div id="statusResult" class="status-result"></div>
+    </div>
+
+    <div class="status-steps">
+      <span>🆕 Nowe</span>
+      <span>💳 Oczekuje na płatność</span>
+      <span>🕯️ W realizacji</span>
+      <span>📦 Wysłane</span>
+      <span>🤍 Zakończone</span>
+    </div>
+
+    <a class="secondary" href="/">Wróć do sklepu</a>
+  </main>
+
+  <script>
+    function checkStatus(){
+      const value = document.getElementById('statusOrderNumber').value.trim();
+      const last = localStorage.getItem('candy_last_order_number');
+      const result = document.getElementById('statusResult');
+
+      if(!value){
+        result.innerHTML = '<p class="small-note">Wpisz numer zamówienia.</p>';
+        return;
+      }
+
+      if(last && value === last){
+        result.innerHTML = '<h2>Status: Nowe</h2><p>Twoje zamówienie zostało zapisane. Po potwierdzeniu realizacji wyślemy sposób płatności oraz informacje o wysyłce.</p>';
+      } else {
+        result.innerHTML = '<h2>Status sprawdzimy ręcznie</h2><p>Nie znaleziono zamówienia w pamięci tej przeglądarki. Napisz do nas z numerem zamówienia na Instagramie, Facebooku albo mailowo.</p>';
+      }
+    }
+
+    const last = localStorage.getItem('candy_last_order_number');
+    if(last) document.getElementById('statusOrderNumber').value = last;
+  </script>
+</body>
+</html>

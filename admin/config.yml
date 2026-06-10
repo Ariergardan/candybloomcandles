@@ -7,40 +7,61 @@ public_folder: "/assets/images"
 
 locale: "pl"
 
+site_url: "https://candybloomcandles.pl"
+display_url: "https://candybloomcandles.pl"
+logo_url: "/assets/images/hero.png"
+
 collections:
-  - name: "ustawienia"
-    label: "Ustawienia sklepu"
+  - name: "produkty"
+    label: "Produkty"
     files:
-      - label: "Dane sklepu"
-        name: "settings"
-        file: "data/settings.json"
-        fields:
-          - {label: "Nazwa marki", name: "brandName", widget: "string"}
-          - {label: "Instagram", name: "instagram", widget: "string"}
-          - {label: "Email", name: "email", widget: "string"}
-          - label: "Zapachy"
-            name: "scentOptions"
-            widget: "list"
-            field: {label: "Zapach", name: "scent", widget: "string"}
-          - label: "Kategorie"
-            name: "categories"
-            widget: "list"
-            field: {label: "Kategoria", name: "category", widget: "string"}
-      - label: "Produkty"
+      - label: "Lista produktów"
         name: "products"
         file: "data/products.json"
+        format: "json"
         fields:
-          - label: "Lista produktów"
+          - label: "Produkty"
             name: "products"
             widget: "list"
             summary: "{{fields.name}} — {{fields.price}} zł"
             fields:
-              - {label: "Nazwa", name: "name", widget: "string"}
+              - { label: "Nazwa produktu", name: "name", widget: "string" }
               - label: "Kategoria"
                 name: "category"
                 widget: "select"
-                options: ["Miłosne", "Kwiaty", "Dekoracyjne", "Podziękowania dla gości", "Zestawy prezentowe"]
-              - {label: "Cena", name: "price", widget: "number", value_type: "int", min: 0}
-              - {label: "Zdjęcie", name: "image", widget: "image"}
-              - {label: "Opis", name: "description", widget: "text", required: false}
-              - {label: "Widoczny na stronie", name: "visible", widget: "boolean", default: true}
+                options:
+                  - "Miłosne"
+                  - "Kwiaty"
+                  - "Dekoracyjne"
+                  - "Podziękowania dla gości"
+                  - "Zestawy prezentowe"
+              - { label: "Cena", name: "price", widget: "number", value_type: "int", min: 0 }
+              - { label: "Zdjęcie", name: "image", widget: "image" }
+              - { label: "Opis", name: "description", widget: "text", required: false }
+              - { label: "Widoczny na stronie", name: "visible", widget: "boolean", default: true }
+              - { label: "Pozycja zdjęcia", name: "imagePosition", widget: "string", default: "center center", hint: "Np. center center, 50% 35%, 40% 50%" }
+              - { label: "Zoom zdjęcia", name: "imageZoom", widget: "number", value_type: "float", min: 1, max: 1.6, step: 0.01, default: 1 }
+
+  - name: "ustawienia"
+    label: "Ustawienia sklepu"
+    files:
+      - label: "Ustawienia"
+        name: "settings"
+        file: "data/settings.json"
+        format: "json"
+        fields:
+          - { label: "Nazwa marki", name: "brandName", widget: "string" }
+          - { label: "Instagram", name: "instagram", widget: "string" }
+          - { label: "Email", name: "email", widget: "string" }
+          - label: "Zapachy"
+            name: "scentOptions"
+            widget: "list"
+            field: { label: "Zapach", name: "scent", widget: "string" }
+          - label: "Kategorie"
+            name: "categories"
+            widget: "list"
+            field: { label: "Kategoria", name: "category", widget: "string" }
+          - label: "Opcje koloru"
+            name: "colorOptions"
+            widget: "list"
+            field: { label: "Opcja koloru", name: "color", widget: "string" }

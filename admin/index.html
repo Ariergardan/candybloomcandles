@@ -4,9 +4,457 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Panel admina — CandyBloomCandles</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/style.css" />
+  <style>
+    body{background:var(--cream)}
+    .admin-app{padding:32px 5vw;max-width:1400px;margin:auto}
+    .admin-header{display:flex;align-items:center;justify-content:space-between;gap:18px;margin-bottom:24px}
+    .admin-header h1{font-family:'Cormorant Garamond',serif;font-size:clamp(42px,6vw,76px);line-height:.95;margin:0}
+    .admin-tabs{display:flex;gap:10px;flex-wrap:wrap;margin:20px 0}
+    .admin-tab{border:1px solid var(--line);background:var(--paper);border-radius:999px;padding:12px 18px;cursor:pointer;font-weight:700;color:var(--brown)}
+    .admin-tab.active{background:var(--brown);color:white}
+    .admin-card{background:var(--paper);border:1px solid var(--line);border-radius:28px;padding:22px;box-shadow:var(--shadow);margin-bottom:20px}
+    .admin-grid{display:grid;grid-template-columns:360px 1fr;gap:22px;align-items:start}
+    .products-list{display:grid;gap:10px;max-height:70vh;overflow:auto;padding-right:4px}
+    .product-row{display:grid;grid-template-columns:68px 1fr auto;gap:12px;align-items:center;border:1px solid var(--line);background:#fff;border-radius:18px;padding:10px;cursor:pointer;text-align:left;color:var(--brown)}
+    .product-row.active{outline:2px solid var(--brown)}
+    .product-row img{width:68px;height:68px;border-radius:14px;object-fit:cover;background:var(--beige)}
+    .product-row strong{display:block}
+    .product-row small{color:var(--muted)}
+    .admin-form{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+    .admin-form label{font-weight:700;font-size:13px}
+    .admin-form .full{grid-column:1/-1}
+    .preview-layout{display:grid;grid-template-columns:minmax(280px,420px) 1fr;gap:24px;align-items:start}
+    .live-product{background:var(--paper);border:1px solid var(--line);border-radius:28px;overflow:hidden;box-shadow:0 15px 45px rgba(75,53,40,.08)}
+    .live-product .live-img{height:360px;overflow:hidden;background:var(--beige)}
+    .live-product img{width:100%;height:100%;object-fit:cover}
+    .live-body{padding:22px}
+    .live-body h3{font-family:'Cormorant Garamond',serif;font-size:30px;margin:0 0 8px}
+    .live-body p{color:var(--muted);line-height:1.6}
+    .range-line{display:grid;gap:8px;margin:12px 0}
+    .range-line div{display:flex;justify-content:space-between;gap:12px;color:var(--muted);font-size:13px}
+    .actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+    .danger{background:#fff;border:1px solid #d8b6a6;color:#8b2f1d;border-radius:999px;padding:12px 18px;font-weight:700;cursor:pointer}
+    .success-banner,.error-banner{display:none;border-radius:18px;padding:14px 16px;margin:14px 0;font-weight:700}
+    .success-banner{background:#e8f8ee;color:#1e6b3a;border:1px solid #bde8ca}
+    .error-banner{background:#fff1ee;color:#8b2f1d;border:1px solid #e5b7aa}
+    .settings-list{display:grid;gap:10px}
+    .list-item{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center}
+    .password-box{max-width:520px}
+    .muted{color:var(--muted);line-height:1.7}
+    .hidden-admin{display:none!important}
+    @media(max-width:980px){.admin-grid,.preview-layout,.admin-form{grid-template-columns:1fr}.products-list{max-height:none}}
+  </style>
 </head>
 <body>
-  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
-  <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
+  <main class="admin-app">
+    <div class="admin-header">
+      <div>
+        <p class="eyebrow">CandyBloomCandles</p>
+        <h1>Panel admina</h1>
+      </div>
+      <a class="secondary" href="/">Wróć do sklepu</a>
+    </div>
+
+    <section class="admin-card password-box" id="loginBox">
+      <h2>Logowanie</h2>
+      <p class="muted">Wpisz hasło panelu ustawione w Netlify jako <strong>ADMIN_PASSWORD</strong>.</p>
+      <label>Hasło
+        <input id="adminPassword" type="password" placeholder="Hasło admina">
+      </label>
+      <button class="primary full" type="button" id="loginBtn">Wejdź do panelu</button>
+    </section>
+
+    <section id="panel" class="hidden-admin">
+      <div class="admin-tabs">
+        <button class="admin-tab active" data-tab="products">📦 Produkty</button>
+        <button class="admin-tab" data-tab="settings">🌸 Zapachy i kategorie</button>
+        <button class="admin-tab" data-tab="help">ℹ️ Pomoc</button>
+      </div>
+
+      <div class="success-banner" id="successBox">✅ Zmiany zapisane. Netlify zaraz opublikuje stronę.</div>
+      <div class="error-banner" id="errorBox">Coś poszło nie tak.</div>
+
+      <section id="productsTab">
+        <div class="admin-grid">
+          <div class="admin-card">
+            <div class="actions">
+              <button class="primary" type="button" id="addProductBtn">➕ Dodaj produkt</button>
+              <button class="secondary" type="button" id="duplicateProductBtn">Kopiuj</button>
+            </div>
+            <div class="products-list" id="productsList"></div>
+          </div>
+
+          <div class="admin-card">
+            <div class="preview-layout">
+              <article class="live-product">
+                <div class="live-img">
+                  <img id="previewImage" src="/assets/images/hero.png" alt="">
+                </div>
+                <div class="live-body">
+                  <p class="eyebrow" id="previewCategory">Kategoria</p>
+                  <h3 id="previewName">Nazwa produktu</h3>
+                  <p id="previewDesc">Opis produktu</p>
+                  <div class="price" id="previewPrice">25 zł</div>
+                  <button class="add" type="button">Dodaj do koszyka</button>
+                </div>
+              </article>
+
+              <div>
+                <form class="admin-form" id="productForm">
+                  <label>Nazwa produktu
+                    <input id="pName">
+                  </label>
+                  <label>Cena
+                    <input id="pPrice" type="number" min="0">
+                  </label>
+                  <label>Kategoria
+                    <select id="pCategory"></select>
+                  </label>
+                  <label>Widoczny
+                    <select id="pVisible">
+                      <option value="true">Tak</option>
+                      <option value="false">Nie</option>
+                    </select>
+                  </label>
+                  <label class="full">Opis
+                    <textarea id="pDescription" rows="4"></textarea>
+                  </label>
+                  <label class="full">Zdjęcie
+                    <input id="pImage" placeholder="/assets/images/swieca-1.png">
+                  </label>
+                  <label class="full">Wgraj nowe zdjęcie
+                    <input id="pUpload" type="file" accept="image/*">
+                  </label>
+
+                  <div class="full">
+                    <div class="range-line">
+                      <div><strong>Pozycja pozioma</strong><span id="xVal">50%</span></div>
+                      <input id="pX" type="range" min="0" max="100" value="50">
+                    </div>
+                    <div class="range-line">
+                      <div><strong>Pozycja pionowa</strong><span id="yVal">50%</span></div>
+                      <input id="pY" type="range" min="0" max="100" value="50">
+                    </div>
+                    <div class="range-line">
+                      <div><strong>Zoom</strong><span id="zoomVal">1.00</span></div>
+                      <input id="pZoom" type="range" min="1" max="1.6" step="0.01" value="1">
+                    </div>
+                  </div>
+                </form>
+
+                <div class="actions">
+                  <button class="primary" type="button" id="saveBtn">💾 Zapisz zmiany</button>
+                  <button class="danger" type="button" id="deleteBtn">Usuń produkt</button>
+                </div>
+                <p class="small-note">Po zapisaniu panel zrobi commit na GitHubie, a Netlify opublikuje zmiany po chwili.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="settingsTab" class="hidden-admin">
+        <div class="admin-grid">
+          <div class="admin-card">
+            <h2>Zapachy</h2>
+            <div class="settings-list" id="scentsList"></div>
+            <div class="actions">
+              <input id="newScent" placeholder="Nowy zapach">
+              <button class="secondary" type="button" id="addScentBtn">Dodaj zapach</button>
+            </div>
+          </div>
+          <div class="admin-card">
+            <h2>Kategorie</h2>
+            <div class="settings-list" id="categoriesList"></div>
+            <div class="actions">
+              <input id="newCategory" placeholder="Nowa kategoria">
+              <button class="secondary" type="button" id="addCategoryBtn">Dodaj kategorię</button>
+            </div>
+          </div>
+        </div>
+        <button class="primary" type="button" id="saveSettingsBtn">💾 Zapisz ustawienia</button>
+      </section>
+
+      <section id="helpTab" class="hidden-admin">
+        <div class="admin-card">
+          <h2>Jak działa zapis?</h2>
+          <p class="muted">Panel wysyła zmiany do funkcji Netlify. Funkcja używa bezpiecznego tokena z Environment variables, zapisuje pliki na GitHubie, a Netlify samo robi nowy deploy.</p>
+          <p class="muted">Jeśli zapis nie działa, sprawdź czy w Netlify masz zmienne: <strong>GITHUB_TOKEN</strong> i <strong>ADMIN_PASSWORD</strong>.</p>
+        </div>
+      </section>
+    </section>
+  </main>
+
+<script>
+let productsData = { products: [] };
+let settingsData = {};
+let selectedIndex = 0;
+let adminPassword = "";
+let pendingUploads = {};
+
+const $ = id => document.getElementById(id);
+const money = value => `${Number(value || 0).toFixed(0)} zł`;
+
+function slugify(text){
+  return text.toString().toLowerCase()
+    .normalize('NFD').replace(/[\\u0300-\\u036f]/g, '')
+    .replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '') || 'produkt';
+}
+
+function parsePosition(pos){
+  const parts = String(pos || "center center").split(" ");
+  const parse = value => value === "center" ? 50 : parseInt(value) || 50;
+  return { x: parse(parts[0]), y: parse(parts[1]) };
+}
+
+async function loadData(){
+  const [productsRes, settingsRes] = await Promise.all([
+    fetch('/data/products.json?cb=' + Date.now()),
+    fetch('/data/settings.json?cb=' + Date.now())
+  ]);
+  productsData = await productsRes.json();
+  settingsData = await settingsRes.json();
+
+  if(!settingsData.colorOptions) settingsData.colorOptions = ['Domyślny (jak na zdjęciu)', 'Zapytaj o kolor'];
+  if(!settingsData.scentOptions.includes('Zapytaj o zapach')) settingsData.scentOptions.push('Zapytaj o zapach');
+
+  selectedIndex = 0;
+  renderAll();
+}
+
+function renderAll(){
+  renderProductsList();
+  renderCategorySelect();
+  renderProductForm();
+  renderSettings();
+}
+
+function renderProductsList(){
+  $('productsList').innerHTML = productsData.products.map((p, i) => `
+    <button class="product-row ${i === selectedIndex ? 'active' : ''}" type="button" data-index="${i}">
+      <img src="${p.image || '/assets/images/hero.png'}" style="object-position:${p.imagePosition || 'center center'};transform:scale(${p.imageZoom || 1});">
+      <span><strong>${p.name || 'Nowy produkt'}</strong><small>${p.category || ''} · ${p.price || 0} zł</small></span>
+      <small>${p.visible === false ? 'Ukryty' : 'Widoczny'}</small>
+    </button>
+  `).join('');
+
+  document.querySelectorAll('.product-row').forEach(btn => {
+    btn.addEventListener('click', () => {
+      selectedIndex = Number(btn.dataset.index);
+      renderAll();
+    });
+  });
+}
+
+function renderCategorySelect(){
+  $('pCategory').innerHTML = (settingsData.categories || []).map(c => `<option>${c}</option>`).join('');
+}
+
+function currentProduct(){
+  return productsData.products[selectedIndex] || {};
+}
+
+function renderProductForm(){
+  const p = currentProduct();
+  $('pName').value = p.name || '';
+  $('pPrice').value = p.price || 25;
+  $('pCategory').value = p.category || (settingsData.categories || [])[0] || '';
+  $('pVisible').value = String(p.visible !== false);
+  $('pDescription').value = p.description || '';
+  $('pImage').value = p.image || '';
+
+  const pos = parsePosition(p.imagePosition);
+  $('pX').value = pos.x;
+  $('pY').value = pos.y;
+  $('pZoom').value = Number(p.imageZoom || 1);
+  updatePreview();
+}
+
+function collectProductForm(){
+  const p = currentProduct();
+  p.name = $('pName').value.trim() || 'Nowy produkt';
+  p.price = Number($('pPrice').value || 0);
+  p.category = $('pCategory').value;
+  p.visible = $('pVisible').value === 'true';
+  p.description = $('pDescription').value.trim();
+  p.image = $('pImage').value.trim() || '/assets/images/hero.png';
+  p.imagePosition = `${$('pX').value}% ${$('pY').value}%`;
+  p.imageZoom = Number($('pZoom').value || 1);
+}
+
+function updatePreview(){
+  collectProductForm();
+  const p = currentProduct();
+  $('previewImage').src = p.image || '/assets/images/hero.png';
+  $('previewImage').style.objectPosition = p.imagePosition || 'center center';
+  $('previewImage').style.transform = `scale(${p.imageZoom || 1})`;
+  $('previewCategory').textContent = p.category || 'Kategoria';
+  $('previewName').textContent = p.name || 'Nazwa produktu';
+  $('previewDesc').textContent = p.description || 'Opis produktu';
+  $('previewPrice').textContent = money(p.price);
+  $('xVal').textContent = $('pX').value + '%';
+  $('yVal').textContent = $('pY').value + '%';
+  $('zoomVal').textContent = Number($('pZoom').value).toFixed(2);
+}
+
+['pName','pPrice','pCategory','pVisible','pDescription','pImage','pX','pY','pZoom'].forEach(id => {
+  $(id).addEventListener('input', updatePreview);
+  $(id).addEventListener('change', updatePreview);
+});
+
+$('pUpload').addEventListener('change', async e => {
+  const file = e.target.files[0];
+  if(!file) return;
+
+  const ext = (file.name.split('.').pop() || 'png').toLowerCase();
+  const filename = `${slugify($('pName').value || 'swieca')}-${Date.now()}.${ext}`;
+  const path = `assets/images/${filename}`;
+  const publicPath = `/assets/images/${filename}`;
+
+  const reader = new FileReader();
+  reader.onload = () => {
+    const base64 = reader.result.split(',')[1];
+    pendingUploads[path] = base64;
+    $('pImage').value = publicPath;
+    updatePreview();
+  };
+  reader.readAsDataURL(file);
+});
+
+function renderSettings(){
+  $('scentsList').innerHTML = (settingsData.scentOptions || []).map((s, i) => `
+    <div class="list-item">
+      <input value="${s}" data-type="scent" data-index="${i}">
+      <button class="danger" type="button" data-remove-scent="${i}">Usuń</button>
+    </div>
+  `).join('');
+
+  $('categoriesList').innerHTML = (settingsData.categories || []).map((c, i) => `
+    <div class="list-item">
+      <input value="${c}" data-type="category" data-index="${i}">
+      <button class="danger" type="button" data-remove-category="${i}">Usuń</button>
+    </div>
+  `).join('');
+
+  document.querySelectorAll('[data-type="scent"]').forEach(input => input.addEventListener('input', e => {
+    settingsData.scentOptions[Number(e.target.dataset.index)] = e.target.value;
+  }));
+
+  document.querySelectorAll('[data-type="category"]').forEach(input => input.addEventListener('input', e => {
+    settingsData.categories[Number(e.target.dataset.index)] = e.target.value;
+    renderCategorySelect();
+  }));
+
+  document.querySelectorAll('[data-remove-scent]').forEach(btn => btn.addEventListener('click', () => {
+    settingsData.scentOptions.splice(Number(btn.dataset.removeScent), 1);
+    renderSettings();
+  }));
+
+  document.querySelectorAll('[data-remove-category]').forEach(btn => btn.addEventListener('click', () => {
+    settingsData.categories.splice(Number(btn.dataset.removeCategory), 1);
+    renderSettings();
+    renderCategorySelect();
+  }));
+}
+
+$('addScentBtn').addEventListener('click', () => {
+  const value = $('newScent').value.trim();
+  if(value){ settingsData.scentOptions.push(value); $('newScent').value=''; renderSettings(); }
+});
+
+$('addCategoryBtn').addEventListener('click', () => {
+  const value = $('newCategory').value.trim();
+  if(value){ settingsData.categories.push(value); $('newCategory').value=''; renderSettings(); renderCategorySelect(); }
+});
+
+$('addProductBtn').addEventListener('click', () => {
+  productsData.products.push({
+    name: 'Nowy produkt',
+    category: (settingsData.categories || [])[0] || 'Dekoracyjne',
+    price: 25,
+    image: '/assets/images/hero.png',
+    description: '',
+    visible: true,
+    imagePosition: '50% 50%',
+    imageZoom: 1
+  });
+  selectedIndex = productsData.products.length - 1;
+  renderAll();
+});
+
+$('duplicateProductBtn').addEventListener('click', () => {
+  const copy = JSON.parse(JSON.stringify(currentProduct()));
+  copy.name = (copy.name || 'Produkt') + ' kopia';
+  productsData.products.push(copy);
+  selectedIndex = productsData.products.length - 1;
+  renderAll();
+});
+
+$('deleteBtn').addEventListener('click', () => {
+  if(!confirm('Na pewno usunąć ten produkt?')) return;
+  productsData.products.splice(selectedIndex, 1);
+  selectedIndex = Math.max(0, selectedIndex - 1);
+  renderAll();
+});
+
+async function saveAll(){
+  collectProductForm();
+  showMsg('', false);
+
+  const uploads = Object.entries(pendingUploads).map(([path, contentBase64]) => ({path, contentBase64}));
+
+  const res = await fetch('/.netlify/functions/save-store', {
+    method: 'POST',
+    headers: {'Content-Type':'application/json'},
+    body: JSON.stringify({
+      password: adminPassword,
+      productsData,
+      settingsData,
+      uploads
+    })
+  });
+
+  const data = await res.json().catch(() => ({}));
+  if(!res.ok){
+    showMsg(data.error || 'Nie udało się zapisać zmian.', true);
+    return;
+  }
+
+  pendingUploads = {};
+  showMsg('✅ Zmiany zapisane. Netlify zaraz opublikuje stronę.', false);
+}
+
+function showMsg(text, isError){
+  $('successBox').style.display = 'none';
+  $('errorBox').style.display = 'none';
+  if(!text) return;
+  const box = isError ? $('errorBox') : $('successBox');
+  box.textContent = text;
+  box.style.display = 'block';
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+$('saveBtn').addEventListener('click', saveAll);
+$('saveSettingsBtn').addEventListener('click', saveAll);
+
+document.querySelectorAll('.admin-tab').forEach(tab => tab.addEventListener('click', () => {
+  document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
+  tab.classList.add('active');
+  ['products','settings','help'].forEach(name => $(name + 'Tab').classList.add('hidden-admin'));
+  $(tab.dataset.tab + 'Tab').classList.remove('hidden-admin');
+}));
+
+$('loginBtn').addEventListener('click', async () => {
+  adminPassword = $('adminPassword').value;
+  if(!adminPassword){ alert('Wpisz hasło.'); return; }
+  $('loginBox').classList.add('hidden-admin');
+  $('panel').classList.remove('hidden-admin');
+  await loadData();
+});
+</script>
 </body>
 </html>

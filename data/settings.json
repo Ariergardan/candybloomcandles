@@ -10,7 +10,8 @@
     "Lychee & Mango",
     "Magnolia & Peach",
     "Świeża Bawełna",
-    "Zapytaj o zapach"
+    "Zapytaj o zapach",
+    "ewe"
   ],
   "categories": [
     "Miłosne",
@@ -50,6 +51,11 @@
       "above120": 6
     },
     "Świeża Bawełna": {
+      "upTo60": 2,
+      "upTo120": 4,
+      "above120": 6
+    },
+    "ewe": {
       "upTo60": 2,
       "upTo120": 4,
       "above120": 6

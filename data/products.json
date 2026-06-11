@@ -8,8 +8,7 @@
       "description": "Ręcznie wykonana świeca sojowa idealna na romantyczny prezent.",
       "visible": true,
       "imagePosition": "center center",
-      "imageZoom": 1,
-      "weight": 60
+      "imageZoom": 1
     },
     {
       "name": "Róża świecowa",
@@ -19,8 +18,7 @@
       "description": "Delikatna świeca w kwiatowej formie, tworzona z dbałością o detal.",
       "visible": true,
       "imagePosition": "center center",
-      "imageZoom": 1,
-      "weight": 60
+      "imageZoom": 1
     },
     {
       "name": "Kompozycja kwiatowa",
@@ -30,8 +28,7 @@
       "description": "Elegancka świeca dekoracyjna inspirowana kwiatami.",
       "visible": true,
       "imagePosition": "center center",
-      "imageZoom": 1,
-      "weight": 60
+      "imageZoom": 1
     },
     {
       "name": "Świeca dekoracyjna",
@@ -41,8 +38,7 @@
       "description": "Minimalistyczna forma, która pięknie ozdobi wnętrze.",
       "visible": true,
       "imagePosition": "center center",
-      "imageZoom": 1,
-      "weight": 60
+      "imageZoom": 1
     },
     {
       "name": "Prezentowa świeca sojowa",
@@ -52,8 +48,7 @@
       "description": "Świeca idealna jako drobny, elegancki prezent.",
       "visible": true,
       "imagePosition": "center center",
-      "imageZoom": 1,
-      "weight": 60
+      "imageZoom": 1
     },
     {
       "name": "Świeca dla gości",
@@ -63,8 +58,7 @@
       "description": "Mała świeca jako podziękowanie dla gości na wyjątkową okazję.",
       "visible": true,
       "imagePosition": "center center",
-      "imageZoom": 1,
-      "weight": 60
+      "imageZoom": 1
     },
     {
       "name": "Świeca ozdobna",
@@ -74,8 +68,7 @@
       "description": "Ręcznie tworzona świeca z naturalnego wosku sojowego.",
       "visible": true,
       "imagePosition": "center center",
-      "imageZoom": 1,
-      "weight": 60
+      "imageZoom": 1
     },
     {
       "name": "Kwiatowa świeca sojowa",
@@ -85,8 +78,7 @@
       "description": "Subtelna kwiatowa forma do dekoracji lub na prezent.",
       "visible": true,
       "imagePosition": "center center",
-      "imageZoom": 1,
-      "weight": 60
+      "imageZoom": 1
     },
     {
       "name": "Zestaw CandyBloom",
@@ -96,8 +88,7 @@
       "description": "Elegancki zestaw świec wykonywany ręcznie na zamówienie.",
       "visible": true,
       "imagePosition": "center center",
-      "imageZoom": 1,
-      "weight": 60
+      "imageZoom": 1
     }
   ]
 }

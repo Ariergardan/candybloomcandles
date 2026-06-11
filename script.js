@@ -7,8 +7,8 @@ const money = value => `${Number(value).toFixed(0)} zł`;
 
 async function loadData(){
   const [productsRes, settingsRes] = await Promise.all([
-    fetch('/data/products.json?cb=' + Date.now()),
-    fetch('/data/settings.json?cb=' + Date.now())
+    fetch('/data/products.json'),
+    fetch('/data/settings.json')
   ]);
 
   products = (await productsRes.json()).products.filter(p => p.visible !== false);
@@ -22,37 +22,9 @@ async function loadData(){
     settings.scentOptions.push('Zapytaj o zapach');
   }
 
-  if (!settings.scentPricing) {
-    settings.scentPricing = {};
-  }
-
   renderFilters();
   renderProducts();
   renderCart();
-}
-
-function getScentExtraPrice(scent, weight){
-  if (!scent || scent === 'Bez zapachu' || scent === 'Zapytaj o zapach') return 0;
-
-  const pricing = settings.scentPricing?.[scent];
-  if (!pricing) return 0;
-
-  const grams = Number(weight || 0);
-
-  if (grams <= 60) return Number(pricing.upTo60 || 0);
-  if (grams <= 120) return Number(pricing.upTo120 || 0);
-  return Number(pricing.above120 || 0);
-}
-
-function getItemUnitPrice(item){
-  return Number(item.price || 0) + getScentExtraPrice(item.scent, item.weight);
-}
-
-function getScentLabel(scent, weight){
-  const extra = getScentExtraPrice(scent, weight);
-  if (scent === 'Bez zapachu') return 'Bez zapachu (+0 zł)';
-  if (scent === 'Zapytaj o zapach') return 'Zapytaj o zapach';
-  return `${scent} (+${extra} zł)`;
 }
 
 function renderFilters(){
@@ -85,7 +57,6 @@ function renderProducts(){
         <p class="eyebrow">${p.category}</p>
         <h3>${p.name}</h3>
         <p>${p.description || ''}</p>
-        <p class="product-weight">⚖️ Waga: ${Number(p.weight || 0)} g</p>
         <div class="product-footer">
           <div class="price">${money(p.price)}</div>
           <button class="add" data-index="${products.indexOf(p)}">Dodaj do koszyka</button>
@@ -115,7 +86,6 @@ function addToCart(e){
       id: Date.now(),
       name: p.name,
       price: Number(p.price),
-      weight: Number(p.weight || 0),
       image: p.image,
       imagePosition: p.imagePosition || 'center center',
       imageZoom: p.imageZoom || 1,
@@ -141,24 +111,9 @@ function updateCartItem(id, updates, shouldRender = true){
   saveCart(shouldRender);
 }
 
+
 function updateHiddenOrderFields(){
-  const total = cart.reduce((sum,i)=>sum + getItemUnitPrice(i) * i.qty,0);
-  document.getElementById('cartTotal').textContent = money(total);
-
-  document.getElementById('cartData').value = cart.map(i => {
-    const scentExtra = getScentExtraPrice(i.scent, i.weight);
-    const colorText = i.colorChoice === 'Zapytaj o kolor'
-      ? `Zapytaj o kolor: ${i.customColor || 'brak wpisanego koloru'}`
-      : i.colorChoice;
-
-    const scentText = i.scent === 'Zapytaj o zapach'
-      ? `Zapytaj o zapach: ${i.customScent || 'brak wpisanego zapachu'}`
-      : `${i.scent} (+${scentExtra} zł)`;
-
-    return `${i.name} | waga: ${i.weight || 0} g | kolor: ${colorText} | zapach: ${scentText} | ilość: ${i.qty} | cena szt.: ${money(getItemUnitPrice(i))} | razem: ${money(getItemUnitPrice(i)*i.qty)}`;
-  }).join('\n');
-
-  document.getElementById('cartAmount').value = money(total);
+  updateHiddenOrderFields();
 }
 
 function renderCart(){
@@ -171,8 +126,6 @@ function renderCart(){
     items.innerHTML = cart.map(i => {
       const showColorInput = i.colorChoice === 'Zapytaj o kolor';
       const showScentInput = i.scent === 'Zapytaj o zapach';
-      const unitPrice = getItemUnitPrice(i);
-      const scentExtra = getScentExtraPrice(i.scent, i.weight);
 
       return `
         <div class="cart-item premium-cart-item">
@@ -181,12 +134,12 @@ function renderCart(){
             <div class="cart-topline">
               <div>
                 <strong>${i.name}</strong>
-                <small>⚖️ ${i.weight || 0} g<br>Cena bazowa: ${money(i.price)} / szt.</small>
+                <small>${money(i.price)} / szt.</small>
               </div>
               <button class="remove" data-id="${i.id}" type="button">Usuń</button>
             </div>
 
-            <label>🎨 Kolor
+            <label>Kolor
               <select class="cart-color-choice" data-id="${i.id}">
                 ${(settings.colorOptions || ['Domyślny (jak na zdjęciu)', 'Zapytaj o kolor']).map(option =>
                   `<option ${option===i.colorChoice?'selected':''}>${option}</option>`
@@ -199,10 +152,10 @@ function renderCart(){
               <input class="cart-custom-color" data-id="${i.id}" value="${i.customColor || ''}" placeholder="Np. niebieski, różowy, czerwony">
             </label>
 
-            <label>🌸 Zapach
+            <label>Zapach
               <select class="cart-scent" data-id="${i.id}">
                 ${settings.scentOptions.map(s =>
-                  `<option value="${s}" ${s===i.scent?'selected':''}>${getScentLabel(s, i.weight)}</option>`
+                  `<option ${s===i.scent?'selected':''}>${s}</option>`
                 ).join('')}
               </select>
             </label>
@@ -212,15 +165,13 @@ function renderCart(){
               <input class="cart-custom-scent" data-id="${i.id}" value="${i.customScent || ''}" placeholder="Np. wanilia, kokos, truskawka">
             </label>
 
-            <p class="small-note">Dopłata za zapach: <strong>${money(scentExtra)}</strong> · Cena z wybranym zapachem: <strong>${money(unitPrice)}</strong></p>
-
             <div class="cart-bottomline">
               <div class="qty-box" aria-label="Ilość">
                 <button class="minus" data-id="${i.id}" type="button">−</button>
                 <span>${i.qty}</span>
                 <button class="plus" data-id="${i.id}" type="button">+</button>
               </div>
-              <strong>${money(unitPrice*i.qty)}</strong>
+              <strong>${money(i.price*i.qty)}</strong>
             </div>
           </div>
         </div>

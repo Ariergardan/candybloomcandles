@@ -22,37 +22,5 @@
   "colorOptions": [
     "Domyślny (jak na zdjęciu)",
     "Zapytaj o kolor"
-  ],
-  "scentPricing": {
-    "Paczula": {
-      "upTo60": 2,
-      "upTo120": 4,
-      "above120": 6
-    },
-    "Lemon Sorbet": {
-      "upTo60": 2,
-      "upTo120": 4,
-      "above120": 6
-    },
-    "Evergreen": {
-      "upTo60": 2,
-      "upTo120": 4,
-      "above120": 6
-    },
-    "Lychee & Mango": {
-      "upTo60": 2,
-      "upTo120": 4,
-      "above120": 6
-    },
-    "Magnolia & Peach": {
-      "upTo60": 2,
-      "upTo120": 4,
-      "above120": 6
-    },
-    "Świeża Bawełna": {
-      "upTo60": 2,
-      "upTo120": 4,
-      "above120": 6
-    }
-  }
+  ]
 }

@@ -3,11 +3,11 @@
     {
       "name": "Świeca sojowa miłosna",
       "category": "Miłosne",
-      "price": 25,
+      "price": 45,
       "image": "/assets/images/swieca-1.png",
       "description": "Ręcznie wykonana świeca sojowa idealna na romantyczny prezent.",
       "visible": true,
-      "imagePosition": "center center",
+      "imagePosition": "50% 65%",
       "imageZoom": 1
     },
     {

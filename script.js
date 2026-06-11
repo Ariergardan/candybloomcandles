@@ -1,3 +1,4 @@
+/* CandyBloom patched: cart closed after add, EmailLabs order redirect, scent price labels */
 let products = [];
 let settings = {};
 let currentCategory = 'Wszystkie';

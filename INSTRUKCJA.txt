@@ -1,27 +1,20 @@
-CandyBloom — podpięcie formularza zamówień pod EmailLabs
+CandyBloom — poprawka panelu i zapachów
 
-Podmień w repozytorium:
-- index.html
+Wgraj/podmień w repozytorium:
 - script.js
+- admin/index.html
+- data/settings.json
+- data/products.json
 
-Dodaj nowy plik:
-- functions/api/order.js
+Co poprawia:
+- koszyk nie otwiera się automatycznie po kliknięciu "Dodaj do koszyka",
+- po wysłaniu zamówienia powinno przekierować na dziekujemy.html,
+- panel admina ma zakładkę "💰 Cennik zapachów",
+- settings.json zawiera dopłaty za zapachy +2/+4/+6,
+- script.js wyświetla etykiety zapachów np. "Paczula (+2 zł)".
 
-W Cloudflare Pages → Settings → Variables and secrets dodaj:
-- EMAILLABS_APP_KEY = App Key z EmailLabs
-- EMAILLABS_SECRET_KEY = Secret Key z EmailLabs
+Po commit + push poczekaj na deploy Cloudflare.
+Potem zrób Ctrl+F5 na stronie i w panelu admina.
 
-Opcjonalnie:
-- EMAILLABS_SMTP_ACCOUNT = 1.ariergarda.smtp
-- ORDER_FROM_EMAIL = zamowienia@candybloomcandles.pl
-- ORDER_FROM_NAME = CandyBloom Candles
-- ORDER_TO_EMAIL = zamowienia@candybloomcandles.pl
-
-Po commit + push Cloudflare zrobi deploy.
-Test:
-1. Dodaj produkt do koszyka.
-2. Wypełnij formularz.
-3. Kliknij Personalizuj i wyślij zamówienie.
-4. Powinna otworzyć się strona dziekujemy.html.
-5. Ty powinnaś dostać mail z zamówieniem.
-6. Klient powinien dostać potwierdzenie.
+Uwaga:
+products.json nadal ma wagę tylko przy pierwszym produkcie. Dla reszty trzeba uzupełnić gramatury w panelu admina, inaczej dopłaty będą liczone jak dla 0 g.

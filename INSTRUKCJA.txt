@@ -1,0 +1,27 @@
+CandyBloom — podpięcie formularza zamówień pod EmailLabs
+
+Podmień w repozytorium:
+- index.html
+- script.js
+
+Dodaj nowy plik:
+- functions/api/order.js
+
+W Cloudflare Pages → Settings → Variables and secrets dodaj:
+- EMAILLABS_APP_KEY = App Key z EmailLabs
+- EMAILLABS_SECRET_KEY = Secret Key z EmailLabs
+
+Opcjonalnie:
+- EMAILLABS_SMTP_ACCOUNT = 1.ariergarda.smtp
+- ORDER_FROM_EMAIL = zamowienia@candybloomcandles.pl
+- ORDER_FROM_NAME = CandyBloom Candles
+- ORDER_TO_EMAIL = zamowienia@candybloomcandles.pl
+
+Po commit + push Cloudflare zrobi deploy.
+Test:
+1. Dodaj produkt do koszyka.
+2. Wypełnij formularz.
+3. Kliknij Personalizuj i wyślij zamówienie.
+4. Powinna otworzyć się strona dziekujemy.html.
+5. Ty powinnaś dostać mail z zamówieniem.
+6. Klient powinien dostać potwierdzenie.

@@ -312,22 +312,72 @@ function closeCart(){
 document.getElementById('openCart').addEventListener('click', openCart);
 document.getElementById('closeCart').addEventListener('click', closeCart);
 
-document.getElementById('orderForm').addEventListener('submit', e => {
+document.getElementById('orderForm').addEventListener('submit', async e => {
+  e.preventDefault();
+
   if(!cart.length){
-    e.preventDefault();
     alert('Dodaj najpierw świecę do koszyka.');
     return;
   }
+
+  const form = e.currentTarget;
+  const submitButton = form.querySelector('button[type="submit"]');
+  const previousButtonText = submitButton ? submitButton.textContent : '';
 
   const orderNumber = generateOrderNumber();
   const orderNumberField = document.getElementById('orderNumber');
   if(orderNumberField) orderNumberField.value = orderNumber;
 
-  localStorage.setItem('candy_last_order_number', orderNumber);
-  localStorage.setItem('candy_last_order_total', document.getElementById('cartAmount').value || '0 zł');
-
   updateHiddenOrderFields();
-  localStorage.removeItem('candy_cart');
+
+  const formData = new FormData(form);
+  const orderPayload = {
+    orderNumber,
+    total: document.getElementById('cartAmount').value || '0 zł',
+    cartText: document.getElementById('cartData').value || '',
+    cartItems: cart,
+    customer: {
+      name: formData.get('imie_i_nazwisko') || '',
+      email: formData.get('email') || '',
+      phone: formData.get('telefon') || '',
+      address: formData.get('adres_dostawy') || '',
+      notes: formData.get('uwagi') || ''
+    }
+  };
+
+  try {
+    if (submitButton) {
+      submitButton.disabled = true;
+      submitButton.textContent = 'Wysyłanie zamówienia...';
+    }
+
+    const response = await fetch('/api/order', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(orderPayload)
+    });
+
+    const result = await response.json().catch(() => ({}));
+
+    if (!response.ok || !result.ok) {
+      throw new Error(result.error || 'Nie udało się wysłać zamówienia.');
+    }
+
+    localStorage.setItem('candy_last_order_number', orderNumber);
+    localStorage.setItem('candy_last_order_total', document.getElementById('cartAmount').value || '0 zł');
+    localStorage.removeItem('candy_cart');
+    cart = [];
+    saveCart(false);
+
+    window.location.href = `/dziekujemy.html?nr=${encodeURIComponent(orderNumber)}`;
+  } catch (error) {
+    alert(error.message || 'Nie udało się wysłać zamówienia. Spróbuj ponownie albo napisz do nas mailowo.');
+  } finally {
+    if (submitButton) {
+      submitButton.disabled = false;
+      submitButton.textContent = previousButtonText;
+    }
+  }
 });
 
 loadData();

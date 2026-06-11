@@ -128,7 +128,6 @@ function addToCart(e){
   }
 
   saveCart();
-  openCart();
 }
 
 function saveCart(shouldRender = true){
@@ -369,7 +368,7 @@ document.getElementById('orderForm').addEventListener('submit', async e => {
     cart = [];
     saveCart(false);
 
-    window.location.href = `/dziekujemy.html?nr=${encodeURIComponent(orderNumber)}`;
+    window.location.assign('/dziekujemy.html?nr=' + encodeURIComponent(orderNumber));
   } catch (error) {
     alert(error.message || 'Nie udało się wysłać zamówienia. Spróbuj ponownie albo napisz do nas mailowo.');
   } finally {

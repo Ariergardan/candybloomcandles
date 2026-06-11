@@ -306,3 +306,16 @@ nav a {
   font-size: 32px;
   margin: 0 0 8px;
 }
+
+
+/* CandyBloom v5.6 — weight and scent pricing */
+.product-weight {
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 700;
+  margin: 8px 0 0;
+}
+
+.cart-info .small-note strong {
+  color: var(--brown);
+}

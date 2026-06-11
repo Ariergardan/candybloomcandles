@@ -1,42 +1,53 @@
-exports.handler = async (event) => {
-  const headers = {
-    "Content-Type": "application/json",
-    "Access-Control-Allow-Origin": "*",
-    "Access-Control-Allow-Headers": "Content-Type",
-    "Access-Control-Allow-Methods": "POST, OPTIONS"
-  };
+function jsonResponse(data, status = 200) {
+  return new Response(JSON.stringify(data), {
+    status,
+    headers: {
+      "Content-Type": "application/json; charset=utf-8",
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Headers": "Content-Type",
+      "Access-Control-Allow-Methods": "POST, OPTIONS"
+    }
+  });
+}
 
-  if (event.httpMethod === "OPTIONS") {
-    return { statusCode: 200, headers, body: "{}" };
+function utf8ToBase64(text) {
+  const bytes = new TextEncoder().encode(text);
+  let binary = "";
+  for (let i = 0; i < bytes.length; i++) {
+    binary += String.fromCharCode(bytes[i]);
   }
+  return btoa(binary);
+}
 
-  if (event.httpMethod !== "POST") {
-    return { statusCode: 405, headers, body: JSON.stringify({ error: "Method not allowed" }) };
-  }
+export async function onRequestOptions() {
+  return jsonResponse({});
+}
 
-  const token = process.env.GITHUB_TOKEN;
-  const adminPassword = process.env.ADMIN_PASSWORD;
-  const owner = process.env.GITHUB_OWNER || "Ariergardan";
-  const repo = process.env.GITHUB_REPO || "candybloomcandles";
-  const branch = process.env.GITHUB_BRANCH || "main";
+export async function onRequestPost(context) {
+  const env = context.env || {};
+  const token = env.GITHUB_TOKEN;
+  const adminPassword = env.ADMIN_PASSWORD;
+  const owner = env.GITHUB_OWNER || "Ariergardan";
+  const repo = env.GITHUB_REPO || "candybloomcandles";
+  const branch = env.GITHUB_BRANCH || "main";
 
   if (!token) {
-    return { statusCode: 500, headers, body: JSON.stringify({ error: "Brakuje GITHUB_TOKEN w Netlify Environment variables." }) };
+    return jsonResponse({ error: "Brakuje GITHUB_TOKEN w Cloudflare Pages → Settings → Environment variables." }, 500);
   }
 
   if (!adminPassword) {
-    return { statusCode: 500, headers, body: JSON.stringify({ error: "Brakuje ADMIN_PASSWORD w Netlify Environment variables." }) };
+    return jsonResponse({ error: "Brakuje ADMIN_PASSWORD w Cloudflare Pages → Settings → Environment variables." }, 500);
   }
 
   let body;
   try {
-    body = JSON.parse(event.body || "{}");
-  } catch (e) {
-    return { statusCode: 400, headers, body: JSON.stringify({ error: "Nieprawidłowy JSON." }) };
+    body = await context.request.json();
+  } catch (error) {
+    return jsonResponse({ error: "Nieprawidłowy JSON." }, 400);
   }
 
   if (body.password !== adminPassword) {
-    return { statusCode: 401, headers, body: JSON.stringify({ error: "Błędne hasło panelu." }) };
+    return jsonResponse({ error: "Błędne hasło panelu." }, 401);
   }
 
   const apiBase = `https://api.github.com/repos/${owner}/${repo}/contents`;
@@ -46,11 +57,12 @@ exports.handler = async (event) => {
       headers: {
         "Authorization": `Bearer ${token}`,
         "Accept": "application/vnd.github+json",
-        "User-Agent": "CandyBloom-CMS"
+        "User-Agent": "CandyBloom-CMS-Cloudflare"
       }
     });
 
     if (res.status === 404) return null;
+
     if (!res.ok) {
       const text = await res.text();
       throw new Error(`Nie udało się pobrać SHA dla ${path}: ${text}`);
@@ -62,9 +74,7 @@ exports.handler = async (event) => {
 
   async function putFile(path, content, message, alreadyBase64 = false) {
     const sha = await getSha(path);
-    const encoded = alreadyBase64
-      ? content
-      : Buffer.from(content, "utf8").toString("base64");
+    const encoded = alreadyBase64 ? content : utf8ToBase64(content);
 
     const payload = {
       message,
@@ -80,7 +90,7 @@ exports.handler = async (event) => {
         "Authorization": `Bearer ${token}`,
         "Accept": "application/vnd.github+json",
         "Content-Type": "application/json",
-        "User-Agent": "CandyBloom-CMS"
+        "User-Agent": "CandyBloom-CMS-Cloudflare"
       },
       body: JSON.stringify(payload)
     });
@@ -98,10 +108,12 @@ exports.handler = async (event) => {
 
     for (const upload of uploads) {
       if (!upload.path || !upload.contentBase64) continue;
+
       const cleanPath = String(upload.path).replace(/^\/+/, "");
       if (!cleanPath.startsWith("assets/images/")) {
         throw new Error("Zdjęcia można zapisywać tylko w assets/images.");
       }
+
       await putFile(cleanPath, upload.contentBase64, `CandyBloom CMS: upload ${cleanPath}`, true);
     }
 
@@ -121,16 +133,8 @@ exports.handler = async (event) => {
       );
     }
 
-    return {
-      statusCode: 200,
-      headers,
-      body: JSON.stringify({ ok: true })
-    };
+    return jsonResponse({ ok: true });
   } catch (error) {
-    return {
-      statusCode: 500,
-      headers,
-      body: JSON.stringify({ error: error.message || "Błąd zapisu." })
-    };
+    return jsonResponse({ error: error.message || "Błąd zapisu." }, 500);
   }
-};
+}

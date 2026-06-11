@@ -80,7 +80,7 @@
         <button class="admin-tab" data-tab="help">ℹ️ Pomoc</button>
       </div>
 
-      <div class="success-banner" id="successBox">✅ Zmiany zapisane. Netlify zaraz opublikuje stronę.</div>
+      <div class="success-banner" id="successBox">✅ Zmiany zapisane. Cloudflare zaraz opublikuje stronę.</div>
       <div class="error-banner" id="errorBox">Coś poszło nie tak.</div>
 
       <section id="productsTab">
@@ -158,7 +158,7 @@
                   <button class="primary" type="button" id="saveBtn">💾 Zapisz zmiany</button>
                   <button class="danger" type="button" id="deleteBtn">Usuń produkt</button>
                 </div>
-                <p class="small-note">Po zapisaniu panel zrobi commit na GitHubie, a Netlify opublikuje zmiany po chwili.</p>
+                <p class="small-note">Po zapisaniu panel zrobi commit na GitHubie, a Cloudflare opublikuje zmiany po chwili.</p>
               </div>
             </div>
           </div>
@@ -199,7 +199,7 @@
       <section id="helpTab" class="hidden-admin">
         <div class="admin-card">
           <h2>Jak działa zapis?</h2>
-          <p class="muted">Panel wysyła zmiany do funkcji Netlify. Funkcja używa bezpiecznego tokena z Environment variables, zapisuje pliki na GitHubie, a Netlify samo robi nowy deploy.</p>
+          <p class="muted">Panel wysyła zmiany do funkcji Cloudflare Pages. Funkcja używa bezpiecznego tokena z Environment variables, zapisuje pliki na GitHubie, a Netlify samo robi nowy deploy.</p>
           <p class="muted">Jeśli zapis nie działa, sprawdź czy w Netlify masz zmienne: <strong>GITHUB_TOKEN</strong> i <strong>ADMIN_PASSWORD</strong>.</p>
         </div>
       </section>
@@ -470,7 +470,7 @@ async function saveAll(){
 
   const uploads = Object.entries(pendingUploads).map(([path, contentBase64]) => ({path, contentBase64}));
 
-  const res = await fetch('/.netlify/functions/save-store', {
+  const res = await fetch('/api/save-store', {
     method: 'POST',
     headers: {'Content-Type':'application/json'},
     body: JSON.stringify({
@@ -488,7 +488,7 @@ async function saveAll(){
   }
 
   pendingUploads = {};
-  showMsg('✅ Zmiany zapisane. Netlify zaraz opublikuje stronę.', false);
+  showMsg('✅ Zmiany zapisane. Cloudflare zaraz opublikuje stronę.', false);
 }
 
 function showMsg(text, isError){

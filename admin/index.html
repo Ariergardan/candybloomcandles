@@ -46,7 +46,11 @@
     .password-box{max-width:520px}
     .muted{color:var(--muted);line-height:1.7}
     .hidden-admin{display:none!important}
-    @media(max-width:980px){.admin-grid,.preview-layout,.admin-form{grid-template-columns:1fr}.products-list{max-height:none}}
+    .pricing-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin:18px 0}
+    .pricing-card{background:#fff;border:1px solid var(--line);border-radius:22px;padding:18px}
+    .pricing-card h3{font-family:'Cormorant Garamond',serif;font-size:28px;margin:0 0 12px}
+    .pricing-fields{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+    @media(max-width:980px){.admin-grid,.preview-layout,.admin-form,.pricing-grid,.pricing-fields{grid-template-columns:1fr}.products-list{max-height:none}}
   </style>
 </head>
 <body>
@@ -72,10 +76,11 @@
       <div class="admin-tabs">
         <button class="admin-tab active" data-tab="products">📦 Produkty</button>
         <button class="admin-tab" data-tab="settings">🌸 Zapachy i kategorie</button>
+        <button class="admin-tab" data-tab="pricing">💰 Cennik zapachów</button>
         <button class="admin-tab" data-tab="help">ℹ️ Pomoc</button>
       </div>
 
-      <div class="success-banner" id="successBox">✅ Zmiany zapisane. Netlify zaraz opublikuje stronę.</div>
+      <div class="success-banner" id="successBox">✅ Zmiany zapisane. Cloudflare zaraz opublikuje stronę.</div>
       <div class="error-banner" id="errorBox">Coś poszło nie tak.</div>
 
       <section id="productsTab">
@@ -108,8 +113,11 @@
                   <label>Nazwa produktu
                     <input id="pName">
                   </label>
-                  <label>Cena
+                  <label>Cena bazowa
                     <input id="pPrice" type="number" min="0">
+                  </label>
+                  <label>Waga świeczki (g)
+                    <input id="pWeight" type="number" min="0">
                   </label>
                   <label>Kategoria
                     <select id="pCategory"></select>
@@ -150,7 +158,7 @@
                   <button class="primary" type="button" id="saveBtn">💾 Zapisz zmiany</button>
                   <button class="danger" type="button" id="deleteBtn">Usuń produkt</button>
                 </div>
-                <p class="small-note">Po zapisaniu panel zrobi commit na GitHubie, a Netlify opublikuje zmiany po chwili.</p>
+                <p class="small-note">Po zapisaniu panel zrobi commit na GitHubie, a Cloudflare opublikuje zmiany po chwili.</p>
               </div>
             </div>
           </div>
@@ -179,10 +187,19 @@
         <button class="primary" type="button" id="saveSettingsBtn">💾 Zapisz ustawienia</button>
       </section>
 
+      <section id="pricingTab" class="hidden-admin">
+        <div class="admin-card">
+          <h2>💰 Cennik zapachów według gramatury</h2>
+          <p class="muted">Ustaw dopłatę dla każdego zapachu osobno. Sklep sam wybierze cenę na podstawie wagi świeczki.</p>
+          <div class="pricing-grid" id="scentPricingList"></div>
+          <button class="primary" type="button" id="savePricingBtn">💾 Zapisz cennik zapachów</button>
+        </div>
+      </section>
+
       <section id="helpTab" class="hidden-admin">
         <div class="admin-card">
           <h2>Jak działa zapis?</h2>
-          <p class="muted">Panel wysyła zmiany do funkcji Netlify. Funkcja używa bezpiecznego tokena z Environment variables, zapisuje pliki na GitHubie, a Netlify samo robi nowy deploy.</p>
+          <p class="muted">Panel wysyła zmiany do funkcji Cloudflare Pages. Funkcja używa bezpiecznego tokena z Environment variables, zapisuje pliki na GitHubie, a Netlify samo robi nowy deploy.</p>
           <p class="muted">Jeśli zapis nie działa, sprawdź czy w Netlify masz zmienne: <strong>GITHUB_TOKEN</strong> i <strong>ADMIN_PASSWORD</strong>.</p>
         </div>
       </section>
@@ -231,13 +248,14 @@ function renderAll(){
   renderCategorySelect();
   renderProductForm();
   renderSettings();
+  renderScentPricing();
 }
 
 function renderProductsList(){
   $('productsList').innerHTML = productsData.products.map((p, i) => `
     <button class="product-row ${i === selectedIndex ? 'active' : ''}" type="button" data-index="${i}">
       <img src="${p.image || '/assets/images/hero.png'}" style="object-position:${p.imagePosition || 'center center'};transform:scale(${p.imageZoom || 1});">
-      <span><strong>${p.name || 'Nowy produkt'}</strong><small>${p.category || ''} · ${p.price || 0} zł</small></span>
+      <span><strong>${p.name || 'Nowy produkt'}</strong><small>${p.category || ''} · ${p.price || 0} zł · ${p.weight || 0} g</small></span>
       <small>${p.visible === false ? 'Ukryty' : 'Widoczny'}</small>
     </button>
   `).join('');
@@ -263,6 +281,7 @@ function renderProductForm(){
   $('pName').value = p.name || '';
   $('pPrice').value = p.price || 25;
   $('pCategory').value = p.category || (settingsData.categories || [])[0] || '';
+  $('pWeight').value = p.weight || 60;
   $('pVisible').value = String(p.visible !== false);
   $('pDescription').value = p.description || '';
   $('pImage').value = p.image || '';
@@ -278,6 +297,7 @@ function collectProductForm(){
   const p = currentProduct();
   p.name = $('pName').value.trim() || 'Nowy produkt';
   p.price = Number($('pPrice').value || 0);
+  p.weight = Number($('pWeight').value || 0);
   p.category = $('pCategory').value;
   p.visible = $('pVisible').value === 'true';
   p.description = $('pDescription').value.trim();
@@ -295,13 +315,13 @@ function updatePreview(){
   $('previewCategory').textContent = p.category || 'Kategoria';
   $('previewName').textContent = p.name || 'Nazwa produktu';
   $('previewDesc').textContent = p.description || 'Opis produktu';
-  $('previewPrice').textContent = money(p.price);
+  $('previewPrice').textContent = money(p.price) + ' · ' + Number(p.weight || 0) + ' g';
   $('xVal').textContent = $('pX').value + '%';
   $('yVal').textContent = $('pY').value + '%';
   $('zoomVal').textContent = Number($('pZoom').value).toFixed(2);
 }
 
-['pName','pPrice','pCategory','pVisible','pDescription','pImage','pX','pY','pZoom'].forEach(id => {
+['pName','pPrice','pWeight','pCategory','pVisible','pDescription','pImage','pX','pY','pZoom'].forEach(id => {
   $(id).addEventListener('input', updatePreview);
   $(id).addEventListener('change', updatePreview);
 });
@@ -350,8 +370,10 @@ function renderSettings(){
   }));
 
   document.querySelectorAll('[data-remove-scent]').forEach(btn => btn.addEventListener('click', () => {
-    settingsData.scentOptions.splice(Number(btn.dataset.removeScent), 1);
+    const removed = settingsData.scentOptions.splice(Number(btn.dataset.removeScent), 1)[0];
+    if(settingsData.scentPricing) delete settingsData.scentPricing[removed];
     renderSettings();
+    renderScentPricing();
   }));
 
   document.querySelectorAll('[data-remove-category]').forEach(btn => btn.addEventListener('click', () => {
@@ -363,7 +385,7 @@ function renderSettings(){
 
 $('addScentBtn').addEventListener('click', () => {
   const value = $('newScent').value.trim();
-  if(value){ settingsData.scentOptions.push(value); $('newScent').value=''; renderSettings(); }
+  if(value){ settingsData.scentOptions.push(value); settingsData.scentPricing = settingsData.scentPricing || {}; settingsData.scentPricing[value] = {upTo60: 2, upTo120: 4, above120: 6}; $('newScent').value=''; renderSettings(); renderScentPricing(); }
 });
 
 $('addCategoryBtn').addEventListener('click', () => {
@@ -376,6 +398,7 @@ $('addProductBtn').addEventListener('click', () => {
     name: 'Nowy produkt',
     category: (settingsData.categories || [])[0] || 'Dekoracyjne',
     price: 25,
+    weight: 60,
     image: '/assets/images/hero.png',
     description: '',
     visible: true,
@@ -401,13 +424,53 @@ $('deleteBtn').addEventListener('click', () => {
   renderAll();
 });
 
+
+function ensureScentPricing(){
+  if(!settingsData.scentPricing) settingsData.scentPricing = {};
+  (settingsData.scentOptions || []).forEach(scent => {
+    if(scent === 'Bez zapachu' || scent === 'Zapytaj o zapach') return;
+    if(!settingsData.scentPricing[scent]){
+      settingsData.scentPricing[scent] = {upTo60: 2, upTo120: 4, above120: 6};
+    }
+  });
+}
+
+function renderScentPricing(){
+  ensureScentPricing();
+  $('scentPricingList').innerHTML = Object.entries(settingsData.scentPricing).map(([scent, prices]) => `
+    <div class="pricing-card">
+      <h3>${scent}</h3>
+      <div class="pricing-fields">
+        <label>do 60 g
+          <input type="number" min="0" value="${prices.upTo60 || 0}" data-scent="${scent}" data-tier="upTo60">
+        </label>
+        <label>do 120 g
+          <input type="number" min="0" value="${prices.upTo120 || 0}" data-scent="${scent}" data-tier="upTo120">
+        </label>
+        <label>120 g+
+          <input type="number" min="0" value="${prices.above120 || 0}" data-scent="${scent}" data-tier="above120">
+        </label>
+      </div>
+    </div>
+  `).join('');
+
+  document.querySelectorAll('[data-scent][data-tier]').forEach(input => {
+    input.addEventListener('input', e => {
+      const scent = e.target.dataset.scent;
+      const tier = e.target.dataset.tier;
+      if(!settingsData.scentPricing[scent]) settingsData.scentPricing[scent] = {};
+      settingsData.scentPricing[scent][tier] = Number(e.target.value || 0);
+    });
+  });
+}
+
 async function saveAll(){
   collectProductForm();
   showMsg('', false);
 
   const uploads = Object.entries(pendingUploads).map(([path, contentBase64]) => ({path, contentBase64}));
 
-  const res = await fetch('/.netlify/functions/save-store', {
+  const res = await fetch('/api/save-store', {
     method: 'POST',
     headers: {'Content-Type':'application/json'},
     body: JSON.stringify({
@@ -425,7 +488,7 @@ async function saveAll(){
   }
 
   pendingUploads = {};
-  showMsg('✅ Zmiany zapisane. Netlify zaraz opublikuje stronę.', false);
+  showMsg('✅ Zmiany zapisane. Cloudflare zaraz opublikuje stronę.', false);
 }
 
 function showMsg(text, isError){
@@ -440,11 +503,12 @@ function showMsg(text, isError){
 
 $('saveBtn').addEventListener('click', saveAll);
 $('saveSettingsBtn').addEventListener('click', saveAll);
+$('savePricingBtn').addEventListener('click', saveAll);
 
 document.querySelectorAll('.admin-tab').forEach(tab => tab.addEventListener('click', () => {
   document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
   tab.classList.add('active');
-  ['products','settings','help'].forEach(name => $(name + 'Tab').classList.add('hidden-admin'));
+  ['products','settings','pricing','help'].forEach(name => $(name + 'Tab').classList.add('hidden-admin'));
   $(tab.dataset.tab + 'Tab').classList.remove('hidden-admin');
 }));
 

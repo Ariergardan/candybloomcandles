@@ -1,0 +1,26 @@
+CandyBloom v1.4 — dynamiczne progi gramatur w cenniku zapachów
+
+Podmień/wgraj:
+- admin/index.html
+- script.js
+- data/settings.json
+
+Co dodaje:
+- w panelu admina możesz dodawać dowolną liczbę progów gramatur dla każdego zapachu,
+- możesz wpisać np. 60 g → 2 zł, 120 g → 4 zł, 200 g → 10 zł, 300 g → 12 zł,
+- możesz usuwać progi,
+- sklep automatycznie wybiera pierwszy próg, do którego mieści się gramatura świeczki,
+- ostatni próg 99999 działa jako „bez limitu”.
+
+Obecne ceny zostały przeniesione:
+- 60 g → 2 zł
+- 120 g → 4 zł
+- bez limitu → 6 zł
+
+Po wgraniu:
+1. Commit + push.
+2. Poczekaj na deploy Cloudflare.
+3. Wejdź w /admin → Cennik zapachów.
+4. Dodaj testowo próg np. 200 g → 10 zł.
+5. Zapisz.
+6. Sprawdź w sklepie świeczkę z gramaturą ponad 120 g.

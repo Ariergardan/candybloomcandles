@@ -70,21 +70,34 @@ async function loadData(){
   renderCart();
 }
 
+function normalizeScentPricing(pricing){
+  if (!pricing) return {tiers: []};
+  if (Array.isArray(pricing.tiers)) return pricing;
+
+  return {
+    tiers: [
+      {maxWeight: 60, price: Number(pricing.upTo60 || 0)},
+      {maxWeight: 120, price: Number(pricing.upTo120 || 0)},
+      {maxWeight: 99999, price: Number(pricing.above120 || 0)}
+    ]
+  };
+}
+
 function getScentExtraPrice(scent, weight){
   if (!scent || scent === 'Bez zapachu' || scent === 'Zapytaj o zapach') return 0;
 
-  const pricing = settings.scentPricing?.[scent];
-  if (!pricing) return 0;
+  const pricing = normalizeScentPricing(settings.scentPricing?.[scent]);
+  const tiers = (pricing.tiers || [])
+    .map(tier => ({
+      maxWeight: Number(tier.maxWeight || 0),
+      price: Number(tier.price || 0)
+    }))
+    .filter(tier => tier.maxWeight > 0)
+    .sort((a,b) => a.maxWeight - b.maxWeight);
 
-  const grams = Number(weight || 0);
-
-  if (grams <= 60) return Number(pricing.upTo60 || 0);
-  if (grams <= 120) return Number(pricing.upTo120 || 0);
-  return Number(pricing.above120 || 0);
-}
-
-function getItemUnitPrice(item){
-  return Number(item.price || 0) + getScentExtraPrice(item.scent, item.weight);
+  const candleWeight = Number(weight || 0);
+  const matched = tiers.find(tier => candleWeight <= tier.maxWeight);
+  return matched ? matched.price : (tiers.length ? tiers[tiers.length - 1].price : 0);
 }
 
 function getScentLabel(scent, weight){

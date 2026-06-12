@@ -26,39 +26,116 @@
   ],
   "scentPricing": {
     "Paczula": {
-      "upTo60": 2,
-      "upTo120": 4,
-      "above120": 6
+      "tiers": [
+        {
+          "maxWeight": 60,
+          "price": 2.0
+        },
+        {
+          "maxWeight": 120,
+          "price": 4.0
+        },
+        {
+          "maxWeight": 99999,
+          "price": 6.0
+        }
+      ]
     },
     "Lemon Sorbet": {
-      "upTo60": 2,
-      "upTo120": 4,
-      "above120": 6
+      "tiers": [
+        {
+          "maxWeight": 60,
+          "price": 2.0
+        },
+        {
+          "maxWeight": 120,
+          "price": 4.0
+        },
+        {
+          "maxWeight": 99999,
+          "price": 6.0
+        }
+      ]
     },
     "Evergreen": {
-      "upTo60": 2,
-      "upTo120": 4,
-      "above120": 6
+      "tiers": [
+        {
+          "maxWeight": 60,
+          "price": 2.0
+        },
+        {
+          "maxWeight": 120,
+          "price": 4.0
+        },
+        {
+          "maxWeight": 99999,
+          "price": 6.0
+        }
+      ]
     },
     "Lychee & Mango": {
-      "upTo60": 2,
-      "upTo120": 4,
-      "above120": 6
+      "tiers": [
+        {
+          "maxWeight": 60,
+          "price": 2.0
+        },
+        {
+          "maxWeight": 120,
+          "price": 4.0
+        },
+        {
+          "maxWeight": 99999,
+          "price": 6.0
+        }
+      ]
     },
     "Magnolia & Peach": {
-      "upTo60": 2,
-      "upTo120": 4,
-      "above120": 6
+      "tiers": [
+        {
+          "maxWeight": 60,
+          "price": 2.0
+        },
+        {
+          "maxWeight": 120,
+          "price": 4.0
+        },
+        {
+          "maxWeight": 99999,
+          "price": 6.0
+        }
+      ]
     },
     "Świeża Bawełna": {
-      "upTo60": 2,
-      "upTo120": 4,
-      "above120": 6
+      "tiers": [
+        {
+          "maxWeight": 60,
+          "price": 2.0
+        },
+        {
+          "maxWeight": 120,
+          "price": 4.0
+        },
+        {
+          "maxWeight": 99999,
+          "price": 6.0
+        }
+      ]
     },
     "ewe": {
-      "upTo60": 2,
-      "upTo120": 4,
-      "above120": 6
+      "tiers": [
+        {
+          "maxWeight": 60,
+          "price": 2.0
+        },
+        {
+          "maxWeight": 120,
+          "price": 4.0
+        },
+        {
+          "maxWeight": 99999,
+          "price": 6.0
+        }
+      ]
     }
   }
 }

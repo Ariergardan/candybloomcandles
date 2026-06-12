@@ -11,7 +11,11 @@ const deliveryOptions = {
 
 let deliveryMethod = localStorage.getItem('candy_delivery_method') || 'paczkomat';
 
-const money = value => `${Number(value).toFixed(0)} zł`;
+const money = value => {
+  const number = Number(value || 0);
+  if (Number.isInteger(number)) return `${number} zł`;
+  return `${number.toFixed(2).replace('.', ',')} zł`;
+};
 
 function getDeliveryOption(){
   return deliveryOptions[deliveryMethod] || deliveryOptions.paczkomat;

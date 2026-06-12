@@ -23,6 +23,13 @@ function nl2br(value) {
   return escapeHtml(value).replaceAll("\n", "<br>");
 }
 
+function formatPrice(value) {
+  const number = Number(value || 0);
+  if (Number.isInteger(number)) return `${number} zł`;
+  return `${number.toFixed(2).replace(".", ",")} zł`;
+}
+
+
 function base64UrlEncode(value) {
   const json = JSON.stringify(value);
   return btoa(unescape(encodeURIComponent(json)))
@@ -86,7 +93,7 @@ function deliveryBlock(order) {
     <h3 style="color:#4d3528;margin-top:24px">Dostawa</h3>
     <p style="line-height:1.7;color:#6f5c51">
       ${escapeHtml(d.label)}<br>
-      Koszt dostawy: <strong>${escapeHtml(String(d.price ?? 0))} zł</strong>
+      Koszt dostawy: <strong>${escapeHtml(formatPrice(d.price))}</strong>
     </p>
   `;
 }

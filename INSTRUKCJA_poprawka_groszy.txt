@@ -1,0 +1,18 @@
+CandyBloom — poprawka groszy w dostawie
+
+Podmień:
+- script.js
+- functions/api/order.js
+- functions/api/send-payment.js
+
+Co poprawia:
+- Kurier pokazuje 18,99 zł zamiast 19 zł.
+- Paczkomat pokazuje 16,99 zł zamiast 17 zł.
+- Suma zamówienia pokazuje grosze, np. 45,99 zł.
+- Produkty z pełnymi cenami nadal pokazują np. 27 zł.
+
+Po wgraniu:
+1. Commit + push.
+2. Poczekaj na deploy Cloudflare.
+3. Ctrl+F5.
+4. Złóż test z Kurierem i Paczkomatem.

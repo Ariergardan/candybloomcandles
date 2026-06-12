@@ -109,6 +109,17 @@
       "visible": true,
       "imagePosition": "50% 57%",
       "imageZoom": 1
+    },
+    {
+      "name": "Świeca miś (duży)",
+      "category": "Miłosne",
+      "price": 35,
+      "weight": 274,
+      "image": "/assets/images/nowy-prodkt-1781303271334.png",
+      "description": "Urocza świeca w kształcie misia trzymającego serce. Symbolizuje miłość, przyjaźń oraz najpiękniejsze emocje, dlatego doskonale sprawdzi się jako prezent dla bliskiej osoby.\nJej wyjątkowy wygląd sprawia, że zachwyca zarówno dzieci, jak i dorosłych.",
+      "visible": true,
+      "imagePosition": "50% 36%",
+      "imageZoom": 1
     }
   ]
 }

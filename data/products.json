@@ -120,6 +120,17 @@
       "visible": true,
       "imagePosition": "50% 36%",
       "imageZoom": 1
+    },
+    {
+      "name": "Świeca miś (mały)",
+      "category": "Miłosne",
+      "price": 9,
+      "weight": 53,
+      "image": "/assets/images/nowy-prodkt-1781303418389.png",
+      "description": "Świeca inspirowana pluszowym misiem, który trzyma serce pełne ciepłych uczuć. Dzięki bogato zdobionej fakturze wygląda niezwykle uroczo i wyjątkowo.\nTo idealny prezent na walentynki, rocznicę, urodziny lub każdą inną okazję, podczas której chcesz wywołać uśmiech na czyjejś twarzy.",
+      "visible": true,
+      "imagePosition": "47% 53%",
+      "imageZoom": 1
     }
   ]
 }

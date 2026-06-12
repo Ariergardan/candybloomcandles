@@ -89,15 +89,15 @@
       "weight": 154
     },
     {
-      "name": "Zestaw CandyBloom",
-      "category": "Zestawy prezentowe",
-      "price": 25,
-      "image": "/assets/images/swieca-9.png",
-      "description": "Elegancki zestaw świec wykonywany ręcznie na zamówienie.",
+      "name": "Świeca miś z bukietem",
+      "category": "Miłosne",
+      "price": 17,
+      "image": "/assets/images/zestaw-candybloom-1781302930071.png",
+      "description": "Urocza świeca przedstawiająca misia trzymającego bukiet kwiatów. To wyjątkowa propozycja dla osób, które uwielbiają słodkie i niepowtarzalne dekoracje.\nIdealnie sprawdzi się jako prezent na urodziny, dzień Kobiet, walentynki czy rocznicę. Każdy detal został wykonany z najwyższą starannością.",
       "visible": true,
-      "imagePosition": "50% 63%",
+      "imagePosition": "50% 72%",
       "imageZoom": 1.07,
-      "weight": 60
+      "weight": 116
     }
   ]
 }

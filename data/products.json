@@ -98,6 +98,17 @@
       "imagePosition": "50% 72%",
       "imageZoom": 1.07,
       "weight": 116
+    },
+    {
+      "name": "Świeca koszyczek róż",
+      "category": "Miłosne",
+      "price": 16,
+      "weight": 110,
+      "image": "/assets/images/nowy-prodkt-1781303083304.jpg",
+      "description": "Wyjątkowa świeca sojowa w kształcie koszyczka wypełnionego delikatnymi różami. Starannie wykonane kwiatowe detale nadają jej romantycznego charakteru, dzięki czemu zachwyca zarówno jako świeca, jak i elegancka dekoracja wnętrza.\nDoskonale sprawdzi się jako prezent dla bliskiej osoby lub wyjątkowy dodatek do salonu czy sypialni. To połączenie subtelnego piękna kwiatów z ciepłem rękodzieła.",
+      "visible": true,
+      "imagePosition": "50% 57%",
+      "imageZoom": 1
     }
   ]
 }

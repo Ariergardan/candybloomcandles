@@ -29,15 +29,15 @@
       "tiers": [
         {
           "maxWeight": 60,
-          "price": 2.0
+          "price": 2
         },
         {
           "maxWeight": 120,
-          "price": 4.0
+          "price": 4
         },
         {
-          "maxWeight": 99999,
-          "price": 6.0
+          "maxWeight": 200,
+          "price": 6
         }
       ]
     },
@@ -45,15 +45,15 @@
       "tiers": [
         {
           "maxWeight": 60,
-          "price": 2.0
+          "price": 2
         },
         {
           "maxWeight": 120,
-          "price": 4.0
+          "price": 4
         },
         {
           "maxWeight": 99999,
-          "price": 6.0
+          "price": 6
         }
       ]
     },
@@ -61,15 +61,15 @@
       "tiers": [
         {
           "maxWeight": 60,
-          "price": 2.0
+          "price": 2
         },
         {
           "maxWeight": 120,
-          "price": 4.0
+          "price": 4
         },
         {
           "maxWeight": 99999,
-          "price": 6.0
+          "price": 6
         }
       ]
     },
@@ -77,15 +77,15 @@
       "tiers": [
         {
           "maxWeight": 60,
-          "price": 2.0
+          "price": 2
         },
         {
           "maxWeight": 120,
-          "price": 4.0
+          "price": 4
         },
         {
           "maxWeight": 99999,
-          "price": 6.0
+          "price": 6
         }
       ]
     },
@@ -93,15 +93,15 @@
       "tiers": [
         {
           "maxWeight": 60,
-          "price": 2.0
+          "price": 2
         },
         {
           "maxWeight": 120,
-          "price": 4.0
+          "price": 4
         },
         {
           "maxWeight": 99999,
-          "price": 6.0
+          "price": 6
         }
       ]
     },
@@ -109,15 +109,15 @@
       "tiers": [
         {
           "maxWeight": 60,
-          "price": 2.0
+          "price": 2
         },
         {
           "maxWeight": 120,
-          "price": 4.0
+          "price": 4
         },
         {
           "maxWeight": 99999,
-          "price": 6.0
+          "price": 6
         }
       ]
     },
@@ -125,15 +125,15 @@
       "tiers": [
         {
           "maxWeight": 60,
-          "price": 2.0
+          "price": 2
         },
         {
           "maxWeight": 120,
-          "price": 4.0
+          "price": 4
         },
         {
           "maxWeight": 99999,
-          "price": 6.0
+          "price": 6
         }
       ]
     }

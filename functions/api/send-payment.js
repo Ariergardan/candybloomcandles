@@ -43,6 +43,18 @@ function productTable(order) {
     </table>`;
 }
 
+function deliveryBlock(order) {
+  const d = order.delivery || {};
+  if (!d.label) return "";
+  return `
+    <h3 style="color:#4d3528;margin-top:24px">Dostawa</h3>
+    <p style="line-height:1.7;color:#6f5c51">
+      ${escapeHtml(d.label)}<br>
+      Koszt dostawy: <strong>${escapeHtml(String(d.price ?? 0))} zł</strong>
+    </p>
+  `;
+}
+
 function emailShell(content) {
   return `
     <div style="margin:0;padding:0;background:#fbf6f0;font-family:Arial,sans-serif;color:#3d2d25">
@@ -75,6 +87,8 @@ function buildPaymentEmail(order) {
     </div>
 
     ${productTable(order)}
+
+    ${deliveryBlock(order)}
 
     <div style="background:#4d3528;color:#fff;border-radius:18px;padding:20px;margin:18px 0;text-align:center">
       <div style="font-size:13px;opacity:.85">Kwota do zapłaty</div>

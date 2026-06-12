@@ -1,0 +1,55 @@
+CandyBloom v1.2 — dostawy + statusy + maile statusowe
+
+Podmień/wgraj pliki z paczki:
+- index.html
+- script.js
+- style.css
+- status.html
+- functions/api/order.js
+- functions/api/send-payment.js
+- functions/api/send-status.js
+
+Co dodaje:
+1. Dostawy w koszyku:
+   - InPost Paczkomat — 16,99 zł
+   - InPost Kurier — 18,99 zł
+   - Odbiór osobisty — 0 zł
+
+2. Koszyk:
+   - automatycznie dolicza dostawę do kwoty końcowej,
+   - wpisuje dostawę do podsumowania zamówienia.
+
+3. Maile:
+   - klient dostaje w potwierdzeniu informację o dostawie,
+   - Ty dostajesz informację o dostawie,
+   - mail z danymi do płatności też pokazuje dostawę.
+
+4. Statusy z maila do Ciebie:
+   - W realizacji,
+   - Gotowe do odbioru,
+   - Wysłane / numer przesyłki.
+
+Jak działa „Wysłane”:
+- W mailu do Ciebie klikasz „Wysłane / numer przesyłki”.
+- Otworzy się strona.
+- Wpisujesz numer przesyłki.
+- Klient dostaje maila ze statusem wysłane i numerem przesyłki.
+
+W Cloudflare musi zostać ustawione:
+ORDER_ACTION_TOKEN = candybloom-platnosc-2026
+EMAILLABS_APP_KEY
+EMAILLABS_SECRET_KEY
+EMAILLABS_SMTP_ACCOUNT = 1.ariergarda.smtp
+ORDER_FROM_EMAIL = zamowienia@candybloomcandles.pl
+ORDER_FROM_NAME = CandyBloom Candles
+ORDER_TO_EMAIL = zamowienia@candybloomcandles.pl
+
+Po wgraniu:
+1. Commit + push.
+2. Poczekaj na zielony deploy Cloudflare.
+3. Ctrl+F5 na stronie.
+4. Złóż testowe zamówienie.
+5. Sprawdź:
+   - czy dostawa dolicza się do kwoty,
+   - czy dostawa jest w mailach,
+   - czy przyciski statusów działają.

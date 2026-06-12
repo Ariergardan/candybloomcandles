@@ -17,6 +17,7 @@
       <a href="#produkty">🕯️ Produkty</a>
       <a href="#zamowienie">📦 Jak zamówić</a>
       <a href="#kontakt">💌 Kontakt</a>
+      <a href="/status.html">🔎 Status</a>
       <button class="cart-button" id="openCart">🛒 Koszyk <span id="cartCount">0</span></button>
     </nav>
   </header>
@@ -102,7 +103,15 @@
         <label>Imię i nazwisko<input required name="imie_i_nazwisko" /></label>
         <label>E-mail<input required type="email" name="email" /></label>
         <label>Telefon<input required name="telefon" /></label>
-        <label>Adres dostawy<textarea required name="adres_dostawy" rows="3"></textarea></label>
+        <label>Sposób dostawy
+          <select id="deliveryMethod" name="delivery_method" required>
+            <option value="paczkomat">InPost Paczkomat — 16,99 zł</option>
+            <option value="kurier">InPost Kurier — 18,99 zł</option>
+            <option value="odbior">Odbiór osobisty — 0 zł</option>
+          </select>
+        </label>
+        <p class="small-note" id="deliverySummary">Dostawa: InPost Paczkomat — 16,99 zł</p>
+        <label>Adres dostawy / Paczkomat / informacja do odbioru<textarea required name="adres_dostawy" rows="3" placeholder="Dla Paczkomatu wpisz wybrany paczkomat, dla kuriera adres, dla odbioru osobistego wpisz: odbiór osobisty."></textarea></label>
         <label>Uwagi do zamówienia<textarea name="uwagi" rows="3" placeholder="Np. okazja, preferowany termin, dodatkowe informacje"></textarea></label>
         <p class="small-note order-info-note">Każda świeca wykonywana jest ręcznie na zamówienie. Po złożeniu zamówienia otrzymasz potwierdzenie, a dane do płatności prześlemy po weryfikacji zamówienia. Na opłacenie zamówienia przysługuje 24 godziny.</p>
         <button class="primary full" type="submit">Personalizuj i wyślij zamówienie</button>

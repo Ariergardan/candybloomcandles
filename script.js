@@ -3,7 +3,42 @@ let settings = {};
 let currentCategory = 'Wszystkie';
 let cart = JSON.parse(localStorage.getItem('candy_cart') || '[]');
 
+const deliveryOptions = {
+  paczkomat: { label: 'InPost Paczkomat', price: 16.99 },
+  kurier: { label: 'InPost Kurier', price: 18.99 },
+  odbior: { label: 'Odbiór osobisty', price: 0 }
+};
+
+let deliveryMethod = localStorage.getItem('candy_delivery_method') || 'paczkomat';
+
 const money = value => `${Number(value).toFixed(0)} zł`;
+
+function getDeliveryOption(){
+  return deliveryOptions[deliveryMethod] || deliveryOptions.paczkomat;
+}
+
+function getProductsTotal(){
+  return cart.reduce((sum,i)=>sum + getItemUnitPrice(i) * i.qty,0);
+}
+
+function getOrderTotal(){
+  return getProductsTotal() + getDeliveryOption().price;
+}
+
+function updateDeliveryUI(){
+  const select = document.getElementById('deliveryMethod');
+  const summary = document.getElementById('deliverySummary');
+
+  if(select && select.value !== deliveryMethod){
+    select.value = deliveryMethod;
+  }
+
+  const option = getDeliveryOption();
+  if(summary){
+    summary.textContent = `Dostawa: ${option.label} — ${money(option.price)}`;
+  }
+}
+
 
 async function loadData(){
   const [productsRes, settingsRes] = await Promise.all([
@@ -141,10 +176,13 @@ function updateCartItem(id, updates, shouldRender = true){
 }
 
 function updateHiddenOrderFields(){
-  const total = cart.reduce((sum,i)=>sum + getItemUnitPrice(i) * i.qty,0);
+  const productsTotal = getProductsTotal();
+  const delivery = getDeliveryOption();
+  const total = productsTotal + delivery.price;
+
   document.getElementById('cartTotal').textContent = money(total);
 
-  document.getElementById('cartData').value = cart.map(i => {
+  const productsText = cart.map(i => {
     const scentExtra = getScentExtraPrice(i.scent, i.weight);
     const colorText = i.colorChoice === 'Zapytaj o kolor'
       ? `Zapytaj o kolor: ${i.customColor || 'brak wpisanego koloru'}`
@@ -157,7 +195,13 @@ function updateHiddenOrderFields(){
     return `${i.name} | waga: ${i.weight || 0} g | kolor: ${colorText} | zapach: ${scentText} | ilość: ${i.qty} | cena szt.: ${money(getItemUnitPrice(i))} | razem: ${money(getItemUnitPrice(i)*i.qty)}`;
   }).join('\n');
 
+  const deliveryText = `Dostawa: ${delivery.label} | koszt: ${money(delivery.price)}`;
+  const summaryText = `Produkty: ${money(productsTotal)} | Dostawa: ${money(delivery.price)} | Razem: ${money(total)}`;
+
+  document.getElementById('cartData').value = [productsText, deliveryText, summaryText].filter(Boolean).join('\n');
   document.getElementById('cartAmount').value = money(total);
+
+  updateDeliveryUI();
 }
 
 function renderCart(){
@@ -311,6 +355,17 @@ function closeCart(){
 document.getElementById('openCart').addEventListener('click', openCart);
 document.getElementById('closeCart').addEventListener('click', closeCart);
 
+const deliverySelect = document.getElementById('deliveryMethod');
+if(deliverySelect){
+  deliverySelect.value = deliveryMethod;
+  deliverySelect.addEventListener('change', e => {
+    deliveryMethod = e.target.value;
+    localStorage.setItem('candy_delivery_method', deliveryMethod);
+    updateHiddenOrderFields();
+  });
+}
+
+
 document.getElementById('orderForm').addEventListener('submit', async e => {
   e.preventDefault();
 
@@ -335,6 +390,11 @@ document.getElementById('orderForm').addEventListener('submit', async e => {
     total: document.getElementById('cartAmount').value || '0 zł',
     cartText: document.getElementById('cartData').value || '',
     cartItems: cart,
+    delivery: {
+      method: deliveryMethod,
+      label: getDeliveryOption().label,
+      price: getDeliveryOption().price
+    },
     customer: {
       name: formData.get('imie_i_nazwisko') || '',
       email: formData.get('email') || '',

@@ -79,6 +79,33 @@ function statusBadge(label, bg = "#fff3cd", color = "#6a4b00") {
   return `<span style="display:inline-block;background:${bg};color:${color};border-radius:999px;padding:8px 12px;font-weight:700;font-size:13px">${escapeHtml(label)}</span>`;
 }
 
+function deliveryBlock(order) {
+  const d = order.delivery || {};
+  if (!d.label) return "";
+  return `
+    <h3 style="color:#4d3528;margin-top:24px">Dostawa</h3>
+    <p style="line-height:1.7;color:#6f5c51">
+      ${escapeHtml(d.label)}<br>
+      Koszt dostawy: <strong>${escapeHtml(String(d.price ?? 0))} zł</strong>
+    </p>
+  `;
+}
+
+function buildStatusActionUrl(requestUrl, env, order, status) {
+  const url = new URL(requestUrl);
+  const base = `${url.protocol}//${url.host}`;
+  const token = env.ORDER_ACTION_TOKEN || "CHANGE_ME";
+  const payload = base64UrlEncode({
+    orderNumber: order.orderNumber,
+    total: order.total,
+    cartText: order.cartText,
+    customer: order.customer,
+    delivery: order.delivery,
+    delivery: order.delivery
+  });
+  return `${base}/api/send-status?token=${encodeURIComponent(token)}&status=${encodeURIComponent(status)}&data=${encodeURIComponent(payload)}`;
+}
+
 function buildCustomerEmail(order) {
   const c = order.customer || {};
   return emailShell(`
@@ -101,6 +128,7 @@ function buildCustomerEmail(order) {
 
     <h3 style="color:#4d3528;margin-top:24px">Dane dostawy</h3>
     <p style="line-height:1.7;color:#6f5c51">${escapeHtml(c.name)}<br>${nl2br(c.address)}<br>tel. ${escapeHtml(c.phone)}</p>
+    ${deliveryBlock(order)}
 
     <p style="line-height:1.7;color:#6f5c51">Po weryfikacji zamówienia prześlemy dane do płatności. Na opłacenie zamówienia przysługuje 24 godziny od otrzymania danych do płatności.</p>
     <p style="line-height:1.7;color:#6f5c51">Realizacja rozpoczyna się po zaksięgowaniu płatności i trwa od 1 do 7 dni roboczych. W przypadku większych lub bardziej personalizowanych zamówień termin może się wydłużyć — poinformujemy Cię o tym mailowo lub telefonicznie.</p>
@@ -115,12 +143,13 @@ function buildPaymentActionUrl(requestUrl, env, order) {
     orderNumber: order.orderNumber,
     total: order.total,
     cartText: order.cartText,
-    customer: order.customer
+    customer: order.customer,
+    delivery: order.delivery
   });
   return `${base}/api/send-payment?token=${encodeURIComponent(token)}&data=${encodeURIComponent(payload)}`;
 }
 
-function buildOwnerEmail(order, paymentUrl) {
+function buildOwnerEmail(order, paymentUrl, statusUrls) {
   const c = order.customer || {};
   return emailShell(`
     <h1 style="font-family:Georgia,serif;color:#4d3528;font-size:34px;margin:0 0 12px">Nowe zamówienie 📦</h1>
@@ -140,6 +169,7 @@ function buildOwnerEmail(order, paymentUrl) {
       Telefon: <a href="tel:${escapeHtml(c.phone)}">${escapeHtml(c.phone)}</a><br>
       Adres:<br>${nl2br(c.address)}
     </p>
+    ${deliveryBlock(order)}
 
     ${productTable(order)}
 
@@ -151,6 +181,13 @@ function buildOwnerEmail(order, paymentUrl) {
         Wyślij dane do płatności
       </a>
       <p style="font-size:13px;color:#8a7468;margin-top:10px">Po kliknięciu klient dostanie elegancki mail z BLIK/przelewem i statusem „oczekuje na płatność”.</p>
+    </div>
+
+    <div style="text-align:center;margin:26px 0">
+      <p style="color:#4d3528;font-weight:700">Aktualizacja statusu zamówienia</p>
+      <a href="${escapeHtml(statusUrls.inProgress)}" style="display:inline-block;background:#b99864;color:#fff;text-decoration:none;border-radius:999px;padding:14px 20px;font-weight:700;margin:5px">W realizacji</a>
+      <a href="${escapeHtml(statusUrls.readyPickup)}" style="display:inline-block;background:#7b8ca6;color:#fff;text-decoration:none;border-radius:999px;padding:14px 20px;font-weight:700;margin:5px">Gotowe do odbioru</a>
+      <a href="${escapeHtml(statusUrls.shipped)}" style="display:inline-block;background:#4d3528;color:#fff;text-decoration:none;border-radius:999px;padding:14px 20px;font-weight:700;margin:5px">Wysłane / numer przesyłki</a>
     </div>
   `);
 }
@@ -208,13 +245,18 @@ export async function onRequestPost(context) {
   try {
     const ownerEmail = context.env.ORDER_TO_EMAIL || "zamowienia@candybloomcandles.pl";
     const paymentUrl = buildPaymentActionUrl(context.request.url, context.env, order);
+    const statusUrls = {
+      inProgress: buildStatusActionUrl(context.request.url, context.env, order, "in_progress"),
+      shipped: buildStatusActionUrl(context.request.url, context.env, order, "shipped"),
+      readyPickup: buildStatusActionUrl(context.request.url, context.env, order, "ready_pickup")
+    };
 
     await sendEmail({
       env: context.env,
       to: ownerEmail,
       toName: "CandyBloom Candles",
       subject: `Nowe zamówienie ${order.orderNumber} — CandyBloom Candles`,
-      html: buildOwnerEmail(order, paymentUrl),
+      html: buildOwnerEmail(order, paymentUrl, statusUrls),
       replyTo: customer.email
     });
 

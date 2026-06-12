@@ -171,6 +171,89 @@ a{display:inline-block;margin-top:18px;background:#4d3528;color:#fff;text-decora
   });
 }
 
+async function githubGetFile(env, path) {
+  const token = env.GITHUB_TOKEN;
+  const owner = env.GITHUB_OWNER || "Ariergardan";
+  const repo = env.GITHUB_REPO || "candybloomcandles";
+  const branch = env.GITHUB_BRANCH || "main";
+  if (!token) return null;
+
+  const res = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${path}?ref=${branch}`, {
+    headers: {
+      "Authorization": `Bearer ${token}`,
+      "Accept": "application/vnd.github+json",
+      "User-Agent": "CandyBloom-Orders-Cloudflare"
+    }
+  });
+  if (res.status === 404) return { sha: null, content: null };
+  if (!res.ok) throw new Error(await res.text());
+  const data = await res.json();
+  return { sha: data.sha, content: decodeURIComponent(escape(atob(data.content.replace(/\n/g, "")))) };
+}
+
+function utf8ToBase64(text) {
+  const bytes = new TextEncoder().encode(text);
+  let binary = "";
+  for (let i = 0; i < bytes.length; i++) binary += String.fromCharCode(bytes[i]);
+  return btoa(binary);
+}
+
+async function githubPutFile(env, path, content, message, sha = null) {
+  const token = env.GITHUB_TOKEN;
+  const owner = env.GITHUB_OWNER || "Ariergardan";
+  const repo = env.GITHUB_REPO || "candybloomcandles";
+  const branch = env.GITHUB_BRANCH || "main";
+  if (!token) return null;
+
+  const payload = { message, content: utf8ToBase64(content), branch };
+  if (sha) payload.sha = sha;
+
+  const res = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${path}`, {
+    method: "PUT",
+    headers: {
+      "Authorization": `Bearer ${token}`,
+      "Accept": "application/vnd.github+json",
+      "Content-Type": "application/json",
+      "User-Agent": "CandyBloom-Orders-Cloudflare"
+    },
+    body: JSON.stringify(payload)
+  });
+  if (!res.ok) throw new Error(await res.text());
+  return res.json();
+}
+
+async function updatePaymentHistory(env, order) {
+  if (!env.GITHUB_TOKEN) return;
+  const path = "data/orders.json";
+  const file = await githubGetFile(env, path);
+  let data = { orders: [] };
+  if (file?.content) {
+    try { data = JSON.parse(file.content); } catch { data = { orders: [] }; }
+  }
+  if (!Array.isArray(data.orders)) data.orders = [];
+  const now = new Date().toISOString();
+  const index = data.orders.findIndex(o => o.orderNumber === order.orderNumber);
+  if (index >= 0) {
+    data.orders[index].status = "Oczekuje na płatność";
+    data.orders[index].updatedAt = now;
+    data.orders[index].history = Array.isArray(data.orders[index].history) ? data.orders[index].history : [];
+    data.orders[index].history.push({ status: "Oczekuje na płatność", date: now, note: "Wysłano dane do płatności" });
+  } else {
+    data.orders.unshift({
+      orderNumber: order.orderNumber,
+      createdAt: now,
+      updatedAt: now,
+      status: "Oczekuje na płatność",
+      total: order.total,
+      cartText: order.cartText,
+      delivery: order.delivery || {},
+      customer: order.customer || {},
+      history: [{ status: "Oczekuje na płatność", date: now, note: "Wysłano dane do płatności" }]
+    });
+  }
+  await githubPutFile(env, path, JSON.stringify(data, null, 2), `CandyBloom: oczekuje na płatność ${order.orderNumber}`, file?.sha || null);
+}
+
 export async function onRequestGet(context) {
   try {
     const url = new URL(context.request.url);
@@ -195,6 +278,8 @@ export async function onRequestGet(context) {
       subject: `Dane do płatności — zamówienie ${order.orderNumber}`,
       html: buildPaymentEmail(order)
     });
+
+    await updatePaymentHistory(context.env, order).catch(() => {});
 
     return htmlResponse("Wysłano", `Dane do płatności zostały wysłane do klienta: ${customer.email}`);
   } catch (error) {

@@ -176,6 +176,119 @@ button{display:inline-block;margin-top:18px;background:#4d3528;color:#fff;border
 </form></main></body></html>`, {headers: {"Content-Type": "text/html; charset=utf-8"}});
 }
 
+async function githubGetFile(env, path) {
+  const token = env.GITHUB_TOKEN;
+  const owner = env.GITHUB_OWNER || "Ariergardan";
+  const repo = env.GITHUB_REPO || "candybloomcandles";
+  const branch = env.GITHUB_BRANCH || "main";
+
+  if (!token) return null;
+
+  const res = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${path}?ref=${branch}`, {
+    headers: {
+      "Authorization": `Bearer ${token}`,
+      "Accept": "application/vnd.github+json",
+      "User-Agent": "CandyBloom-Orders-Cloudflare"
+    }
+  });
+
+  if (res.status === 404) return { sha: null, content: null, branch };
+  if (!res.ok) throw new Error(`Nie udało się pobrać ${path}: ${await res.text()}`);
+
+  const data = await res.json();
+  const decoded = decodeURIComponent(escape(atob(data.content.replace(/\n/g, ""))));
+  return { sha: data.sha, content: decoded, branch };
+}
+
+function utf8ToBase64(text) {
+  const bytes = new TextEncoder().encode(text);
+  let binary = "";
+  for (let i = 0; i < bytes.length; i++) binary += String.fromCharCode(bytes[i]);
+  return btoa(binary);
+}
+
+async function githubPutFile(env, path, content, message, sha = null) {
+  const token = env.GITHUB_TOKEN;
+  const owner = env.GITHUB_OWNER || "Ariergardan";
+  const repo = env.GITHUB_REPO || "candybloomcandles";
+  const branch = env.GITHUB_BRANCH || "main";
+
+  if (!token) return null;
+
+  const payload = { message, content: utf8ToBase64(content), branch };
+  if (sha) payload.sha = sha;
+
+  const res = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${path}`, {
+    method: "PUT",
+    headers: {
+      "Authorization": `Bearer ${token}`,
+      "Accept": "application/vnd.github+json",
+      "Content-Type": "application/json",
+      "User-Agent": "CandyBloom-Orders-Cloudflare"
+    },
+    body: JSON.stringify(payload)
+  });
+
+  if (!res.ok) throw new Error(`Nie udało się zapisać ${path}: ${await res.text()}`);
+  return res.json();
+}
+
+function statusLabel(status) {
+  return {
+    in_progress: "W realizacji",
+    ready_pickup: "Gotowe do odbioru",
+    shipped: "Wysłane",
+    paid: "Opłacone",
+    completed: "Zakończone"
+  }[status] || status || "Aktualizacja";
+}
+
+async function updateOrderHistory(env, order, status, tracking = "") {
+  if (!env.GITHUB_TOKEN) return;
+
+  const path = "data/orders.json";
+  const file = await githubGetFile(env, path);
+
+  let data = { orders: [] };
+  if (file?.content) {
+    try { data = JSON.parse(file.content); } catch { data = { orders: [] }; }
+  }
+  if (!Array.isArray(data.orders)) data.orders = [];
+
+  const now = new Date().toISOString();
+  const label = statusLabel(status);
+  const index = data.orders.findIndex(o => o.orderNumber === order.orderNumber);
+
+  const baseEntry = {
+    orderNumber: order.orderNumber,
+    createdAt: now,
+    updatedAt: now,
+    status: label,
+    total: order.total,
+    cartText: order.cartText,
+    delivery: order.delivery || {},
+    customer: order.customer || {},
+    trackingNumber: tracking || "",
+    history: []
+  };
+
+  if (index >= 0) {
+    const previous = data.orders[index];
+    data.orders[index] = {
+      ...previous,
+      ...baseEntry,
+      createdAt: previous.createdAt || now,
+      history: Array.isArray(previous.history) ? previous.history : []
+    };
+    data.orders[index].history.push({ status: label, date: now, trackingNumber: tracking || "" });
+  } else {
+    baseEntry.history.push({ status: label, date: now, trackingNumber: tracking || "" });
+    data.orders.unshift(baseEntry);
+  }
+
+  await githubPutFile(env, path, JSON.stringify(data, null, 2), `CandyBloom: status ${order.orderNumber} - ${label}`, file?.sha || null);
+}
+
 async function handleSend(context, params) {
   const token = params.get("token");
   const expected = context.env.ORDER_ACTION_TOKEN;
@@ -212,6 +325,8 @@ async function handleSend(context, params) {
     subject: subjects[status] || `Aktualizacja zamówienia ${order.orderNumber} — CandyBloom Candles`,
     html: buildStatusEmail(order, status, tracking)
   });
+
+  await updateOrderHistory(context.env, order, status, tracking).catch(() => {});
 
   const labels = {
     in_progress: "Status „w realizacji” został wysłany do klienta.",

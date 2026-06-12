@@ -237,6 +237,105 @@ async function sendEmail({ env, to, toName, subject, html, replyTo }) {
   return parsed;
 }
 
+async function githubGetFile(env, path) {
+  const token = env.GITHUB_TOKEN;
+  const owner = env.GITHUB_OWNER || "Ariergardan";
+  const repo = env.GITHUB_REPO || "candybloomcandles";
+  const branch = env.GITHUB_BRANCH || "main";
+
+  if (!token) return null;
+
+  const res = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${path}?ref=${branch}`, {
+    headers: {
+      "Authorization": `Bearer ${token}`,
+      "Accept": "application/vnd.github+json",
+      "User-Agent": "CandyBloom-Orders-Cloudflare"
+    }
+  });
+
+  if (res.status === 404) return { sha: null, content: null, branch };
+  if (!res.ok) throw new Error(`Nie udało się pobrać ${path}: ${await res.text()}`);
+
+  const data = await res.json();
+  const decoded = decodeURIComponent(escape(atob(data.content.replace(/\n/g, ""))));
+  return { sha: data.sha, content: decoded, branch };
+}
+
+function utf8ToBase64(text) {
+  const bytes = new TextEncoder().encode(text);
+  let binary = "";
+  for (let i = 0; i < bytes.length; i++) binary += String.fromCharCode(bytes[i]);
+  return btoa(binary);
+}
+
+async function githubPutFile(env, path, content, message, sha = null) {
+  const token = env.GITHUB_TOKEN;
+  const owner = env.GITHUB_OWNER || "Ariergardan";
+  const repo = env.GITHUB_REPO || "candybloomcandles";
+  const branch = env.GITHUB_BRANCH || "main";
+
+  if (!token) return null;
+
+  const payload = {
+    message,
+    content: utf8ToBase64(content),
+    branch
+  };
+  if (sha) payload.sha = sha;
+
+  const res = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${path}`, {
+    method: "PUT",
+    headers: {
+      "Authorization": `Bearer ${token}`,
+      "Accept": "application/vnd.github+json",
+      "Content-Type": "application/json",
+      "User-Agent": "CandyBloom-Orders-Cloudflare"
+    },
+    body: JSON.stringify(payload)
+  });
+
+  if (!res.ok) throw new Error(`Nie udało się zapisać ${path}: ${await res.text()}`);
+  return res.json();
+}
+
+async function saveOrderHistory(env, order, status = "Nowe") {
+  if (!env.GITHUB_TOKEN) return;
+
+  const path = "data/orders.json";
+  const file = await githubGetFile(env, path);
+
+  let data = { orders: [] };
+  if (file?.content) {
+    try { data = JSON.parse(file.content); } catch { data = { orders: [] }; }
+  }
+  if (!Array.isArray(data.orders)) data.orders = [];
+
+  const existingIndex = data.orders.findIndex(o => o.orderNumber === order.orderNumber);
+  const now = new Date().toISOString();
+
+  const entry = {
+    orderNumber: order.orderNumber,
+    createdAt: existingIndex >= 0 ? (data.orders[existingIndex].createdAt || now) : now,
+    updatedAt: now,
+    status,
+    total: order.total,
+    cartText: order.cartText,
+    cartItems: order.cartItems || [],
+    delivery: order.delivery || {},
+    customer: order.customer || {},
+    history: existingIndex >= 0 && Array.isArray(data.orders[existingIndex].history)
+      ? data.orders[existingIndex].history
+      : []
+  };
+
+  entry.history.push({ status, date: now, note: "Zamówienie zapisane automatycznie" });
+
+  if (existingIndex >= 0) data.orders[existingIndex] = { ...data.orders[existingIndex], ...entry };
+  else data.orders.unshift(entry);
+
+  await githubPutFile(env, path, JSON.stringify(data, null, 2), `CandyBloom: zapis zamówienia ${order.orderNumber}`, file?.sha || null);
+}
+
 export async function onRequestOptions() { return jsonResponse({}); }
 
 export async function onRequestPost(context) {
@@ -257,6 +356,7 @@ export async function onRequestPost(context) {
       shipped: buildStatusActionUrl(context.request.url, context.env, order, "shipped"),
       readyPickup: buildStatusActionUrl(context.request.url, context.env, order, "ready_pickup")
     };
+    await saveOrderHistory(context.env, order, "Nowe").catch(() => {});
 
     await sendEmail({
       env: context.env,

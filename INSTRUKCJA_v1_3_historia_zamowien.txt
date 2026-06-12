@@ -1,0 +1,55 @@
+CandyBloom v1.3 — historia zamówień + statystyki + doprecyzowanie danych
+
+Podmień/wgraj:
+- admin/index.html
+- data/orders.json
+- functions/api/order.js
+- functions/api/send-payment.js
+- functions/api/send-status.js
+- polityka-prywatnosci.html
+
+Co dodaje:
+1. Historia zamówień w panelu admina:
+   - nowa zakładka „📦 Zamówienia”,
+   - lista zamówień,
+   - wyszukiwarka po numerze, kliencie i e-mailu,
+   - filtrowanie po statusie,
+   - szczegóły zamówienia po kliknięciu.
+
+2. Statystyki:
+   - liczba zamówień,
+   - sprzedaż łączna,
+   - oczekujące na płatność,
+   - w realizacji,
+   - wysłane.
+
+3. Automatyczny zapis zamówień:
+   - zamówienie zapisuje się do data/orders.json,
+   - wysłanie danych do płatności zmienia status na „Oczekuje na płatność”,
+   - kliknięcie statusów zapisuje zmianę w historii.
+
+4. Polityka prywatności:
+   - doprecyzowany okres przechowywania danych do 5 lat od końca roku kalendarzowego,
+   - dodana informacja o technicznym przechowywaniu historii zamówień.
+
+Wymagane zmienne Cloudflare:
+- GITHUB_TOKEN
+- ADMIN_PASSWORD
+- ORDER_ACTION_TOKEN
+- EMAILLABS_APP_KEY
+- EMAILLABS_SECRET_KEY
+- EMAILLABS_SMTP_ACCOUNT
+- ORDER_FROM_EMAIL
+- ORDER_FROM_NAME
+- ORDER_TO_EMAIL
+
+Ważne:
+Historia zamówień będzie działać, jeśli GITHUB_TOKEN ma prawo zapisu do repozytorium.
+Przy pierwszym zamówieniu plik data/orders.json zostanie uzupełniony automatycznie.
+
+Po wgraniu:
+1. Commit + push.
+2. Poczekaj na deploy Cloudflare.
+3. Złóż testowe zamówienie.
+4. Wejdź w /admin → zakładka „Zamówienia”.
+5. Sprawdź, czy zamówienie pojawiło się na liście.

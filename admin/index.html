@@ -50,7 +50,16 @@
     .pricing-card{background:#fff;border:1px solid var(--line);border-radius:22px;padding:18px}
     .pricing-card h3{font-family:'Cormorant Garamond',serif;font-size:28px;margin:0 0 12px}
     .pricing-fields{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
-    @media(max-width:980px){.admin-grid,.preview-layout,.admin-form,.pricing-grid,.pricing-fields{grid-template-columns:1fr}.products-list{max-height:none}}
+    .orders-stats{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px;margin-bottom:18px}
+    .stat-card{background:#fff;border:1px solid var(--line);border-radius:20px;padding:16px}
+    .stat-card strong{display:block;font-family:'Cormorant Garamond',serif;font-size:32px;color:var(--brown)}
+    .orders-tools{display:flex;gap:10px;flex-wrap:wrap;margin:14px 0}
+    .orders-table{display:grid;gap:10px}
+    .order-row{display:grid;grid-template-columns:170px 1fr 110px 150px 120px;gap:12px;align-items:center;background:#fff;border:1px solid var(--line);border-radius:18px;padding:14px;text-align:left;color:var(--brown);cursor:pointer}
+    .order-row small{color:var(--muted);display:block}
+    .order-details{background:#fff;border:1px solid var(--line);border-radius:22px;padding:18px;margin-top:16px;white-space:pre-wrap}
+    .status-pill{display:inline-flex;border-radius:999px;padding:7px 10px;background:#f7eee8;color:var(--brown);font-weight:700;font-size:12px}
+    @media(max-width:980px){.admin-grid,.preview-layout,.admin-form,.pricing-grid,.pricing-fields,.orders-stats,.order-row{grid-template-columns:1fr}.products-list{max-height:none}}
   </style>
 </head>
 <body>
@@ -65,7 +74,7 @@
 
     <section class="admin-card password-box" id="loginBox">
       <h2>Logowanie</h2>
-      <p class="muted">Wpisz hasło panelu ustawione w Netlify jako <strong>ADMIN_PASSWORD</strong>.</p>
+      <p class="muted">Wpisz hasło panelu ustawione w Cloudflare jako <strong>ADMIN_PASSWORD</strong>.</p>
       <label>Hasło
         <input id="adminPassword" type="password" placeholder="Hasło admina">
       </label>
@@ -77,6 +86,7 @@
         <button class="admin-tab active" data-tab="products">📦 Produkty</button>
         <button class="admin-tab" data-tab="settings">🌸 Zapachy i kategorie</button>
         <button class="admin-tab" data-tab="pricing">💰 Cennik zapachów</button>
+        <button class="admin-tab" data-tab="orders">📦 Zamówienia</button>
         <button class="admin-tab" data-tab="help">ℹ️ Pomoc</button>
       </div>
 
@@ -196,11 +206,35 @@
         </div>
       </section>
 
+
+      <section id="ordersTab" class="hidden-admin">
+        <div class="admin-card">
+          <h2>📦 Historia zamówień</h2>
+          <p class="muted">Tutaj zapisują się zamówienia z formularza oraz aktualizacje statusów wysyłane mailowo.</p>
+          <div class="orders-stats" id="ordersStats"></div>
+          <div class="orders-tools">
+            <input id="ordersSearch" placeholder="Szukaj po numerze, kliencie lub e-mailu">
+            <select id="ordersStatusFilter">
+              <option value="">Wszystkie statusy</option>
+              <option>Nowe</option>
+              <option>Oczekuje na płatność</option>
+              <option>W realizacji</option>
+              <option>Gotowe do odbioru</option>
+              <option>Wysłane</option>
+              <option>Zakończone</option>
+            </select>
+            <button class="secondary" type="button" id="refreshOrdersBtn">Odśwież</button>
+          </div>
+          <div class="orders-table" id="ordersList"></div>
+          <div id="orderDetails" class="order-details hidden-admin"></div>
+        </div>
+      </section>
+
       <section id="helpTab" class="hidden-admin">
         <div class="admin-card">
           <h2>Jak działa zapis?</h2>
-          <p class="muted">Panel wysyła zmiany do funkcji Cloudflare Pages. Funkcja używa bezpiecznego tokena z Environment variables, zapisuje pliki na GitHubie, a Netlify samo robi nowy deploy.</p>
-          <p class="muted">Jeśli zapis nie działa, sprawdź czy w Netlify masz zmienne: <strong>GITHUB_TOKEN</strong> i <strong>ADMIN_PASSWORD</strong>.</p>
+          <p class="muted">Panel wysyła zmiany do funkcji Cloudflare Pages. Funkcja używa bezpiecznego tokena z Environment variables, zapisuje pliki na GitHubie, a Cloudflare publikuje nowy deploy.</p>
+          <p class="muted">Jeśli zapis nie działa, sprawdź czy w Cloudflare masz zmienne: <strong>GITHUB_TOKEN</strong> i <strong>ADMIN_PASSWORD</strong>.</p>
         </div>
       </section>
     </section>
@@ -209,6 +243,7 @@
 <script>
 let productsData = { products: [] };
 let settingsData = {};
+let ordersData = { orders: [] };
 let selectedIndex = 0;
 let adminPassword = "";
 let pendingUploads = {};
@@ -229,12 +264,14 @@ function parsePosition(pos){
 }
 
 async function loadData(){
-  const [productsRes, settingsRes] = await Promise.all([
+  const [productsRes, settingsRes, ordersRes] = await Promise.all([
     fetch('/data/products.json?cb=' + Date.now()),
-    fetch('/data/settings.json?cb=' + Date.now())
+    fetch('/data/settings.json?cb=' + Date.now()),
+    fetch('/data/orders.json?cb=' + Date.now()).catch(() => null)
   ]);
   productsData = await productsRes.json();
   settingsData = await settingsRes.json();
+  ordersData = ordersRes && ordersRes.ok ? await ordersRes.json() : {orders: []};
 
   if(!settingsData.colorOptions) settingsData.colorOptions = ['Domyślny (jak na zdjęciu)', 'Zapytaj o kolor'];
   if(!settingsData.scentOptions.includes('Zapytaj o zapach')) settingsData.scentOptions.push('Zapytaj o zapach');
@@ -249,6 +286,7 @@ function renderAll(){
   renderProductForm();
   renderSettings();
   renderScentPricing();
+  renderOrders();
 }
 
 function renderProductsList(){
@@ -464,6 +502,111 @@ function renderScentPricing(){
   });
 }
 
+
+function parseMoneyValue(value){
+  const number = String(value || '0').replace(',', '.').replace(/[^0-9.]/g, '');
+  return Number(number || 0);
+}
+
+function formatDate(value){
+  if(!value) return '';
+  try{
+    return new Date(value).toLocaleString('pl-PL', {dateStyle:'short', timeStyle:'short'});
+  }catch{return value}
+}
+
+function renderOrders(){
+  const orders = Array.isArray(ordersData.orders) ? ordersData.orders : [];
+  const query = ($('ordersSearch')?.value || '').toLowerCase().trim();
+  const statusFilter = $('ordersStatusFilter')?.value || '';
+
+  const filtered = orders.filter(order => {
+    const c = order.customer || {};
+    const haystack = `${order.orderNumber || ''} ${c.name || ''} ${c.email || ''} ${c.phone || ''}`.toLowerCase();
+    const matchesQuery = !query || haystack.includes(query);
+    const matchesStatus = !statusFilter || order.status === statusFilter;
+    return matchesQuery && matchesStatus;
+  });
+
+  const stats = {
+    all: orders.length,
+    sales: orders.reduce((sum, o) => sum + parseMoneyValue(o.total), 0),
+    payment: orders.filter(o => o.status === 'Oczekuje na płatność').length,
+    progress: orders.filter(o => o.status === 'W realizacji').length,
+    shipped: orders.filter(o => o.status === 'Wysłane').length
+  };
+
+  if($('ordersStats')){
+    $('ordersStats').innerHTML = `
+      <div class="stat-card"><small>Zamówienia</small><strong>${stats.all}</strong></div>
+      <div class="stat-card"><small>Sprzedaż</small><strong>${money(stats.sales)}</strong></div>
+      <div class="stat-card"><small>Oczekuje</small><strong>${stats.payment}</strong></div>
+      <div class="stat-card"><small>W realizacji</small><strong>${stats.progress}</strong></div>
+      <div class="stat-card"><small>Wysłane</small><strong>${stats.shipped}</strong></div>
+    `;
+  }
+
+  if($('ordersList')){
+    $('ordersList').innerHTML = filtered.length ? filtered.map((order, index) => {
+      const c = order.customer || {};
+      return `
+        <button class="order-row" type="button" data-order-number="${order.orderNumber || ''}">
+          <span><strong>${order.orderNumber || 'Brak numeru'}</strong><small>${formatDate(order.createdAt)}</small></span>
+          <span>${c.name || 'Brak klienta'}<small>${c.email || ''}</small></span>
+          <strong>${order.total || '0 zł'}</strong>
+          <span class="status-pill">${order.status || 'Nowe'}</span>
+          <small>${(order.delivery || {}).label || ''}</small>
+        </button>
+      `;
+    }).join('') : '<p class="muted">Brak zamówień do wyświetlenia.</p>';
+
+    document.querySelectorAll('.order-row').forEach(btn => {
+      btn.addEventListener('click', () => showOrderDetails(btn.dataset.orderNumber));
+    });
+  }
+}
+
+function showOrderDetails(orderNumber){
+  const order = (ordersData.orders || []).find(o => o.orderNumber === orderNumber);
+  const box = $('orderDetails');
+  if(!order || !box) return;
+  const c = order.customer || {};
+  const d = order.delivery || {};
+  const history = Array.isArray(order.history) ? order.history : [];
+
+  box.classList.remove('hidden-admin');
+  box.innerHTML = `
+<strong>Zamówienie:</strong> ${order.orderNumber || ''}
+<strong>Status:</strong> ${order.status || 'Nowe'}
+<strong>Data:</strong> ${formatDate(order.createdAt)}
+<strong>Kwota:</strong> ${order.total || ''}
+
+<strong>Klient:</strong>
+${c.name || ''}
+${c.email || ''}
+${c.phone || ''}
+
+<strong>Adres / paczkomat / odbiór:</strong>
+${c.address || ''}
+
+<strong>Dostawa:</strong>
+${d.label || ''} ${d.price !== undefined ? '(' + d.price + ' zł)' : ''}
+
+<strong>Produkty:</strong>
+${order.cartText || ''}
+
+<strong>Uwagi:</strong>
+${c.notes || 'Brak'}
+
+<strong>Numer przesyłki:</strong>
+${order.trackingNumber || 'Brak'}
+
+<strong>Historia:</strong>
+${history.length ? history.map(h => `- ${formatDate(h.date)} — ${h.status || ''}${h.trackingNumber ? ' — ' + h.trackingNumber : ''}`).join('\n') : 'Brak historii'}
+  `;
+}
+
+
 async function saveAll(){
   collectProductForm();
   showMsg('', false);
@@ -505,10 +648,19 @@ $('saveBtn').addEventListener('click', saveAll);
 $('saveSettingsBtn').addEventListener('click', saveAll);
 $('savePricingBtn').addEventListener('click', saveAll);
 
+
+$('ordersSearch')?.addEventListener('input', renderOrders);
+$('ordersStatusFilter')?.addEventListener('change', renderOrders);
+$('refreshOrdersBtn')?.addEventListener('click', async () => {
+  const res = await fetch('/data/orders.json?cb=' + Date.now()).catch(() => null);
+  ordersData = res && res.ok ? await res.json() : {orders: []};
+  renderOrders();
+});
+
 document.querySelectorAll('.admin-tab').forEach(tab => tab.addEventListener('click', () => {
   document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
   tab.classList.add('active');
-  ['products','settings','pricing','help'].forEach(name => $(name + 'Tab').classList.add('hidden-admin'));
+  ['products','settings','pricing','orders','help'].forEach(name => $(name + 'Tab').classList.add('hidden-admin'));
   $(tab.dataset.tab + 'Tab').classList.remove('hidden-admin');
 }));
 

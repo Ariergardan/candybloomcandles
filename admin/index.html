@@ -86,11 +86,11 @@
 
     <section id="panel" class="hidden-admin">
       <div class="admin-tabs">
-        <button class="admin-tab active" data-tab="products">📦 Produkty</button>
-        <button class="admin-tab" data-tab="settings">🌸 Zapachy i kategorie</button>
-        <button class="admin-tab" data-tab="pricing">💰 Cennik zapachów</button>
-        <button class="admin-tab" data-tab="orders">📦 Zamówienia</button>
-        <button class="admin-tab" data-tab="help">ℹ️ Pomoc</button>
+        <button class="admin-tab active" data-tab="products" onclick="candyShowTab('products', this)">📦 Produkty</button>
+        <button class="admin-tab" data-tab="settings" onclick="candyShowTab('settings', this)">🌸 Zapachy i kategorie</button>
+        <button class="admin-tab" data-tab="pricing" onclick="candyShowTab('pricing', this)">💰 Cennik zapachów</button>
+        <button class="admin-tab" data-tab="orders" onclick="candyShowTab('orders', this)">📦 Zamówienia</button>
+        <button class="admin-tab" data-tab="help" onclick="candyShowTab('help', this)">ℹ️ Pomoc</button>
       </div>
 
       <div class="success-banner" id="successBox">✅ Zmiany zapisane. Cloudflare zaraz opublikuje stronę.</div>
@@ -535,6 +535,7 @@ function formatMaxWeightLabel(value){
   return Number(value) >= 99999 ? 'bez limitu' : `${value} g`;
 }
 
+window.candyAdminRenderScentPricing = renderScentPricing;
 function renderScentPricing(){
   ensureScentPricing();
 
@@ -654,12 +655,9 @@ $('refreshOrdersBtn')?.addEventListener('click', async () => {
   renderOrders();
 });
 
-document.querySelectorAll('.admin-tab').forEach(tab => tab.addEventListener('click', () => {
-  document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
-  tab.classList.add('active');
-  ['products','settings','pricing','orders','help'].forEach(name => $(name + 'Tab').classList.add('hidden-admin'));
-  $(tab.dataset.tab + 'Tab').classList.remove('hidden-admin');
-}));
+document.querySelectorAll('.admin-tab').forEach(tab => {
+  tab.addEventListener('click', () => candyShowTab(tab.dataset.tab, tab));
+});
 
 $('loginBtn').addEventListener('click', candyLoginNow);
 

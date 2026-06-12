@@ -67,11 +67,11 @@ function buildCustomerEmail(order) {
   `;
 }
 
-async function sendEmail({ env, to, subject, html }) {
+async function sendEmail({ env, to, subject, html, replyTo }) {
   const appKey = env.EMAILLABS_APP_KEY;
   const secretKey = env.EMAILLABS_SECRET_KEY;
   const smtpAccount = env.EMAILLABS_SMTP_ACCOUNT || "1.ariergarda.smtp";
-  const fromEmail = env.ORDER_FROM_EMAIL || "zamowienia@candybloomcandles.pl";
+  const fromEmail = env.ORDER_FROM_EMAIL || "noreply@candybloomcandles.pl";
   const fromName = env.ORDER_FROM_NAME || "CandyBloom Candles";
 
   if (!appKey || !secretKey) {
@@ -92,6 +92,10 @@ async function sendEmail({ env, to, subject, html }) {
     subject,
     html
   };
+
+  if (replyTo) {
+    payload.reply_to = replyTo;
+  }
 
   const response = await fetch("https://api.emaillabs.net.pl/api/new_sendmail", {
     method: "POST",
@@ -141,7 +145,8 @@ export async function onRequestPost(context) {
       env: context.env,
       to: ownerEmail,
       subject: `Nowe zamówienie ${order.orderNumber} — CandyBloom Candles`,
-      html: buildOwnerEmail(order)
+      html: buildOwnerEmail(order),
+      replyTo: customer.email
     });
 
     await sendEmail({

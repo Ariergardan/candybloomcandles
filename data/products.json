@@ -197,6 +197,17 @@
       "visible": true,
       "imagePosition": "50% 54%",
       "imageZoom": 1
+    },
+    {
+      "name": "Świeca kwiat warstwowy",
+      "category": "Kwiaty",
+      "price": 13,
+      "weight": 80,
+      "image": "/assets/images/nowy-prodkt-1781304277205.png",
+      "description": "Elegancka świeca sojowa o wyjątkowym, warstwowym układzie płatków, inspirowana pięknem rozkwitających kwiatów. Jej harmonijna forma i starannie wykonane detale sprawiają, że stanowi nie tylko świecę, ale również efektowną dekorację wnętrza. Zachwyca subtelnym wyglądem i ponadczasowym charakterem. \nDoskonale sprawdzi się jako prezent dla bliskiej osoby lub stylowy dodatek do salonu, sypialni czy toaletki, wprowadzając do wnętrza odrobinę elegancji i przytulności.",
+      "visible": true,
+      "imagePosition": "50% 86%",
+      "imageZoom": 1
     }
   ]
 }

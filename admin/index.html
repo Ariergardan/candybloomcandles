@@ -274,12 +274,31 @@ function candyLoginNow(){
         errorBox.style.display = 'block';
       }
     }
+
   }, 50);
+}
+
+function candyShowTab(name, clickedButton){
+  ['products','settings','pricing','orders','help'].forEach(tabName => {
+    const section = document.getElementById(tabName + 'Tab');
+    if(section) section.classList.add('hidden-admin');
+  });
+
+  const target = document.getElementById(name + 'Tab');
+  if(target) target.classList.remove('hidden-admin');
+
+  document.querySelectorAll('.admin-tab').forEach(btn => btn.classList.remove('active'));
+
+  const btn = clickedButton || document.querySelector('[data-tab="' + name + '"]');
+  if(btn) btn.classList.add('active');
+
+  if(name === 'orders' && window.candyAdminRenderOrders) window.candyAdminRenderOrders();
+  if(name === 'pricing' && window.candyAdminRenderScentPricing) window.candyAdminRenderScentPricing();
 }
 </script>
 
 <script>
-console.log('CandyBloom admin hard login fix v1.4.2 loaded');
+console.log('CandyBloom admin tabs fix v1.4.4 loaded');
 let productsData = { products: [] };
 let settingsData = {};
 let ordersData = { orders: [] };

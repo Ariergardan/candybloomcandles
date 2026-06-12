@@ -153,6 +153,17 @@
       "visible": true,
       "imagePosition": "50% 51%",
       "imageZoom": 1
+    },
+    {
+      "name": "Świeca stokrotka",
+      "category": "Kwiaty",
+      "price": 5,
+      "weight": 18,
+      "image": "/assets/images/nowy-prodkt-1781303762883.png",
+      "description": "Delikatna świeca inspirowana urokiem stokrotki. Jej lekka forma i subtelny wygląd doskonale oddają piękno natury.\nTo idealna propozycja dla osób ceniących romantyczne i naturalne dekoracje wnętrz.",
+      "visible": true,
+      "imagePosition": "50% 39%",
+      "imageZoom": 1
     }
   ]
 }

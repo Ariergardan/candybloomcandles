@@ -255,6 +255,7 @@ function candyLoginNow(){
     return;
   }
 
+  window.candyAdminPasswordValue = passwordInput.value;
   if(window.candyAdminSetPassword){
     window.candyAdminSetPassword(passwordInput.value);
   }
@@ -298,7 +299,7 @@ function candyShowTab(name, clickedButton){
 </script>
 
 <script>
-console.log('CandyBloom admin tabs fix v1.4.4 loaded');
+console.log('CandyBloom admin password save fix v1.4.5 loaded');
 let productsData = { products: [] };
 let settingsData = {};
 let ordersData = { orders: [] };
@@ -634,7 +635,7 @@ async function saveAll(){
     method: 'POST',
     headers: {'Content-Type':'application/json'},
     body: JSON.stringify({
-      password: adminPassword,
+      password: adminPassword || window.candyAdminPasswordValue || $('adminPassword')?.value || '',
       productsData,
       settingsData,
       uploads
@@ -643,7 +644,7 @@ async function saveAll(){
 
   const data = await res.json().catch(() => ({}));
   if(!res.ok){
-    showMsg(data.error || 'Nie udało się zapisać zmian.', true);
+    showMsg(data.error || 'Nie udało się zapisać zmian. Sprawdź hasło ADMIN_PASSWORD w Cloudflare.', true);
     return;
   }
 

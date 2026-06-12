@@ -131,6 +131,17 @@
       "visible": true,
       "imagePosition": "47% 53%",
       "imageZoom": 1
+    },
+    {
+      "name": "Świeca róża",
+      "category": "Kwiaty",
+      "price": 15,
+      "weight": 101,
+      "image": "/assets/images/nowy-prodkt-1781303544987.png",
+      "description": "Świeca inspirowana ponadczasowym pięknem róży. Starannie odwzorowane płatki tworzą elegancką kompozycję, która zachwyca swoją delikatnością.\nTo wyjątkowy dodatek do wnętrza oraz doskonały pomysł na prezent dla miłośników kwiatowych dekoracji.",
+      "visible": true,
+      "imagePosition": "50% 69%",
+      "imageZoom": 1
     }
   ]
 }

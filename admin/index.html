@@ -244,6 +244,7 @@
   </main>
 
 <script>
+console.log('CandyBloom admin login fix v1.4.1 loaded');
 let productsData = { products: [] };
 let settingsData = {};
 let ordersData = { orders: [] };
@@ -625,12 +626,24 @@ document.querySelectorAll('.admin-tab').forEach(tab => tab.addEventListener('cli
   $(tab.dataset.tab + 'Tab').classList.remove('hidden-admin');
 }));
 
-$('loginBtn').addEventListener('click', async () => {
+$('loginBtn').addEventListener('click', () => {
   adminPassword = $('adminPassword').value;
   if(!adminPassword){ alert('Wpisz hasło.'); return; }
+
   $('loginBox').classList.add('hidden-admin');
   $('panel').classList.remove('hidden-admin');
-  await loadData();
+
+  loadData().catch(error => {
+    console.error(error);
+    showMsg('Panel się otworzył, ale nie udało się pobrać danych sklepu. Odśwież stronę albo sprawdź czy istnieją pliki /data/products.json, /data/settings.json i /data/orders.json.', true);
+  });
+});
+
+$('adminPassword').addEventListener('keydown', e => {
+  if(e.key === 'Enter'){
+    e.preventDefault();
+    $('loginBtn').click();
+  }
 });
 </script>
 </body>

@@ -1,0 +1,15 @@
+CandyBloom — poprawka logowania do admina
+
+Podmień tylko:
+- admin/index.html
+
+Co poprawia:
+- przycisk logowania reaguje od razu,
+- Enter w polu hasła też loguje,
+- jeśli dane sklepu nie pobiorą się poprawnie, panel pokaże komunikat zamiast wyglądać jakby nic się nie działo.
+
+Po wgraniu:
+1. Commit + push.
+2. Poczekaj na deploy Cloudflare.
+3. Wejdź na /admin i zrób Ctrl+Shift+R.
+4. Spróbuj zalogować się ponownie.

@@ -67,11 +67,11 @@ function buildCustomerEmail(order) {
   `;
 }
 
-async function sendEmail({ env, to, subject, html, replyTo }) {
+async function sendEmail({ env, to, toName, subject, html, replyTo }) {
   const appKey = env.EMAILLABS_APP_KEY;
   const secretKey = env.EMAILLABS_SECRET_KEY;
   const smtpAccount = env.EMAILLABS_SMTP_ACCOUNT || "1.ariergarda.smtp";
-  const fromEmail = env.ORDER_FROM_EMAIL || "noreply@candybloomcandles.pl";
+  const fromEmail = env.ORDER_FROM_EMAIL || "zamowienia@candybloomcandles.pl";
   const fromName = env.ORDER_FROM_NAME || "CandyBloom Candles";
 
   if (!appKey || !secretKey) {
@@ -80,43 +80,43 @@ async function sendEmail({ env, to, subject, html, replyTo }) {
 
   const auth = btoa(`${appKey}:${secretKey}`);
 
-  const payload = {
-    smtp_account: smtpAccount,
-    from: fromEmail,
-    from_name: fromName,
-    to: {
-      [to]: {
-        name: to
-      }
-    },
-    subject,
-    html
-  };
+  // EmailLabs API stabilniej przyjmuje dane jako formularz URL-encoded,
+  // a nie jako JSON. Poprzedni JSON powodował: "Sender address is not valid".
+  const body = new URLSearchParams();
+  body.set("smtp_account", smtpAccount);
+  body.set("from", fromEmail);
+  body.set("from_name", fromName);
+  body.set("to[" + to + "][name]", toName || to);
+  body.set("subject", subject);
+  body.set("html", html);
 
   if (replyTo) {
-    payload.reply_to = replyTo;
+    body.set("reply_to", replyTo);
   }
 
   const response = await fetch("https://api.emaillabs.net.pl/api/new_sendmail", {
     method: "POST",
     headers: {
       "Authorization": `Basic ${auth}`,
-      "Content-Type": "application/json"
+      "Content-Type": "application/x-www-form-urlencoded; charset=utf-8"
     },
-    body: JSON.stringify(payload)
+    body
   });
 
   const text = await response.text();
 
-  if (!response.ok) {
+  let parsed = null;
+  try {
+    parsed = JSON.parse(text);
+  } catch {
+    parsed = { raw: text };
+  }
+
+  if (!response.ok || parsed?.status === "fail" || parsed?.code >= 400) {
     throw new Error(`EmailLabs odrzucił wysyłkę: ${text}`);
   }
 
-  try {
-    return JSON.parse(text);
-  } catch {
-    return { raw: text };
-  }
+  return parsed;
 }
 
 export async function onRequestOptions() {
@@ -144,6 +144,7 @@ export async function onRequestPost(context) {
     await sendEmail({
       env: context.env,
       to: ownerEmail,
+      toName: "CandyBloom Candles",
       subject: `Nowe zamówienie ${order.orderNumber} — CandyBloom Candles`,
       html: buildOwnerEmail(order),
       replyTo: customer.email
@@ -152,6 +153,7 @@ export async function onRequestPost(context) {
     await sendEmail({
       env: context.env,
       to: customer.email,
+      toName: customer.name,
       subject: `Potwierdzenie zamówienia ${order.orderNumber} — CandyBloom Candles`,
       html: buildCustomerEmail(order)
     });

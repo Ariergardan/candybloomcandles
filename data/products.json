@@ -1,15 +1,15 @@
 {
   "products": [
     {
-      "name": "Świeca sojowa miłosna",
-      "category": "Miłosne",
-      "price": 60,
+      "name": "Świeca kula",
+      "category": "Dekoracyjne",
+      "price": 17,
       "image": "/assets/images/swieca-1.png",
-      "description": "Ręcznie wykonana świeca sojowa idealna na romantyczny prezent.",
+      "description": "Minimalistyczna świeca sojowa o harmonijnym, kulistym kształcie. Jej prosta forma sprawia, że doskonale wpisuje się zarówno w nowoczesne, jak i klasyczne wnętrza. To subtelny dodatek, który wnosi do pomieszczenia przytulność i elegancję. Idealna jako dekoracja salonu, sypialni lub prezent dla miłośników minimalistycznego designu.",
       "visible": true,
       "imagePosition": "50% 70%",
       "imageZoom": 1,
-      "weight": 60
+      "weight": 133
     },
     {
       "name": "Róża świecowa",

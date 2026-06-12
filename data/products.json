@@ -186,6 +186,17 @@
       "visible": true,
       "imagePosition": "50% 53%",
       "imageZoom": 1
+    },
+    {
+      "name": "Świeca kwiatowe połaczenie",
+      "category": "Kwiaty",
+      "price": 5,
+      "weight": 19,
+      "image": "/assets/images/nowy-prodkt-1781304148901.png",
+      "description": "Wyjątkowa świeca przedstawiająca kompozycję delikatnych kwiatów. Starannie wykonane detale nadają jej romantycznego i naturalnego charakteru.\nTo piękna dekoracja, która wnosi do wnętrza lekkość, świeżość i odrobinę wiosennego klimatu.",
+      "visible": true,
+      "imagePosition": "50% 54%",
+      "imageZoom": 1
     }
   ]
 }

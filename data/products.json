@@ -56,15 +56,15 @@
       "weight": 56
     },
     {
-      "name": "Świeca dla gości",
-      "category": "Podziękowania dla gości",
-      "price": 25,
-      "image": "/assets/images/swieca-6.png",
-      "description": "Mała świeca jako podziękowanie dla gości na wyjątkową okazję.",
+      "name": "Świeca kosz serc",
+      "category": "Miłosne",
+      "price": 27,
+      "image": "/assets/images/s-wieca-dla-gos-ci-1781302654711.png",
+      "description": "Romantyczna świeca w formie koszyczka pełnego serc. Symbolizuje miłość, bliskość i ciepłe uczucia, dlatego świetnie sprawdzi się jako wyjątkowy prezent dla ukochanej osoby.\nDopracowane detale sprawiają, że świeca zachwyca swoim wyglądem i pięknie prezentuje się jako dekoracja.",
       "visible": true,
-      "imagePosition": "50% 50%",
+      "imagePosition": "50% 68%",
       "imageZoom": 1,
-      "weight": 60
+      "weight": 194
     },
     {
       "name": "Świeca ozdobna",

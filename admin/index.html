@@ -299,13 +299,14 @@ function candyShowTab(name, clickedButton){
 </script>
 
 <script>
-console.log('CandyBloom admin password save fix v1.4.5 loaded');
+console.log('CandyBloom admin image preview fix v1.4.6 loaded');
 let productsData = { products: [] };
 let settingsData = {};
 let ordersData = { orders: [] };
 let selectedIndex = 0;
 let adminPassword = "";
 let pendingUploads = {};
+let pendingImagePreviews = {};
 
 const $ = id => document.getElementById(id);
 const money = value => `${Number(value || 0).toFixed(0)} zł`;
@@ -351,7 +352,7 @@ function renderAll(){
 function renderProductsList(){
   $('productsList').innerHTML = productsData.products.map((p, i) => `
     <button class="product-row ${i === selectedIndex ? 'active' : ''}" type="button" data-index="${i}">
-      <img src="${p.image || '/assets/images/hero.png'}" style="object-position:${p.imagePosition || 'center center'};transform:scale(${p.imageZoom || 1});">
+      <img src="${pendingImagePreviews[p.image] || p.image || '/assets/images/hero.png'}" style="object-position:${p.imagePosition || 'center center'};transform:scale(${p.imageZoom || 1});">
       <span><strong>${p.name || 'Nowy produkt'}</strong><small>${p.category || ''} · ${p.price || 0} zł · ${p.weight || 0} g</small></span>
       <small>${p.visible === false ? 'Ukryty' : 'Widoczny'}</small>
     </button>
@@ -406,7 +407,7 @@ function collectProductForm(){
 function updatePreview(){
   collectProductForm();
   const p = currentProduct();
-  $('previewImage').src = p.image || '/assets/images/hero.png';
+  $('previewImage').src = pendingImagePreviews[p.image] || p.image || '/assets/images/hero.png';
   $('previewImage').style.objectPosition = p.imagePosition || 'center center';
   $('previewImage').style.transform = `scale(${p.imageZoom || 1})`;
   $('previewCategory').textContent = p.category || 'Kategoria';
@@ -417,6 +418,14 @@ function updatePreview(){
   $('yVal').textContent = $('pY').value + '%';
   $('zoomVal').textContent = Number($('pZoom').value).toFixed(2);
 }
+
+
+$('previewImage').addEventListener('error', () => {
+  const p = currentProduct();
+  if(pendingImagePreviews[p.image]){
+    $('previewImage').src = pendingImagePreviews[p.image];
+  }
+});
 
 ['pName','pPrice','pWeight','pCategory','pVisible','pDescription','pImage','pX','pY','pZoom'].forEach(id => {
   $(id).addEventListener('input', updatePreview);
@@ -434,10 +443,17 @@ $('pUpload').addEventListener('change', async e => {
 
   const reader = new FileReader();
   reader.onload = () => {
-    const base64 = reader.result.split(',')[1];
+    const dataUrl = reader.result;
+    const base64 = dataUrl.split(',')[1];
+
     pendingUploads[path] = base64;
+    pendingImagePreviews[publicPath] = dataUrl;
+
     $('pImage').value = publicPath;
+    currentProduct().image = publicPath;
+
     updatePreview();
+    renderProductsList();
   };
   reader.readAsDataURL(file);
 });
@@ -649,7 +665,7 @@ async function saveAll(){
   }
 
   pendingUploads = {};
-  showMsg('✅ Zmiany zapisane. Cloudflare zaraz opublikuje stronę.', false);
+  showMsg('✅ Zmiany zapisane. Jeśli zmieniono zdjęcie, poczekaj chwilę na deploy Cloudflare. Do tego czasu na stronie może być jeszcze stare zdjęcie.', false);
 }
 
 function showMsg(text, isError){

@@ -23,6 +23,14 @@ function nl2br(value) {
   return escapeHtml(value).replaceAll("\n", "<br>");
 }
 
+function base64UrlEncode(value) {
+  const json = JSON.stringify(value);
+  return btoa(unescape(encodeURIComponent(json)))
+    .replaceAll("+", "-")
+    .replaceAll("/", "_")
+    .replaceAll("=", "");
+}
+
 function parseCartRows(cartText) {
   return String(cartText || "").split("\n").filter(Boolean).map(line => {
     const parts = line.split("|").map(p => p.trim());
@@ -67,82 +75,83 @@ function emailShell(content) {
     </div>`;
 }
 
+function statusBadge(label, bg = "#fff3cd", color = "#6a4b00") {
+  return `<span style="display:inline-block;background:${bg};color:${color};border-radius:999px;padding:8px 12px;font-weight:700;font-size:13px">${escapeHtml(label)}</span>`;
+}
+
 function buildCustomerEmail(order) {
   const c = order.customer || {};
   return emailShell(`
     <h1 style="font-family:Georgia,serif;color:#4d3528;font-size:34px;margin:0 0 12px">Dziękujemy za zamówienie 🤍</h1>
     <p style="line-height:1.7;color:#6f5c51">Cześć ${escapeHtml(c.name)}, otrzymaliśmy Twoje zamówienie i zostało ono przyjęte do weryfikacji.</p>
+
+    <p>${statusBadge("Status: przyjęte do weryfikacji", "#f7eee8", "#4d3528")}</p>
+
     <div style="background:#fff;border:1px solid #eadfd7;border-radius:18px;padding:18px;margin:18px 0">
       <p style="margin:0;color:#7b665a">Numer zamówienia</p>
       <p style="margin:6px 0 0;font-size:22px;font-weight:700;color:#4d3528">${escapeHtml(order.orderNumber)}</p>
     </div>
+
     ${productTable(order)}
+
     <div style="background:#4d3528;color:#fff;border-radius:18px;padding:20px;margin:18px 0;text-align:center">
       <div style="font-size:13px;opacity:.85">Podsumowanie zamówienia</div>
       <div style="font-size:30px;font-weight:700;margin-top:6px">${escapeHtml(order.total)}</div>
     </div>
+
     <h3 style="color:#4d3528;margin-top:24px">Dane dostawy</h3>
     <p style="line-height:1.7;color:#6f5c51">${escapeHtml(c.name)}<br>${nl2br(c.address)}<br>tel. ${escapeHtml(c.phone)}</p>
+
     <p style="line-height:1.7;color:#6f5c51">Po weryfikacji zamówienia prześlemy dane do płatności. Na opłacenie zamówienia przysługuje 24 godziny od otrzymania danych do płatności.</p>
     <p style="line-height:1.7;color:#6f5c51">Realizacja rozpoczyna się po zaksięgowaniu płatności i trwa od 1 do 7 dni roboczych. W przypadku większych lub bardziej personalizowanych zamówień termin może się wydłużyć — poinformujemy Cię o tym mailowo lub telefonicznie.</p>
   `);
 }
 
-function buildPaymentDraft(order) {
-  const c = order.customer || {};
-  return `
-Dzień dobry ${c.name || ""},
-
-Dziękujemy za złożenie zamówienia w CandyBloom Candles 🤍
-
-Twoje zamówienie zostało zweryfikowane i jest gotowe do realizacji.
-
-Numer zamówienia: ${order.orderNumber}
-Kwota do zapłaty: ${order.total}
-
-Sposób płatności:
-BLIK na telefon: 605 194 932
-
-lub
-
-Przelew tradycyjny:
-Odbiorca: Aleksandra Żabicka
-Numer konta: 29 1240 2832 1111 0011 0794 4606
-
-Tytuł przelewu: ${order.orderNumber}
-
-Prosimy o dokonanie płatności w ciągu 24 godzin od otrzymania tej wiadomości.
-
-Po zaksięgowaniu płatności rozpoczynamy realizację zamówienia.
-Czas realizacji wynosi od 1 do 7 dni roboczych od momentu zaksięgowania płatności.
-
-Pozdrawiamy,
-CandyBloom Candles
-zamowienia@candybloomcandles.pl
-`;
+function buildPaymentActionUrl(requestUrl, env, order) {
+  const url = new URL(requestUrl);
+  const base = `${url.protocol}//${url.host}`;
+  const token = env.ORDER_ACTION_TOKEN || "CHANGE_ME";
+  const payload = base64UrlEncode({
+    orderNumber: order.orderNumber,
+    total: order.total,
+    cartText: order.cartText,
+    customer: order.customer
+  });
+  return `${base}/api/send-payment?token=${encodeURIComponent(token)}&data=${encodeURIComponent(payload)}`;
 }
 
-function buildOwnerEmail(order) {
+function buildOwnerEmail(order, paymentUrl) {
   const c = order.customer || {};
   return emailShell(`
     <h1 style="font-family:Georgia,serif;color:#4d3528;font-size:34px;margin:0 0 12px">Nowe zamówienie 📦</h1>
+    <p>${statusBadge("Status: przyjęte do weryfikacji", "#f7eee8", "#4d3528")}</p>
+
     <div style="background:#fff;border:1px solid #eadfd7;border-radius:18px;padding:18px;margin:18px 0">
       <p style="margin:0;color:#7b665a">Numer zamówienia</p>
       <p style="margin:6px 0 0;font-size:22px;font-weight:700;color:#4d3528">${escapeHtml(order.orderNumber)}</p>
       <p style="margin:12px 0 0;color:#7b665a">Kwota</p>
       <p style="margin:6px 0 0;font-size:26px;font-weight:700;color:#4d3528">${escapeHtml(order.total)}</p>
     </div>
+
     <h3 style="color:#4d3528">Klient</h3>
-    <p style="line-height:1.8;color:#6f5c51"><strong>${escapeHtml(c.name)}</strong><br>
+    <p style="line-height:1.8;color:#6f5c51">
+      <strong>${escapeHtml(c.name)}</strong><br>
       E-mail: <a href="mailto:${escapeHtml(c.email)}">${escapeHtml(c.email)}</a><br>
       Telefon: <a href="tel:${escapeHtml(c.phone)}">${escapeHtml(c.phone)}</a><br>
       Adres:<br>${nl2br(c.address)}
     </p>
+
     ${productTable(order)}
+
     <h3 style="color:#4d3528">Uwagi</h3>
     <p style="line-height:1.7;color:#6f5c51">${nl2br(c.notes || "Brak")}</p>
-    <h3 style="color:#4d3528">Gotowy mail z danymi do płatności</h3>
-    <div style="background:#fff;border:1px solid #eadfd7;border-radius:18px;padding:18px;white-space:pre-wrap;color:#4d3528;line-height:1.6">${escapeHtml(buildPaymentDraft(order))}</div>
+
+    <div style="text-align:center;margin:28px 0">
+      <a href="${escapeHtml(paymentUrl)}" style="display:inline-block;background:#4d3528;color:#fff;text-decoration:none;border-radius:999px;padding:16px 24px;font-weight:700">
+        Wyślij dane do płatności
+      </a>
+      <p style="font-size:13px;color:#8a7468;margin-top:10px">Po kliknięciu klient dostanie elegancki mail z BLIK/przelewem i statusem „oczekuje na płatność”.</p>
+    </div>
   `);
 }
 
@@ -198,13 +207,14 @@ export async function onRequestPost(context) {
 
   try {
     const ownerEmail = context.env.ORDER_TO_EMAIL || "zamowienia@candybloomcandles.pl";
+    const paymentUrl = buildPaymentActionUrl(context.request.url, context.env, order);
 
     await sendEmail({
       env: context.env,
       to: ownerEmail,
       toName: "CandyBloom Candles",
       subject: `Nowe zamówienie ${order.orderNumber} — CandyBloom Candles`,
-      html: buildOwnerEmail(order),
+      html: buildOwnerEmail(order, paymentUrl),
       replyTo: customer.email
     });
 

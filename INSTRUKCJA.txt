@@ -1,18 +1,23 @@
-CandyBloom v1.0 — dokumenty, cookies, maile, strona podziękowania
+CandyBloom — płatność jednym kliknięciem + status + Facebook
 
-Podmień/wgraj:
+Wgraj/podmień:
 - index.html
 - script.js
-- dziekujemy.html
-- regulamin.html
-- polityka-prywatnosci.html
-- cookies.html
 - functions/api/order.js
+- functions/api/send-payment.js
 
-Do style.css dopisz zawartość pliku:
-- STYLE_DODAJ_DO_STYLE_CSS.txt
+Co dodaje:
+- przycisk Facebook obok Instagrama,
+- status zamówienia w mailach,
+- w mailu do Ciebie przycisk "Wyślij dane do płatności",
+- po kliknięciu klient dostaje ładny mail z BLIK/przelewem i statusem "oczekuje na płatność".
 
-Cloudflare Variables:
+WAŻNE: w Cloudflare Pages → Settings → Variables dodaj:
+ORDER_ACTION_TOKEN = candybloom-platnosc-2026
+
+Możesz dać własny token, ale musi być ustawiony przed testem. Bez tego przycisk płatności nie zadziała.
+
+Zostają też:
 EMAILLABS_APP_KEY
 EMAILLABS_SECRET_KEY
 EMAILLABS_SMTP_ACCOUNT = 1.ariergarda.smtp
@@ -21,10 +26,7 @@ ORDER_FROM_NAME = CandyBloom Candles
 ORDER_TO_EMAIL = zamowienia@candybloomcandles.pl
 
 Po commit + push:
-1. Poczekaj na zielony deploy Cloudflare.
-2. Ctrl+F5 na stronie.
-3. Test zamówienia.
-4. Sprawdź mail do klienta i mail do Ciebie.
-
-Uwaga:
-Dokumenty prawne są praktycznym wzorem pod ustalone zasady CandyBloom. Przy większej sprzedaży warto dać je do sprawdzenia prawnikowi.
+1. Poczekaj na zielony deploy.
+2. Złóż testowe zamówienie.
+3. W mailu do Ciebie kliknij "Wyślij dane do płatności".
+4. Sprawdź, czy klient dostał mail płatniczy.

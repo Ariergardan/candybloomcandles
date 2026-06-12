@@ -81,7 +81,7 @@
       <label>Hasło
         <input id="adminPassword" type="password" placeholder="Hasło admina">
       </label>
-      <button class="primary full" type="button" id="loginBtn">Wejdź do panelu</button>
+      <button class="primary full" type="button" id="loginBtn" onclick="candyLoginNow()">Wejdź do panelu</button>
     </section>
 
     <section id="panel" class="hidden-admin">
@@ -243,8 +243,43 @@
     </section>
   </main>
 
+
 <script>
-console.log('CandyBloom admin login fix v1.4.1 loaded');
+function candyLoginNow(){
+  const passwordInput = document.getElementById('adminPassword');
+  const loginBox = document.getElementById('loginBox');
+  const panel = document.getElementById('panel');
+
+  if(!passwordInput || !passwordInput.value){
+    alert('Wpisz hasło.');
+    return;
+  }
+
+  if(window.candyAdminSetPassword){
+    window.candyAdminSetPassword(passwordInput.value);
+  }
+
+  if(loginBox) loginBox.classList.add('hidden-admin');
+  if(panel) panel.classList.remove('hidden-admin');
+
+  setTimeout(() => {
+    if(window.candyAdminLoadData){
+      window.candyAdminLoadData();
+    } else if(typeof loadData === 'function'){
+      loadData();
+    } else {
+      const errorBox = document.getElementById('errorBox');
+      if(errorBox){
+        errorBox.textContent = 'Panel został otwarty, ale skrypt admina nie załadował danych. Zrób Ctrl+Shift+R albo sprawdź Console.';
+        errorBox.style.display = 'block';
+      }
+    }
+  }, 50);
+}
+</script>
+
+<script>
+console.log('CandyBloom admin hard login fix v1.4.2 loaded');
 let productsData = { products: [] };
 let settingsData = {};
 let ordersData = { orders: [] };
@@ -626,23 +661,12 @@ document.querySelectorAll('.admin-tab').forEach(tab => tab.addEventListener('cli
   $(tab.dataset.tab + 'Tab').classList.remove('hidden-admin');
 }));
 
-$('loginBtn').addEventListener('click', () => {
-  adminPassword = $('adminPassword').value;
-  if(!adminPassword){ alert('Wpisz hasło.'); return; }
-
-  $('loginBox').classList.add('hidden-admin');
-  $('panel').classList.remove('hidden-admin');
-
-  loadData().catch(error => {
-    console.error(error);
-    showMsg('Panel się otworzył, ale nie udało się pobrać danych sklepu. Odśwież stronę albo sprawdź czy istnieją pliki /data/products.json, /data/settings.json i /data/orders.json.', true);
-  });
-});
+$('loginBtn').addEventListener('click', candyLoginNow);
 
 $('adminPassword').addEventListener('keydown', e => {
   if(e.key === 'Enter'){
     e.preventDefault();
-    $('loginBtn').click();
+    candyLoginNow();
   }
 });
 </script>

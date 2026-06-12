@@ -12,15 +12,15 @@
       "weight": 133
     },
     {
-      "name": "Róża świecowa",
-      "category": "Kwiaty",
-      "price": 25,
-      "image": "/assets/images/ro-z-a-s-wiecowa-1781301704503.png",
-      "description": "Delikatna świeca w kwiatowej formie, tworzona z dbałością o detal.",
+      "name": "Świeca harmony",
+      "category": "Minimalistyczne",
+      "price": 23,
+      "image": "/assets/images/s-wieca-harmony-1781302015488.png",
+      "description": "Nowoczesna świeca o wyjątkowym, geometrycznym kształcie inspirowanym współczesnym designem. Jej oryginalna forma przyciąga uwagę i stanowi niebanalny element dekoracyjny.\nDoskonale sprawdzi się jako ozdoba wnętrza lub wyjątkowy prezent dla osób ceniących minimalistyczne dodatki i niepowtarzalne wzornictwo.",
       "visible": true,
-      "imagePosition": "50% 50%",
+      "imagePosition": "50% 81%",
       "imageZoom": 1,
-      "weight": 60
+      "weight": 155
     },
     {
       "name": "Kompozycja kwiatowa",

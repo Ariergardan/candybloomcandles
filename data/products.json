@@ -78,15 +78,15 @@
       "weight": 23
     },
     {
-      "name": "Kwiatowa świeca sojowa",
-      "category": "Kwiaty",
-      "price": 25,
-      "image": "/assets/images/swieca-8.png",
+      "name": "Świeca serce amour",
+      "category": "Miłosne",
+      "price": 24,
+      "image": "/assets/images/kwiatowa-s-wieca-sojowa-1781302834868.png",
       "description": "Subtelna kwiatowa forma do dekoracji lub na prezent.",
       "visible": true,
-      "imagePosition": "50% 50%",
+      "imagePosition": "50% 61%",
       "imageZoom": 1,
-      "weight": 60
+      "weight": 154
     },
     {
       "name": "Zestaw CandyBloom",

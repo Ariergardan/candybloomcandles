@@ -1,4 +1,3 @@
-/* CandyBloom patched: cart closed after add, EmailLabs order redirect, scent price labels */
 let products = [];
 let settings = {};
 let currentCategory = 'Wszystkie';
@@ -379,5 +378,23 @@ document.getElementById('orderForm').addEventListener('submit', async e => {
     }
   }
 });
+
+
+function initCookieBanner(){
+  const banner = document.getElementById('cookieBanner');
+  const btn = document.getElementById('acceptCookies');
+  if(!banner || !btn) return;
+
+  if(localStorage.getItem('candy_cookie_ok') !== 'yes'){
+    banner.hidden = false;
+  }
+
+  btn.addEventListener('click', () => {
+    localStorage.setItem('candy_cookie_ok', 'yes');
+    banner.hidden = true;
+  });
+}
+
+initCookieBanner();
 
 loadData();

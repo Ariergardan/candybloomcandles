@@ -1,20 +1,30 @@
-CandyBloom — poprawka panelu i zapachów
+CandyBloom v1.0 — dokumenty, cookies, maile, strona podziękowania
 
-Wgraj/podmień w repozytorium:
+Podmień/wgraj:
+- index.html
 - script.js
-- admin/index.html
-- data/settings.json
-- data/products.json
+- dziekujemy.html
+- regulamin.html
+- polityka-prywatnosci.html
+- cookies.html
+- functions/api/order.js
 
-Co poprawia:
-- koszyk nie otwiera się automatycznie po kliknięciu "Dodaj do koszyka",
-- po wysłaniu zamówienia powinno przekierować na dziekujemy.html,
-- panel admina ma zakładkę "💰 Cennik zapachów",
-- settings.json zawiera dopłaty za zapachy +2/+4/+6,
-- script.js wyświetla etykiety zapachów np. "Paczula (+2 zł)".
+Do style.css dopisz zawartość pliku:
+- STYLE_DODAJ_DO_STYLE_CSS.txt
 
-Po commit + push poczekaj na deploy Cloudflare.
-Potem zrób Ctrl+F5 na stronie i w panelu admina.
+Cloudflare Variables:
+EMAILLABS_APP_KEY
+EMAILLABS_SECRET_KEY
+EMAILLABS_SMTP_ACCOUNT = 1.ariergarda.smtp
+ORDER_FROM_EMAIL = zamowienia@candybloomcandles.pl
+ORDER_FROM_NAME = CandyBloom Candles
+ORDER_TO_EMAIL = zamowienia@candybloomcandles.pl
+
+Po commit + push:
+1. Poczekaj na zielony deploy Cloudflare.
+2. Ctrl+F5 na stronie.
+3. Test zamówienia.
+4. Sprawdź mail do klienta i mail do Ciebie.
 
 Uwaga:
-products.json nadal ma wagę tylko przy pierwszym produkcie. Dla reszty trzeba uzupełnić gramatury w panelu admina, inaczej dopłaty będą liczone jak dla 0 g.
+Dokumenty prawne są praktycznym wzorem pod ustalone zasady CandyBloom. Przy większej sprzedaży warto dać je do sprawdzenia prawnikowi.

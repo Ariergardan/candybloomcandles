@@ -4,63 +4,33 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Dziękujemy za zamówienie — CandyBloomCandles</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/style.css" />
+  <style>
+    .thanks-page{min-height:70vh;display:grid;place-items:center;padding:48px 5vw}
+    .thanks-card{max-width:760px;background:var(--paper);border:1px solid var(--line);border-radius:32px;padding:clamp(28px,5vw,52px);box-shadow:var(--shadow);text-align:center}
+    .thanks-card h1{font-family:serif;font-size:clamp(48px,8vw,84px);line-height:.92;margin:0 0 18px}
+    .thanks-card p{color:var(--muted);line-height:1.8}
+    .order-pill{display:inline-block;background:#fff;border:1px solid var(--line);border-radius:999px;padding:12px 18px;margin:12px 0;font-weight:700;color:var(--brown)}
+    .thanks-actions{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin-top:24px}
+  </style>
 </head>
 <body>
-  <main class="thanks">
-    <p class="eyebrow">CandyBloomCandles</p>
-    <h1>Dziękujemy za zamówienie! 🕯️</h1>
-    <p>Twoje zamówienie zostało wysłane pomyślnie. Skontaktujemy się z Tobą w celu potwierdzenia realizacji, płatności oraz wysyłki.</p>
-
-    <div class="thanks-box">
-      <h2>Numer zamówienia</h2>
-      <p class="order-number" id="lastOrderNumber">CB-...</p>
-      <p class="small-note">Status początkowy: <strong>Nowe</strong>. Po potwierdzeniu realizacji prześlemy sposób płatności i informacje o wysyłce.</p>
-    </div>
-
-    <div class="thanks-box">
-      <h2>Potwierdź zamówienie</h2>
-      <p>Możesz napisać do nas na Instagramie albo Facebooku, żeby szybciej potwierdzić szczegóły.</p>
-      <div class="thanks-actions">
-        <a class="primary" href="https://instagram.com/candybloom_candles" target="_blank" rel="noreferrer">📸 Potwierdź na Instagramie</a>
-        <a class="secondary" href="https://www.facebook.com/profile.php?id=61590554766575&locale=pl_PL" target="_blank" rel="noreferrer">📘 Napisz na Facebooku</a>
-      </div>
-
-      <div class="copy-card">
-        <p class="small-note">Możesz skopiować tę wiadomość:</p>
-        <textarea id="igMessage" readonly>Cześć 😊
-Właśnie złożyłam/złożyłem zamówienie na stronie CandyBloomCandles.
-Numer zamówienia:
-Proszę o potwierdzenie otrzymania zamówienia.</textarea>
-        <button class="secondary copy-btn" type="button" onclick="copyMessage()">📋 Kopiuj wiadomość</button>
-      </div>
-    </div>
-
-    <div class="thanks-actions">
-      <a class="secondary" href="/">Wróć do sklepu</a>
-      <a class="secondary" href="/status.html">Sprawdź status zamówienia</a>
-      <a class="secondary" href="mailto:zamowienia@candybloomcandles.pl">✉ zamowienia@candybloomcandles.pl</a>
-    </div>
+  <header class="site-header"><a class="logo" href="/">CandyBloomCandles</a><nav><a href="/">Sklep</a><a href="https://instagram.com/candybloom_candles" target="_blank" rel="noreferrer">Instagram</a></nav></header>
+  <main class="thanks-page">
+    <section class="thanks-card">
+      <p class="eyebrow">Zamówienie przyjęte</p>
+      <h1>Dziękujemy 🤍</h1>
+      <p>Twoje zamówienie zostało wysłane. Potwierdzenie trafiło na podany adres e-mail.</p>
+      <div class="order-pill" id="orderNumberBox">Numer zamówienia: —</div>
+      <p>Po weryfikacji zamówienia prześlemy dane do płatności. Na opłacenie zamówienia przysługuje 24 godziny od otrzymania danych do płatności.</p>
+      <p>Realizacja rozpoczyna się po zaksięgowaniu płatności i trwa od 1 do 7 dni roboczych.</p>
+      <div class="thanks-actions"><a class="primary" href="/">Wróć do sklepu</a><a class="secondary" href="https://instagram.com/candybloom_candles" target="_blank" rel="noreferrer">Napisz na Instagramie</a></div>
+    </section>
   </main>
-
   <script>
-    const orderNumber = localStorage.getItem('candy_last_order_number') || 'CB-...';
-    document.getElementById('lastOrderNumber').textContent = orderNumber;
-    const msg = document.getElementById('igMessage');
-    msg.value = msg.value.replace('Numer zamówienia:', 'Numer zamówienia: ' + orderNumber);
-
-    function copyMessage(){
-      const el = document.getElementById('igMessage');
-      el.select();
-      el.setSelectionRange(0, 99999);
-      navigator.clipboard.writeText(el.value).then(() => alert('Wiadomość skopiowana 🤍')).catch(() => {
-        document.execCommand('copy');
-        alert('Wiadomość skopiowana 🤍');
-      });
-    }
+    const params = new URLSearchParams(window.location.search);
+    const nr = params.get('nr') || localStorage.getItem('candy_last_order_number') || '—';
+    document.getElementById('orderNumberBox').textContent = 'Numer zamówienia: ' + nr;
   </script>
 </body>
 </html>

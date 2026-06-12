@@ -1,0 +1,24 @@
+
+/* CandyBloom v1.0 additions */
+.cookie-banner{
+  position:fixed;
+  left:20px;
+  right:20px;
+  bottom:20px;
+  z-index:1000;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:18px;
+  background:var(--paper);
+  border:1px solid var(--line);
+  border-radius:24px;
+  padding:18px;
+  box-shadow:var(--shadow);
+}
+.cookie-banner[hidden]{display:none}
+.cookie-banner p{margin:5px 0 0;color:var(--muted);line-height:1.5}
+.cookie-actions{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.cookie-actions a{color:var(--brown);font-weight:700}
+.order-info-note{background:#fff;border:1px solid var(--line);border-radius:18px;padding:12px}
+@media(max-width:760px){.cookie-banner{flex-direction:column;align-items:flex-start}}

@@ -67,15 +67,15 @@
       "weight": 194
     },
     {
-      "name": "Świeca ozdobna",
-      "category": "Dekoracyjne",
-      "price": 25,
-      "image": "/assets/images/swieca-7.png",
+      "name": "Świeca słodkie serce",
+      "category": "Miłosne",
+      "price": 6,
+      "image": "/assets/images/s-wieca-ozdobna-1781302771578.png",
       "description": "Ręcznie tworzona świeca z naturalnego wosku sojowego.",
       "visible": true,
-      "imagePosition": "50% 53%",
+      "imagePosition": "50% 64%",
       "imageZoom": 1,
-      "weight": 60
+      "weight": 23
     },
     {
       "name": "Kwiatowa świeca sojowa",

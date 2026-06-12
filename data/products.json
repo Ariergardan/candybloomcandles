@@ -23,19 +23,19 @@
       "weight": 155
     },
     {
-      "name": "Kompozycja kwiatowa",
-      "category": "Kwiaty",
-      "price": 25,
-      "image": "/assets/images/swieca-3.png",
-      "description": "Elegancka świeca dekoracyjna inspirowana kwiatami.",
+      "name": "Świeca kaktus",
+      "category": "Minimalistyczne",
+      "price": 7,
+      "image": "/assets/images/kompozycja-kwiatowa-1781302211531.png",
+      "description": "Minimalistyczna świeca sojowa inspirowana kaktusem – rośliną symbolizującą wytrwałość, siłę i naturalne piękno. Jej urocza forma sprawia, że doskonale odnajdzie się zarówno w nowoczesnych, jak i bardziej przytulnych wnętrzach.\nRęcznie wykonana z naturalnego wosku sojowego, zachwyca starannie odwzorowanymi detalami i stanowi wyjątkową dekorację nawet przed zapaleniem. To idealny dodatek do domu lub oryginalny pomysł na prezent dla miłośników roślin i niebanalnych ozdób.",
       "visible": true,
-      "imagePosition": "50% 50%",
+      "imagePosition": "50% 63%",
       "imageZoom": 1,
-      "weight": 60
+      "weight": 38
     },
     {
       "name": "Świeca dekoracyjna",
-      "category": "Dekoracyjne",
+      "category": "",
       "price": 25,
       "image": "/assets/images/swieca-4.png",
       "description": "Minimalistyczna forma, która pięknie ozdobi wnętrze.",

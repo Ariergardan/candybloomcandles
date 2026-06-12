@@ -2,12 +2,12 @@
   "products": [
     {
       "name": "Świeca kula",
-      "category": "Dekoracyjne",
+      "category": "Minimalistyczne",
       "price": 17,
       "image": "/assets/images/s-wieca-kla-1781300954725.png",
       "description": "Minimalistyczna świeca sojowa o harmonijnym, kulistym kształcie. Jej prosta forma sprawia, że doskonale wpisuje się zarówno w nowoczesne, jak i klasyczne wnętrza. To subtelny dodatek, który wnosi do pomieszczenia przytulność i elegancję. Idealna jako dekoracja salonu, sypialni lub prezent dla miłośników minimalistycznego designu.",
       "visible": true,
-      "imagePosition": "50% 70%",
+      "imagePosition": "50% 47%",
       "imageZoom": 1,
       "weight": 133
     },
@@ -15,11 +15,12 @@
       "name": "Róża świecowa",
       "category": "Kwiaty",
       "price": 25,
-      "image": "/assets/images/swieca-2.png",
+      "image": "/assets/images/ro-z-a-s-wiecowa-1781301704503.png",
       "description": "Delikatna świeca w kwiatowej formie, tworzona z dbałością o detal.",
       "visible": true,
-      "imagePosition": "center center",
-      "imageZoom": 1
+      "imagePosition": "50% 50%",
+      "imageZoom": 1,
+      "weight": 60
     },
     {
       "name": "Kompozycja kwiatowa",

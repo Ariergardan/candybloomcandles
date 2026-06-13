@@ -208,6 +208,17 @@
       "visible": true,
       "imagePosition": "50% 86%",
       "imageZoom": 1
+    },
+    {
+      "name": "Zestaw świec home decor",
+      "category": "Miłosne",
+      "price": 60,
+      "weight": 470,
+      "image": "/assets/images/nowy-prodkt-1781365830085.png",
+      "description": "",
+      "visible": true,
+      "imagePosition": "50% 50%",
+      "imageZoom": 1
     }
   ]
 }

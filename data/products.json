@@ -274,6 +274,17 @@
       "visible": true,
       "imagePosition": "50% 73%",
       "imageZoom": 1
+    },
+    {
+      "name": "Zestaw kwiatowy duet",
+      "category": "Zestawy",
+      "price": 18,
+      "weight": 113,
+      "image": "/assets/images/nowy-prodkt-1781368828782.png",
+      "description": "Zestaw inspirowany wiosennym ogrodem pełnym kwitnących kwiatów. Delikatne formy i eleganckie wykonanie sprawiają, że świece stanowią wyjątkową dekorację wnętrza, wprowadzając do niego lekkość, świeżość i naturalne piękno.\nZestaw zawiera 2 świece: piwonia, kwiat warstwowy.",
+      "visible": true,
+      "imagePosition": "50% 67%",
+      "imageZoom": 1
     }
   ]
 }

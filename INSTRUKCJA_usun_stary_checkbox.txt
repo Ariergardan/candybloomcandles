@@ -1,0 +1,8 @@
+CandyBloom — usunięcie starego checkboxa regulaminu
+
+Podmień:
+- index.html
+
+Co poprawia:
+- usuwa stary checkbox, który został nad nową elegancką ramką,
+- zostawia tylko nowy checkbox w ramce.

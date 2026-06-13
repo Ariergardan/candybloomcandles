@@ -298,14 +298,14 @@
       "imageZoom": 1
     },
     {
-      "name": "Nowy produkt",
-      "category": "Miłosne",
-      "price": 25,
-      "weight": 60,
+      "name": "Zestaw cozy home",
+      "category": "Zestawy",
+      "price": 30,
+      "weight": 259,
       "image": "/assets/images/nowy-prodkt-1781369297945.png",
-      "description": "",
+      "description": "Elegancki zestaw świec inspirowany naturalnymi kształtami i spokojem natury. Starannie wykonane detale nadają świecom wyjątkowego charakteru, dzięki czemu stanowią piękną dekorację wnętrza. Doskonały pomysł na prezent na każdą okazję.\nZestaw zawiera 3 świece: kula, spiralna, kaktus.",
       "visible": true,
-      "imagePosition": "50% 50%",
+      "imagePosition": "50% 74%",
       "imageZoom": 1
     }
   ]

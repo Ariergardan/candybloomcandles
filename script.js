@@ -69,6 +69,14 @@ function updateDeliveryUI(){
   }
 }
 
+function toggleCartFormVisibility(){
+  const form = document.getElementById('orderForm');
+  if(form){
+    form.style.display = cart.length ? '' : 'none';
+  }
+}
+
+
 
 async function loadData(){
   const [productsRes, settingsRes] = await Promise.all([
@@ -218,15 +226,9 @@ function updateCartItem(id, updates, shouldRender = true){
   saveCart(shouldRender);
 }
 
-function toggleCartFormVisibility(){
-  const form = document.getElementById('orderForm');
-  if(form){
-    form.style.display = cart.length ? '' : 'none';
-  }
-}
-
 function updateHiddenOrderFields(){
   syncDeliveryFromSelect();
+
   const productsTotal = getProductsTotal();
   const delivery = getDeliveryOption();
   const total = cart.length ? productsTotal + delivery.price : 0;
@@ -255,6 +257,7 @@ function updateHiddenOrderFields(){
   document.getElementById('cartAmount').value = money(total);
 
   updateDeliveryUI();
+  toggleCartFormVisibility();
 
   const minNote = document.getElementById('minimumOrderNote');
   if(minNote){
@@ -390,8 +393,6 @@ function renderCart(){
     })
   );
 
-  toggleCartFormVisibility();
-  toggleCartFormVisibility();
   updateHiddenOrderFields();
 }
 

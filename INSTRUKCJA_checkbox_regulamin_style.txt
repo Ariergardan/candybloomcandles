@@ -1,0 +1,10 @@
+CandyBloom — poprawka wyglądu checkboxa regulaminu
+
+Podmień:
+- index.html
+- style.css
+
+Co zmienia:
+- checkbox i tekst akceptacji są obok siebie,
+- całość jest w jasnej ramce pasującej do sklepu,
+- linki Regulamin i Polityka Prywatności są bardziej widoczne.

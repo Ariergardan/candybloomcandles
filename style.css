@@ -396,3 +396,44 @@ nav a {
   border-color:#bde8ca;
   color:#1e6b3a;
 }
+
+/* CandyBloom — elegancka akceptacja regulaminu */
+.checkbox-consent{
+  display:flex;
+  align-items:flex-start;
+  gap:12px;
+  margin:18px 0;
+  padding:14px 16px;
+  background:#f7eee8;
+  border:1px solid #eadfd7;
+  border-radius:16px;
+}
+
+.checkbox-consent input[type="checkbox"]{
+  flex:0 0 auto;
+  width:18px;
+  height:18px;
+  margin:3px 0 0;
+  accent-color:#4d3528;
+  cursor:pointer;
+}
+
+.checkbox-consent label{
+  margin:0;
+  font-size:14px;
+  line-height:1.55;
+  color:#4d3528;
+  cursor:pointer;
+  font-weight:600;
+}
+
+.checkbox-consent a{
+  color:#4d3528;
+  font-weight:800;
+  text-decoration:underline;
+  text-underline-offset:3px;
+}
+
+.checkbox-consent a:hover{
+  opacity:.8;
+}

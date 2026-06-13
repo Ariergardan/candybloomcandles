@@ -211,13 +211,13 @@
     },
     {
       "name": "Zestaw świec home decor",
-      "category": "Miłosne",
+      "category": "Zestawy",
       "price": 60,
       "weight": 470,
       "image": "/assets/images/nowy-prodkt-1781365830085.png",
-      "description": "",
+      "description": "Zestaw minimalistycznych, dekoracyjnych świec sojowych stworzony z myślą o miłośnikach nowoczesnego designu. Połączenie geometrycznych form i delikatnych detali tworzy harmonijną kompozycję, która pięknie ozdobi wnętrze salonu, sypialni lub biura. Idealny jako wyjątkowy prezent lub elegancki dodatek do własnej przestrzeni.\nZestaw zawiera 5 świec: kula, harmony, kaktus, spiralna, supełek.",
       "visible": true,
-      "imagePosition": "50% 50%",
+      "imagePosition": "50% 84%",
       "imageZoom": 1
     }
   ]

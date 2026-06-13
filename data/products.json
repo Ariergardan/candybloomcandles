@@ -230,6 +230,17 @@
       "visible": true,
       "imagePosition": "50% 72%",
       "imageZoom": 1
+    },
+    {
+      "name": "Zestaw sweet love",
+      "category": "Zestawy",
+      "price": 13,
+      "weight": 76,
+      "image": "/assets/images/nowy-prodkt-1781367654234.png",
+      "description": "Uroczy zestaw stworzony z myślą o wyjątkowych chwilach. Słodki miś i dekoracyjne serce tworzą romantyczną kompozycję, która świetnie sprawdzi się jako prezent dla ukochanej osoby, na walentynki, rocznicę lub bez okazji – po prostu z miłości.\nZestaw zawiera 2 świece: miś (mały), słodkie serce.",
+      "visible": true,
+      "imagePosition": "50% 74%",
+      "imageZoom": 1
     }
   ]
 }

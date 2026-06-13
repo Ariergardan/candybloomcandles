@@ -3,154 +3,706 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>CandyBloomCandles — świece sojowe</title>
-  <meta name="description" content="Ręcznie tworzone świece sojowe CandyBloomCandles. Zamówienia indywidualne, zapachy i kolory na życzenie." />
+  <title>Panel admina — CandyBloomCandles</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/style.css" />
+  <style>
+    body{background:var(--cream)}
+    .admin-app{padding:32px 5vw;max-width:1400px;margin:auto}
+    .admin-header{display:flex;align-items:center;justify-content:space-between;gap:18px;margin-bottom:24px}
+    .admin-header h1{font-family:'Cormorant Garamond',serif;font-size:clamp(42px,6vw,76px);line-height:.95;margin:0}
+    .admin-tabs{display:flex;gap:10px;flex-wrap:wrap;margin:20px 0}
+    .admin-tab{border:1px solid var(--line);background:var(--paper);border-radius:999px;padding:12px 18px;cursor:pointer;font-weight:700;color:var(--brown)}
+    .admin-tab.active{background:var(--brown);color:white}
+    .admin-card{background:var(--paper);border:1px solid var(--line);border-radius:28px;padding:22px;box-shadow:var(--shadow);margin-bottom:20px}
+    .admin-grid{display:grid;grid-template-columns:360px 1fr;gap:22px;align-items:start}
+    .products-list{display:grid;gap:10px;max-height:70vh;overflow:auto;padding-right:4px}
+    .product-row{display:grid;grid-template-columns:68px 1fr auto;gap:12px;align-items:center;border:1px solid var(--line);background:#fff;border-radius:18px;padding:10px;cursor:pointer;text-align:left;color:var(--brown)}
+    .product-row.active{outline:2px solid var(--brown)}
+    .product-row img{width:68px;height:68px;border-radius:14px;object-fit:cover;background:var(--beige)}
+    .product-row strong{display:block}
+    .product-row small{color:var(--muted)}
+    .admin-form{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+    .admin-form label{font-weight:700;font-size:13px}
+    .admin-form .full{grid-column:1/-1}
+    .preview-layout{display:grid;grid-template-columns:minmax(280px,420px) 1fr;gap:24px;align-items:start}
+    .live-product{background:var(--paper);border:1px solid var(--line);border-radius:28px;overflow:hidden;box-shadow:0 15px 45px rgba(75,53,40,.08)}
+    .live-product .live-img{height:360px;overflow:hidden;background:var(--beige)}
+    .live-product img{width:100%;height:100%;object-fit:cover}
+    .live-body{padding:22px}
+    .live-body h3{font-family:'Cormorant Garamond',serif;font-size:30px;margin:0 0 8px}
+    .live-body p{color:var(--muted);line-height:1.6}
+    .range-line{display:grid;gap:8px;margin:12px 0}
+    .range-line div{display:flex;justify-content:space-between;gap:12px;color:var(--muted);font-size:13px}
+    .actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+    .danger{background:#fff;border:1px solid #d8b6a6;color:#8b2f1d;border-radius:999px;padding:12px 18px;font-weight:700;cursor:pointer}
+    .success-banner,.error-banner{display:none;border-radius:18px;padding:14px 16px;margin:14px 0;font-weight:700}
+    .success-banner{background:#e8f8ee;color:#1e6b3a;border:1px solid #bde8ca}
+    .error-banner{background:#fff1ee;color:#8b2f1d;border:1px solid #e5b7aa}
+    .settings-list{display:grid;gap:10px}
+    .list-item{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center}
+    .password-box{max-width:520px}
+    .muted{color:var(--muted);line-height:1.7}
+    .hidden-admin{display:none!important}
+    .pricing-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin:18px 0}
+    .pricing-card{background:#fff;border:1px solid var(--line);border-radius:22px;padding:18px}
+    .pricing-card h3{font-family:'Cormorant Garamond',serif;font-size:28px;margin:0 0 12px}
+    .pricing-fields{display:grid;gap:10px}
+    .tier-row{display:grid;grid-template-columns:1fr 1fr auto;gap:10px;align-items:end;margin-bottom:10px}
+    .tier-row label{display:grid;gap:6px}
+    .pricing-note{font-size:13px;color:var(--muted);line-height:1.5;margin-top:8px}
+    .orders-stats{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px;margin-bottom:18px}
+    .stat-card{background:#fff;border:1px solid var(--line);border-radius:20px;padding:16px}
+    .stat-card strong{display:block;font-family:'Cormorant Garamond',serif;font-size:32px;color:var(--brown)}
+    .orders-tools{display:flex;gap:10px;flex-wrap:wrap;margin:14px 0}
+    .orders-table{display:grid;gap:10px}
+    .order-row{display:grid;grid-template-columns:170px 1fr 110px 150px 120px;gap:12px;align-items:center;background:#fff;border:1px solid var(--line);border-radius:18px;padding:14px;text-align:left;color:var(--brown);cursor:pointer}
+    .order-row small{color:var(--muted);display:block}
+    .order-details{background:#fff;border:1px solid var(--line);border-radius:22px;padding:18px;margin-top:16px;white-space:pre-wrap}
+    .status-pill{display:inline-flex;border-radius:999px;padding:7px 10px;background:#f7eee8;color:var(--brown);font-weight:700;font-size:12px}
+    @media(max-width:980px){.admin-grid,.preview-layout,.admin-form,.pricing-grid,.pricing-fields,.tier-row,.orders-stats,.order-row{grid-template-columns:1fr}.products-list{max-height:none}}
+  </style>
 </head>
 <body>
-  <header class="site-header">
-    <a class="logo" href="#top">CandyBloomCandles</a>
-    <nav>
-      <a href="#produkty">🕯️ Produkty</a>
-      <a href="#zamowienie">📦 Jak zamówić</a>
-      <a href="#kontakt">💌 Kontakt</a>
-      <a href="/status.html">🔎 Status</a>
-      <button class="cart-button" id="openCart">🛒 Koszyk <span id="cartCount">0</span></button>
-    </nav>
-  </header>
+  <main class="admin-app">
+    <div class="admin-header">
+      <div>
+        <p class="eyebrow">CandyBloomCandles</p>
+        <h1>Panel admina</h1>
+      </div>
+      <a class="secondary" href="/">Wróć do sklepu</a>
+    </div>
 
-  <main id="top">
-    <section class="hero">
-      <div class="hero-text">
-        <p class="eyebrow">Naturalne świece sojowe</p>
-        <h1>Ręcznie tworzone świece pełne ciepła i elegancji.</h1>
-        <p class="hero-copy">CandyBloomCandles to mała pracownia świec, w której każdy produkt powstaje indywidualnie — z naturalnego wosku sojowego, dbałością o detale i wyjątkowy klimat.</p>
-        <div class="hero-actions">
-          <a class="primary" href="#produkty">Przeglądaj świece</a>
-          <a class="secondary" href="https://instagram.com/candybloom_candles" target="_blank" rel="noreferrer">Instagram</a>
-          <a class="secondary" href="https://www.facebook.com/profile.php?id=61590554766575&amp;locale=pl_PL" target="_blank" rel="noreferrer">Facebook</a>
+    <section class="admin-card password-box" id="loginBox">
+      <h2>Logowanie</h2>
+      <p class="muted">Wpisz hasło panelu ustawione w Cloudflare jako <strong>ADMIN_PASSWORD</strong>.</p>
+      <label>Hasło
+        <input id="adminPassword" type="password" placeholder="Hasło admina">
+      </label>
+      <button class="primary full" type="button" id="loginBtn" onclick="candyLoginNow()">Wejdź do panelu</button>
+    </section>
+
+    <section id="panel" class="hidden-admin">
+      <div class="admin-tabs">
+        <button class="admin-tab active" data-tab="products" onclick="candyShowTab('products', this)">📦 Produkty</button>
+        <button class="admin-tab" data-tab="settings" onclick="candyShowTab('settings', this)">🌸 Zapachy i kategorie</button>
+        <button class="admin-tab" data-tab="pricing" onclick="candyShowTab('pricing', this)">💰 Cennik zapachów</button>
+        <button class="admin-tab" data-tab="orders" onclick="candyShowTab('orders', this)">📦 Zamówienia</button>
+        <button class="admin-tab" data-tab="help" onclick="candyShowTab('help', this)">ℹ️ Pomoc</button>
+      </div>
+
+      <div class="success-banner" id="successBox">✅ Zmiany zapisane. Cloudflare zaraz opublikuje stronę.</div>
+      <div class="error-banner" id="errorBox">Coś poszło nie tak.</div>
+
+      <section id="productsTab">
+        <div class="admin-grid">
+          <div class="admin-card">
+            <div class="actions">
+              <button class="primary" type="button" id="addProductBtn">➕ Dodaj produkt</button>
+              <button class="secondary" type="button" id="duplicateProductBtn">Kopiuj</button>
+            </div>
+            <div class="products-list" id="productsList"></div>
+          </div>
+
+          <div class="admin-card">
+            <div class="preview-layout">
+              <article class="live-product">
+                <div class="live-img">
+                  <img id="previewImage" src="/assets/images/hero.png" alt="">
+                </div>
+                <div class="live-body">
+                  <p class="eyebrow" id="previewCategory">Kategoria</p>
+                  <h3 id="previewName">Nazwa produktu</h3>
+                  <p id="previewDesc">Opis produktu</p>
+                  <div class="price" id="previewPrice">25 zł</div>
+                  <button class="add" type="button">Dodaj do koszyka</button>
+                </div>
+              </article>
+
+              <div>
+                <form class="admin-form" id="productForm">
+                  <label>Nazwa produktu
+                    <input id="pName">
+                  </label>
+                  <label>Cena bazowa
+                    <input id="pPrice" type="number" min="0">
+                  </label>
+                  <label>Waga świeczki (g)
+                    <input id="pWeight" type="number" min="0">
+                  </label>
+                  <label>Kategoria
+                    <select id="pCategory"></select>
+                  </label>
+                  <label>Widoczny
+                    <select id="pVisible">
+                      <option value="true">Tak</option>
+                      <option value="false">Nie</option>
+                    </select>
+                  </label>
+                  <label class="full">Opis
+                    <textarea id="pDescription" rows="4"></textarea>
+                  </label>
+                  <label class="full">Zdjęcie
+                    <input id="pImage" placeholder="/assets/images/swieca-1.png">
+                  </label>
+                  <label class="full">Wgraj nowe zdjęcie
+                    <input id="pUpload" type="file" accept="image/*">
+                  </label>
+
+                  <div class="full">
+                    <div class="range-line">
+                      <div><strong>Pozycja pozioma</strong><span id="xVal">50%</span></div>
+                      <input id="pX" type="range" min="0" max="100" value="50">
+                    </div>
+                    <div class="range-line">
+                      <div><strong>Pozycja pionowa</strong><span id="yVal">50%</span></div>
+                      <input id="pY" type="range" min="0" max="100" value="50">
+                    </div>
+                    <div class="range-line">
+                      <div><strong>Zoom</strong><span id="zoomVal">1.00</span></div>
+                      <input id="pZoom" type="range" min="1" max="1.6" step="0.01" value="1">
+                    </div>
+                  </div>
+                </form>
+
+                <div class="actions">
+                  <button class="primary" type="button" id="saveBtn">💾 Zapisz zmiany</button>
+                  <button class="danger" type="button" id="deleteBtn">Usuń produkt</button>
+                </div>
+                <p class="small-note">Po zapisaniu panel zrobi commit na GitHubie, a Cloudflare opublikuje zmiany po chwili.</p>
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
-      <div class="hero-image"><img src="/assets/images/hero.png" alt="Świece CandyBloomCandles" /></div>
-    </section>
+      </section>
 
-    <section class="intro">
-      <div><strong>Ręcznie robione</strong><span>każda świeca powstaje indywidualnie</span></div>
-      <div><strong>Wosk sojowy</strong><span>naturalna baza i piękna forma</span></div>
-      <div><strong>Na zamówienie</strong><span>kolor możesz dopasować do okazji</span></div>
-    </section>
+      <section id="settingsTab" class="hidden-admin">
+        <div class="admin-grid">
+          <div class="admin-card">
+            <h2>Zapachy</h2>
+            <div class="settings-list" id="scentsList"></div>
+            <div class="actions">
+              <input id="newScent" placeholder="Nowy zapach">
+              <button class="secondary" type="button" id="addScentBtn">Dodaj zapach</button>
+            </div>
+          </div>
+          <div class="admin-card">
+            <h2>Kategorie</h2>
+            <div class="settings-list" id="categoriesList"></div>
+            <div class="actions">
+              <input id="newCategory" placeholder="Nowa kategoria">
+              <button class="secondary" type="button" id="addCategoryBtn">Dodaj kategorię</button>
+            </div>
+          </div>
+        </div>
+        <button class="primary" type="button" id="saveSettingsBtn">💾 Zapisz ustawienia</button>
+      </section>
 
-    <section class="section" id="produkty">
-      <div class="section-heading">
-        <p class="eyebrow">Kolekcja</p>
-        <h2>Wybierz świecę</h2>
-        <p>Dodaj wybrane świece do koszyka, a następnie spersonalizuj zamówienie.</p>
-      </div>
-      <div class="filters" id="categoryFilters"></div>
-      <div class="products-grid" id="productsGrid"></div>
-    </section>
+      <section id="pricingTab" class="hidden-admin">
+        <div class="admin-card">
+          <h2>💰 Cennik zapachów według gramatury</h2>
+          <p class="muted">Ustaw dowolne progi gramatur dla każdego zapachu. Możesz dodać np. 200 g → 10 zł.</p>
+          <div class="pricing-grid" id="scentPricingList"></div>
+          <button class="primary" type="button" id="savePricingBtn">💾 Zapisz cennik zapachów</button>
+        </div>
+      </section>
 
-    <section class="section how" id="zamowienie">
-      <div class="section-heading">
-        <p class="eyebrow">Zamówienie</p>
-        <h2>Jak to działa?</h2>
-      </div>
-      <div class="steps">
-        <article><span>01</span><h3>Wybierz świecę</h3><p>Dodaj do koszyka wybrane świece, a ich kolor, zapach i ilość ustawisz w koszyku.</p></article>
-        <article><span>02</span><h3>Wyślij formularz</h3><p>Podaj dane dostawy i uwagi. Zamówienie trafi do nas mailowo.</p></article>
-        <article><span>03</span><h3>Potwierdź na Instagramie</h3><p>Po wysłaniu zamówienia możesz od razu napisać do nas na Instagramie.</p></article>
-      </div>
-    </section>
 
-    <section class="section contact" id="kontakt">
-      <p class="eyebrow">Kontakt</p>
-      <h2>Masz pytanie lub chcesz zamówić indywidualny projekt?</h2>
-      <p>Napisz do nas mailowo, na Instagramie albo złóż zamówienie przez koszyk.</p>
-      <div class="contact-actions">
-        <a class="contact-pill" href="mailto:zamowienia@candybloomcandles.pl">
-          <span class="icon">✉</span>
-          zamowienia@candybloomcandles.pl
-        </a>
-        <a class="contact-pill" href="https://instagram.com/candybloom_candles" target="_blank" rel="noreferrer">
-          <span class="icon">📸</span>
-          @candybloom_candles
-        </a>
-        <a class="contact-pill" href="https://www.facebook.com/profile.php?id=61590554766575&locale=pl_PL" target="_blank" rel="noreferrer">
-          <span class="icon">📘</span>
-          Facebook
-        </a>
-      </div>
+      <section id="ordersTab" class="hidden-admin">
+        <div class="admin-card">
+          <h2>📦 Historia zamówień</h2>
+          <p class="muted">Tutaj zapisują się zamówienia z formularza oraz aktualizacje statusów wysyłane mailowo.</p>
+          <div class="orders-stats" id="ordersStats"></div>
+          <div class="orders-tools">
+            <input id="ordersSearch" placeholder="Szukaj po numerze, kliencie lub e-mailu">
+            <select id="ordersStatusFilter">
+              <option value="">Wszystkie statusy</option>
+              <option>Nowe</option>
+              <option>Oczekuje na płatność</option>
+              <option>W realizacji</option>
+              <option>Gotowe do odbioru</option>
+              <option>Wysłane</option>
+              <option>Zakończone</option>
+            </select>
+            <button class="secondary" type="button" id="refreshOrdersBtn">Odśwież</button>
+          </div>
+          <div class="orders-table" id="ordersList"></div>
+          <div id="orderDetails" class="order-details hidden-admin"></div>
+        </div>
+      </section>
+
+      <section id="helpTab" class="hidden-admin">
+        <div class="admin-card">
+          <h2>Jak działa zapis?</h2>
+          <p class="muted">Panel wysyła zmiany do funkcji Cloudflare Pages. Funkcja używa bezpiecznego tokena z Environment variables, zapisuje pliki na GitHubie, a Cloudflare publikuje nowy deploy.</p>
+          <p class="muted">Jeśli zapis nie działa, sprawdź czy w Cloudflare masz zmienne: <strong>GITHUB_TOKEN</strong> i <strong>ADMIN_PASSWORD</strong>.</p>
+        </div>
+      </section>
     </section>
   </main>
 
-  <aside class="cart-panel" id="cartPanel" aria-hidden="true">
-    <div class="cart-card">
-      <button class="close" id="closeCart">×</button>
-      <h2>Koszyk</h2>
-      <div id="cartItems" class="cart-items"></div>
-      <div class="total">Produkty: <strong id="cartProductsTotal">0 zł</strong></div>
-      <div class="total cart-delivery-line">Dostawa: <strong id="cartDeliveryTotal">0 zł</strong></div>
-      <div class="total cart-final-line">Do zapłaty: <strong id="cartTotal">0 zł</strong></div>
-      <p class="small-note minimum-order-note" id="minimumOrderNote">📦 Minimalna wartość zamówienia wynosi 20 zł za produkty, bez kosztów dostawy.</p>
 
-      <form name="zamowienie" id="orderForm" style="display:none">
-        <input type="hidden" name="form-name" value="zamowienie" />
-        <p class="hidden"><label>Nie wypełniaj: <input name="bot-field" /></label></p>
-        <input type="hidden" name="koszyk" id="cartData" />
-        <input type="hidden" name="kwota" id="cartAmount" />
-        <input type="hidden" name="numer_zamowienia" id="orderNumber" />
-        <input type="hidden" name="status" value="Nowe" />
-        <label>Imię i nazwisko<input required name="imie_i_nazwisko" /></label>
-        <label>E-mail<input required type="email" name="email" /></label>
-        <label>Telefon<input required name="telefon" /></label>
-        <label>Sposób dostawy
-          <select id="deliveryMethod" name="delivery_method" required>
-            <option value="paczkomat">InPost Paczkomat — 16,99 zł</option>
-            <option value="kurier">InPost Kurier — 18,99 zł</option>
-            <option value="odbior">Odbiór osobisty — 0 zł</option>
-          </select>
-        </label>
-        <p class="small-note" id="deliverySummary">Dostawa: InPost Paczkomat — 16,99 zł</p>
-        <label>Adres dostawy / Paczkomat / informacja do odbioru<textarea required name="adres_dostawy" rows="3" placeholder="Dla Paczkomatu wpisz wybrany paczkomat, dla kuriera adres, dla odbioru osobistego wpisz: odbiór osobisty."></textarea></label>
-        <label>Uwagi do zamówienia<textarea name="uwagi" rows="3" placeholder="Np. okazja, preferowany termin, dodatkowe informacje"></textarea></label>
-        <p class="small-note order-info-note">Każda świeca wykonywana jest ręcznie na zamówienie. Po złożeniu zamówienia otrzymasz potwierdzenie, a dane do płatności prześlemy po weryfikacji zamówienia. Na opłacenie zamówienia przysługuje 24 godziny.</p>
-        <button class="primary full" type="submit">Personalizuj i wyślij zamówienie</button>
-        <p class="small-note">Po wysłaniu zamówienia skontaktujemy się w celu potwierdzenia realizacji i płatności.</p>
-      </form>
-    </div>
-  </aside>
+<script>
+function candyLoginNow(){
+  const passwordInput = document.getElementById('adminPassword');
+  const loginBox = document.getElementById('loginBox');
+  const panel = document.getElementById('panel');
 
-  <footer class="premium-footer">
-    <div>
-      <strong>CandyBloomCandles</strong>
-      <span>Ręcznie tworzone świece sojowe na zamówienie.</span>
-    </div>
-    <div class="footer-links">
-      <a href="/regulamin.html">Regulamin</a>
-      <a href="/polityka-prywatnosci.html">Polityka prywatności</a>
-      <a href="/cookies.html">Cookies</a>
-      <a href="mailto:zamowienia@candybloomcandles.pl"><span class="icon">✉</span> zamowienia@candybloomcandles.pl</a>
-      <a href="https://instagram.com/candybloom_candles" target="_blank" rel="noreferrer"><span class="icon">📸</span> @candybloom_candles</a>
-      <a href="https://www.facebook.com/profile.php?id=61590554766575&amp;locale=pl_PL" target="_blank" rel="noreferrer"><span class="icon">📘</span> Facebook</a>
-      <span><span class="icon">🕯</span> Handmade soy candles</span>
-    </div>
-  </footer>
+  if(!passwordInput || !passwordInput.value){
+    alert('Wpisz hasło.');
+    return;
+  }
+
+  window.candyAdminPasswordValue = passwordInput.value;
+  if(window.candyAdminSetPassword){
+    window.candyAdminSetPassword(passwordInput.value);
+  }
+
+  if(loginBox) loginBox.classList.add('hidden-admin');
+  if(panel) panel.classList.remove('hidden-admin');
+
+  setTimeout(() => {
+    if(window.candyAdminLoadData){
+      window.candyAdminLoadData();
+    } else if(typeof loadData === 'function'){
+      loadData();
+    } else {
+      const errorBox = document.getElementById('errorBox');
+      if(errorBox){
+        errorBox.textContent = 'Panel został otwarty, ale skrypt admina nie załadował danych. Zrób Ctrl+Shift+R albo sprawdź Console.';
+        errorBox.style.display = 'block';
+      }
+    }
+
+  }, 50);
+}
+
+function candyShowTab(name, clickedButton){
+  ['products','settings','pricing','orders','help'].forEach(tabName => {
+    const section = document.getElementById(tabName + 'Tab');
+    if(section) section.classList.add('hidden-admin');
+  });
+
+  const target = document.getElementById(name + 'Tab');
+  if(target) target.classList.remove('hidden-admin');
+
+  document.querySelectorAll('.admin-tab').forEach(btn => btn.classList.remove('active'));
+
+  const btn = clickedButton || document.querySelector('[data-tab="' + name + '"]');
+  if(btn) btn.classList.add('active');
+
+  if(name === 'orders' && window.candyAdminRenderOrders) window.candyAdminRenderOrders();
+  if(name === 'pricing' && window.candyAdminRenderScentPricing) window.candyAdminRenderScentPricing();
+}
+</script>
+
+<script>
+console.log('CandyBloom admin image preview fix v1.4.6 loaded');
+let productsData = { products: [] };
+let settingsData = {};
+let ordersData = { orders: [] };
+let selectedIndex = 0;
+let adminPassword = "";
+let pendingUploads = {};
+let pendingImagePreviews = {};
+
+const $ = id => document.getElementById(id);
+const money = value => `${Number(value || 0).toFixed(0)} zł`;
+
+function slugify(text){
+  return text.toString().toLowerCase()
+    .normalize('NFD').replace(/[\\u0300-\\u036f]/g, '')
+    .replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '') || 'produkt';
+}
+
+function parsePosition(pos){
+  const parts = String(pos || "center center").split(" ");
+  const parse = value => value === "center" ? 50 : parseInt(value) || 50;
+  return { x: parse(parts[0]), y: parse(parts[1]) };
+}
+
+async function loadData(){
+  const [productsRes, settingsRes, ordersRes] = await Promise.all([
+    fetch('/data/products.json?cb=' + Date.now()),
+    fetch('/data/settings.json?cb=' + Date.now()),
+    fetch('/data/orders.json?cb=' + Date.now()).catch(() => null)
+  ]);
+  productsData = await productsRes.json();
+  settingsData = await settingsRes.json();
+  ordersData = ordersRes && ordersRes.ok ? await ordersRes.json() : {orders: []};
+
+  if(!settingsData.colorOptions) settingsData.colorOptions = ['Domyślny (jak na zdjęciu)', 'Zapytaj o kolor'];
+  if(!settingsData.scentOptions.includes('Zapytaj o zapach')) settingsData.scentOptions.push('Zapytaj o zapach');
+
+  selectedIndex = 0;
+  renderAll();
+}
+
+function renderAll(){
+  renderProductsList();
+  renderCategorySelect();
+  renderProductForm();
+  renderSettings();
+  renderScentPricing();
+  renderOrders();
+}
+
+function renderProductsList(){
+  $('productsList').innerHTML = productsData.products.map((p, i) => `
+    <button class="product-row ${i === selectedIndex ? 'active' : ''}" type="button" data-index="${i}">
+      <img src="${pendingImagePreviews[p.image] || p.image || '/assets/images/hero.png'}" style="object-position:${p.imagePosition || 'center center'};transform:scale(${p.imageZoom || 1});">
+      <span><strong>${p.name || 'Nowy produkt'}</strong><small>${p.category || ''} · ${p.price || 0} zł · ${p.weight || 0} g</small></span>
+      <small>${p.visible === false ? 'Ukryty' : 'Widoczny'}</small>
+    </button>
+  `).join('');
+
+  document.querySelectorAll('.product-row').forEach(btn => {
+    btn.addEventListener('click', () => {
+      selectedIndex = Number(btn.dataset.index);
+      renderAll();
+    });
+  });
+}
+
+function renderCategorySelect(){
+  $('pCategory').innerHTML = (settingsData.categories || []).map(c => `<option>${c}</option>`).join('');
+}
+
+function currentProduct(){
+  return productsData.products[selectedIndex] || {};
+}
+
+function renderProductForm(){
+  const p = currentProduct();
+  $('pName').value = p.name || '';
+  $('pPrice').value = p.price || 25;
+  $('pCategory').value = p.category || (settingsData.categories || [])[0] || '';
+  $('pWeight').value = p.weight || 60;
+  $('pVisible').value = String(p.visible !== false);
+  $('pDescription').value = p.description || '';
+  $('pImage').value = p.image || '';
+
+  const pos = parsePosition(p.imagePosition);
+  $('pX').value = pos.x;
+  $('pY').value = pos.y;
+  $('pZoom').value = Number(p.imageZoom || 1);
+  updatePreview();
+}
+
+function collectProductForm(){
+  const p = currentProduct();
+  p.name = $('pName').value.trim() || 'Nowy produkt';
+  p.price = Number($('pPrice').value || 0);
+  p.weight = Number($('pWeight').value || 0);
+  p.category = $('pCategory').value;
+  p.visible = $('pVisible').value === 'true';
+  p.description = $('pDescription').value.trim();
+  p.image = $('pImage').value.trim() || '/assets/images/hero.png';
+  p.imagePosition = `${$('pX').value}% ${$('pY').value}%`;
+  p.imageZoom = Number($('pZoom').value || 1);
+}
+
+function updatePreview(){
+  collectProductForm();
+  const p = currentProduct();
+  $('previewImage').src = pendingImagePreviews[p.image] || p.image || '/assets/images/hero.png';
+  $('previewImage').style.objectPosition = p.imagePosition || 'center center';
+  $('previewImage').style.transform = `scale(${p.imageZoom || 1})`;
+  $('previewCategory').textContent = p.category || 'Kategoria';
+  $('previewName').textContent = p.name || 'Nazwa produktu';
+  $('previewDesc').textContent = p.description || 'Opis produktu';
+  $('previewPrice').textContent = money(p.price) + ' · ' + Number(p.weight || 0) + ' g';
+  $('xVal').textContent = $('pX').value + '%';
+  $('yVal').textContent = $('pY').value + '%';
+  $('zoomVal').textContent = Number($('pZoom').value).toFixed(2);
+}
 
 
-  <div class="cookie-banner" id="cookieBanner" hidden>
-    <div>
-      <strong>🍪 Pliki cookies</strong>
-      <p>Strona wykorzystuje pliki cookies niezbędne do działania sklepu, koszyka i zapamiętania ustawień.</p>
-    </div>
-    <div class="cookie-actions">
-      <a href="/cookies.html">Dowiedz się więcej</a>
-      <button class="primary" type="button" id="acceptCookies">Akceptuję</button>
-    </div>
-  </div>
+$('previewImage').addEventListener('error', () => {
+  const p = currentProduct();
+  if(pendingImagePreviews[p.image]){
+    $('previewImage').src = pendingImagePreviews[p.image];
+  }
+});
 
-  <script src="/script.js"></script>
+['pName','pPrice','pWeight','pCategory','pVisible','pDescription','pImage','pX','pY','pZoom'].forEach(id => {
+  $(id).addEventListener('input', updatePreview);
+  $(id).addEventListener('change', updatePreview);
+});
+
+$('pUpload').addEventListener('change', async e => {
+  const file = e.target.files[0];
+  if(!file) return;
+
+  const ext = (file.name.split('.').pop() || 'png').toLowerCase();
+  const filename = `${slugify($('pName').value || 'swieca')}-${Date.now()}.${ext}`;
+  const path = `assets/images/${filename}`;
+  const publicPath = `/assets/images/${filename}`;
+
+  const reader = new FileReader();
+  reader.onload = () => {
+    const dataUrl = reader.result;
+    const base64 = dataUrl.split(',')[1];
+
+    pendingUploads[path] = base64;
+    pendingImagePreviews[publicPath] = dataUrl;
+
+    $('pImage').value = publicPath;
+    currentProduct().image = publicPath;
+
+    updatePreview();
+    renderProductsList();
+  };
+  reader.readAsDataURL(file);
+});
+
+function renderSettings(){
+  $('scentsList').innerHTML = (settingsData.scentOptions || []).map((s, i) => `
+    <div class="list-item">
+      <input value="${s}" data-type="scent" data-index="${i}">
+      <button class="danger" type="button" data-remove-scent="${i}">Usuń</button>
+    </div>
+  `).join('');
+
+  $('categoriesList').innerHTML = (settingsData.categories || []).map((c, i) => `
+    <div class="list-item">
+      <input value="${c}" data-type="category" data-index="${i}">
+      <button class="danger" type="button" data-remove-category="${i}">Usuń</button>
+    </div>
+  `).join('');
+
+  document.querySelectorAll('[data-type="scent"]').forEach(input => input.addEventListener('input', e => {
+    settingsData.scentOptions[Number(e.target.dataset.index)] = e.target.value;
+  }));
+
+  document.querySelectorAll('[data-type="category"]').forEach(input => input.addEventListener('input', e => {
+    settingsData.categories[Number(e.target.dataset.index)] = e.target.value;
+    renderCategorySelect();
+  }));
+
+  document.querySelectorAll('[data-remove-scent]').forEach(btn => btn.addEventListener('click', () => {
+    const removed = settingsData.scentOptions.splice(Number(btn.dataset.removeScent), 1)[0];
+    if(settingsData.scentPricing) delete settingsData.scentPricing[removed];
+    renderSettings();
+    renderScentPricing();
+  }));
+
+  document.querySelectorAll('[data-remove-category]').forEach(btn => btn.addEventListener('click', () => {
+    settingsData.categories.splice(Number(btn.dataset.removeCategory), 1);
+    renderSettings();
+    renderCategorySelect();
+  }));
+}
+
+$('addScentBtn').addEventListener('click', () => {
+  const value = $('newScent').value.trim();
+  if(value){ settingsData.scentOptions.push(value); settingsData.scentPricing = settingsData.scentPricing || {}; settingsData.scentPricing[value] = {tiers: [{maxWeight: 60, price: 2}, {maxWeight: 120, price: 4}, {maxWeight: 99999, price: 6}]}; $('newScent').value=''; renderSettings(); renderScentPricing(); }
+});
+
+$('addCategoryBtn').addEventListener('click', () => {
+  const value = $('newCategory').value.trim();
+  if(value){ settingsData.categories.push(value); $('newCategory').value=''; renderSettings(); renderCategorySelect(); }
+});
+
+$('addProductBtn').addEventListener('click', () => {
+  productsData.products.push({
+    name: 'Nowy produkt',
+    category: (settingsData.categories || [])[0] || 'Dekoracyjne',
+    price: 25,
+    weight: 60,
+    image: '/assets/images/hero.png',
+    description: '',
+    visible: true,
+    imagePosition: '50% 50%',
+    imageZoom: 1
+  });
+  selectedIndex = productsData.products.length - 1;
+  renderAll();
+});
+
+$('duplicateProductBtn').addEventListener('click', () => {
+  const copy = JSON.parse(JSON.stringify(currentProduct()));
+  copy.name = (copy.name || 'Produkt') + ' kopia';
+  productsData.products.push(copy);
+  selectedIndex = productsData.products.length - 1;
+  renderAll();
+});
+
+$('deleteBtn').addEventListener('click', () => {
+  if(!confirm('Na pewno usunąć ten produkt?')) return;
+  productsData.products.splice(selectedIndex, 1);
+  selectedIndex = Math.max(0, selectedIndex - 1);
+  renderAll();
+});
+
+
+
+function normalizePricing(pricing){
+  if(!pricing) return {tiers: []};
+  if(Array.isArray(pricing.tiers)) return pricing;
+
+  return {
+    tiers: [
+      {maxWeight: 60, price: Number(pricing.upTo60 || 0)},
+      {maxWeight: 120, price: Number(pricing.upTo120 || 0)},
+      {maxWeight: 99999, price: Number(pricing.above120 || 0)}
+    ]
+  };
+}
+
+function ensureScentPricing(){
+  if(!settingsData.scentPricing) settingsData.scentPricing = {};
+  (settingsData.scentOptions || []).forEach(scent => {
+    if(scent === 'Bez zapachu' || scent === 'Zapytaj o zapach') return;
+    settingsData.scentPricing[scent] = normalizePricing(settingsData.scentPricing[scent]);
+    if(!settingsData.scentPricing[scent].tiers.length){
+      settingsData.scentPricing[scent].tiers = [
+        {maxWeight: 60, price: 2},
+        {maxWeight: 120, price: 4},
+        {maxWeight: 99999, price: 6}
+      ];
+    }
+  });
+}
+
+function formatMaxWeightLabel(value){
+  return Number(value) >= 99999 ? 'bez limitu' : `${value} g`;
+}
+
+window.candyAdminRenderScentPricing = renderScentPricing;
+function renderScentPricing(){
+  ensureScentPricing();
+
+  $('scentPricingList').innerHTML = Object.entries(settingsData.scentPricing).map(([scent, pricing]) => {
+    const tiers = (pricing.tiers || []).slice().sort((a,b) => Number(a.maxWeight || 0) - Number(b.maxWeight || 0));
+    pricing.tiers = tiers;
+
+    return `
+      <div class="pricing-card">
+        <h3>${scent}</h3>
+        <p class="pricing-note">Sklep wybierze pierwszy próg, do którego mieści się gramatura świeczki. Dla ostatniego progu możesz zostawić 99999 jako „bez limitu”.</p>
+        <div class="pricing-fields">
+          ${tiers.map((tier, index) => `
+            <div class="tier-row">
+              <label>Do ilu gramów?
+                <input type="number" min="1" value="${tier.maxWeight || 0}" data-scent="${scent}" data-tier-index="${index}" data-tier-field="maxWeight">
+              </label>
+              <label>Dopłata
+                <input type="number" min="0" step="0.01" value="${tier.price || 0}" data-scent="${scent}" data-tier-index="${index}" data-tier-field="price">
+              </label>
+              <button class="danger" type="button" data-remove-tier="${scent}" data-remove-tier-index="${index}">Usuń</button>
+            </div>
+          `).join('')}
+        </div>
+        <div class="actions">
+          <button class="secondary" type="button" data-add-tier="${scent}">➕ Dodaj próg</button>
+        </div>
+      </div>
+    `;
+  }).join('');
+
+  document.querySelectorAll('[data-scent][data-tier-field]').forEach(input => {
+    input.addEventListener('input', e => {
+      const scent = e.target.dataset.scent;
+      const index = Number(e.target.dataset.tierIndex);
+      const field = e.target.dataset.tierField;
+      if(!settingsData.scentPricing[scent]) settingsData.scentPricing[scent] = {tiers: []};
+      if(!settingsData.scentPricing[scent].tiers[index]) settingsData.scentPricing[scent].tiers[index] = {maxWeight: 60, price: 0};
+      settingsData.scentPricing[scent].tiers[index][field] = Number(e.target.value || 0);
+    });
+  });
+
+  document.querySelectorAll('[data-add-tier]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const scent = btn.dataset.addTier;
+      if(!settingsData.scentPricing[scent]) settingsData.scentPricing[scent] = {tiers: []};
+      const tiers = settingsData.scentPricing[scent].tiers;
+      const last = tiers.length ? tiers[tiers.length - 1] : {maxWeight: 120, price: 4};
+      const nextWeight = Number(last.maxWeight || 120) >= 99999 ? 200 : Number(last.maxWeight || 120) + 80;
+      const nextPrice = Number(last.price || 0) + 2;
+      tiers.push({maxWeight: nextWeight, price: nextPrice});
+      renderScentPricing();
+    });
+  });
+
+  document.querySelectorAll('[data-remove-tier]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const scent = btn.dataset.removeTier;
+      const index = Number(btn.dataset.removeTierIndex);
+      if(!settingsData.scentPricing[scent]) return;
+      settingsData.scentPricing[scent].tiers.splice(index, 1);
+      if(!settingsData.scentPricing[scent].tiers.length){
+        settingsData.scentPricing[scent].tiers.push({maxWeight: 60, price: 2});
+      }
+      renderScentPricing();
+    });
+  });
+}
+
+async function saveAll(){
+  collectProductForm();
+  showMsg('', false);
+
+  const uploads = Object.entries(pendingUploads).map(([path, contentBase64]) => ({path, contentBase64}));
+
+  const res = await fetch('/api/save-store', {
+    method: 'POST',
+    headers: {'Content-Type':'application/json'},
+    body: JSON.stringify({
+      password: adminPassword || window.candyAdminPasswordValue || $('adminPassword')?.value || '',
+      productsData,
+      settingsData,
+      uploads
+    })
+  });
+
+  const data = await res.json().catch(() => ({}));
+  if(!res.ok){
+    showMsg(data.error || 'Nie udało się zapisać zmian. Sprawdź hasło ADMIN_PASSWORD w Cloudflare.', true);
+    return;
+  }
+
+  pendingUploads = {};
+  showMsg('✅ Zmiany zapisane. Jeśli zmieniono zdjęcie, poczekaj chwilę na deploy Cloudflare. Do tego czasu na stronie może być jeszcze stare zdjęcie.', false);
+}
+
+function showMsg(text, isError){
+  $('successBox').style.display = 'none';
+  $('errorBox').style.display = 'none';
+  if(!text) return;
+  const box = isError ? $('errorBox') : $('successBox');
+  box.textContent = text;
+  box.style.display = 'block';
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+$('saveBtn').addEventListener('click', saveAll);
+$('saveSettingsBtn').addEventListener('click', saveAll);
+$('savePricingBtn').addEventListener('click', saveAll);
+
+
+$('ordersSearch')?.addEventListener('input', renderOrders);
+$('ordersStatusFilter')?.addEventListener('change', renderOrders);
+$('refreshOrdersBtn')?.addEventListener('click', async () => {
+  const res = await fetch('/data/orders.json?cb=' + Date.now()).catch(() => null);
+  ordersData = res && res.ok ? await res.json() : {orders: []};
+  renderOrders();
+});
+
+document.querySelectorAll('.admin-tab').forEach(tab => {
+  tab.addEventListener('click', () => candyShowTab(tab.dataset.tab, tab));
+});
+
+$('loginBtn').addEventListener('click', candyLoginNow);
+
+$('adminPassword').addEventListener('keydown', e => {
+  if(e.key === 'Enter'){
+    e.preventDefault();
+    candyLoginNow();
+  }
+});
+</script>
 </body>
 </html>

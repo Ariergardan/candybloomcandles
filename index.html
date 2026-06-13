@@ -91,9 +91,12 @@
       <button class="close" id="closeCart">×</button>
       <h2>Koszyk</h2>
       <div id="cartItems" class="cart-items"></div>
-      <div class="total">Razem: <strong id="cartTotal">0 zł</strong></div>
+      <div class="total">Produkty: <strong id="cartProductsTotal">0 zł</strong></div>
+      <div class="total cart-delivery-line">Dostawa: <strong id="cartDeliveryTotal">0 zł</strong></div>
+      <div class="total cart-final-line">Do zapłaty: <strong id="cartTotal">0 zł</strong></div>
+      <p class="small-note minimum-order-note" id="minimumOrderNote">📦 Minimalna wartość zamówienia wynosi 20 zł za produkty, bez kosztów dostawy.</p>
 
-      <form name="zamowienie" id="orderForm">
+      <form name="zamowienie" id="orderForm" style="display:none">
         <input type="hidden" name="form-name" value="zamowienie" />
         <p class="hidden"><label>Nie wypełniaj: <input name="bot-field" /></label></p>
         <input type="hidden" name="koszyk" id="cartData" />

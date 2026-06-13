@@ -307,6 +307,17 @@
       "visible": true,
       "imagePosition": "50% 74%",
       "imageZoom": 1
+    },
+    {
+      "name": "Zestaw romantyczny ogród",
+      "category": "Zestawy",
+      "price": 19,
+      "weight": 94,
+      "image": "/assets/images/nowy-prodkt-1781369671269.png",
+      "description": "Połączenie romantycznego serca i kwiatowych detali tworzy niezwykle kobiecą oraz elegancką kompozycję. Ten zestaw świec sojowych doskonale sprawdzi się jako prezent dla bliskiej osoby lub dekoracja nadająca wnętrzu przytulnego charakteru.\nZestaw zawiera 3 świece: piwonia, magnolia, słodkie serce.",
+      "visible": true,
+      "imagePosition": "50% 71%",
+      "imageZoom": 1
     }
   ]
 }

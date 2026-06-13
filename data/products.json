@@ -285,6 +285,17 @@
       "visible": true,
       "imagePosition": "50% 67%",
       "imageZoom": 1
+    },
+    {
+      "name": "Zestaw wyjątkowy moment",
+      "category": "Zestawy",
+      "price": 59,
+      "weight": 451,
+      "image": "/assets/images/nowy-prodkt-1781369043132.png",
+      "description": "Delikatny i romantyczny zestaw świec sojowych symbolizujący bliskość, ciepło i piękne wspomnienia. Dzięki subtelnemu wzornictwu będzie idealnym prezentem dla partnera, przyjaciółki lub bliskiej osoby.\nZestaw zawiera 3 świece: miś (duży), serce amour, słodkie serce.",
+      "visible": true,
+      "imagePosition": "50% 84%",
+      "imageZoom": 1
     }
   ]
 }

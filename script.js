@@ -43,14 +43,14 @@ function getMinimumOrderMessage(){
   const missing = Math.max(0, MIN_ORDER_PRODUCTS_VALUE - productsTotal);
 
   if(!cart.length){
-    return `Minimalna wartość zamówienia wynosi ${money(MIN_ORDER_PRODUCTS_VALUE)} bez kosztów dostawy.`;
+    return `Minimalna wartość zamówienia wynosi ${money(MIN_ORDER_PRODUCTS_VALUE)} za produkty, bez kosztów dostawy.`;
   }
 
   if(productsTotal < MIN_ORDER_PRODUCTS_VALUE){
-    return `Do minimalnej wartości zamówienia brakuje jeszcze ${money(missing)}. Minimalna wartość produktów to ${money(MIN_ORDER_PRODUCTS_VALUE)} bez kosztów dostawy.`;
+    return `Do minimalnej wartości zamówienia brakuje jeszcze ${money(missing)}. Minimalna wartość produktów/świeczek to ${money(MIN_ORDER_PRODUCTS_VALUE)} bez kosztów dostawy.`;
   }
 
-  return `Minimalna wartość zamówienia ${money(MIN_ORDER_PRODUCTS_VALUE)} została osiągnięta.`;
+  return `Minimalna wartość produktów ${money(MIN_ORDER_PRODUCTS_VALUE)} została osiągnięta.`;
 }
 
 function updateDeliveryUI(){
@@ -237,7 +237,13 @@ function updateHiddenOrderFields(){
   const delivery = getDeliveryOption();
   const total = cart.length ? productsTotal + delivery.price : 0;
 
-  document.getElementById('cartTotal').textContent = money(total);
+  const productsTotalEl = document.getElementById('cartProductsTotal');
+  const deliveryTotalEl = document.getElementById('cartDeliveryTotal');
+  const finalTotalEl = document.getElementById('cartTotal');
+
+  if(productsTotalEl) productsTotalEl.textContent = money(productsTotal);
+  if(deliveryTotalEl) deliveryTotalEl.textContent = cart.length ? money(delivery.price) : '0 zł';
+  if(finalTotalEl) finalTotalEl.textContent = money(total);
 
   const productsText = cart.map(i => {
     const scentExtra = getScentExtraPrice(i.scent, i.weight);
@@ -442,7 +448,7 @@ document.getElementById('orderForm').addEventListener('submit', async e => {
   }
 
   if(getProductsTotal() < MIN_ORDER_PRODUCTS_VALUE){
-    alert(`Minimalna wartość zamówienia wynosi ${money(MIN_ORDER_PRODUCTS_VALUE)} bez kosztów dostawy. Dodaj produkty do koszyka, aby kontynuować.`);
+    alert(`Minimalna wartość zamówienia wynosi ${money(MIN_ORDER_PRODUCTS_VALUE)} za produkty, bez kosztów dostawy. Dodaj produkty do koszyka, aby kontynuować.`);
     updateHiddenOrderFields();
     return;
   }

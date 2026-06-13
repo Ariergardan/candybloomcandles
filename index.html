@@ -108,15 +108,19 @@
         <label>Telefon<input required name="telefon" /></label>
         <label>Sposób dostawy
           <select id="deliveryMethod" name="delivery_method" required>
-            <option value="paczkomat">InPost Paczkomat — 16,99 zł</option>
+            <option value="paczkomat">InPost Paczkomat — 16,49 zł</option>
             <option value="kurier">InPost Kurier — 18,99 zł</option>
             <option value="odbior">Odbiór osobisty (Katowice) — 0 zł</option>
           </select>
         </label>
-        <p class="small-note" id="deliverySummary">Dostawa: InPost Paczkomat — 16,99 zł</p>
+        <p class="small-note" id="deliverySummary">Dostawa: InPost Paczkomat — 16,49 zł</p>
         <label>Adres dostawy / Paczkomat / informacja do odbioru<textarea required name="adres_dostawy" rows="3" placeholder="Dla Paczkomatu wpisz wybrany paczkomat, dla kuriera adres, dla odbioru osobistego wpisz: odbiór osobisty."></textarea></label>
         <label>Uwagi do zamówienia<textarea name="uwagi" rows="3" placeholder="Np. okazja, preferowany termin, dodatkowe informacje"></textarea></label>
         <p class="small-note order-info-note">Każda świeca wykonywana jest ręcznie na zamówienie. Po złożeniu zamówienia otrzymasz potwierdzenie, a dane do płatności prześlemy po weryfikacji zamówienia. Na opłacenie zamówienia przysługuje 24 godziny.</p>
+        <label style="display:flex;gap:8px;align-items:flex-start;margin:10px 0">
+          <input required type="checkbox" name="akceptacja_regulaminu">
+          <span>Akceptuję <a href="regulamin.html" target="_blank">Regulamin</a> oraz <a href="polityka-prywatnosci.html" target="_blank">Politykę Prywatności</a>.</span>
+        </label>
         <button class="primary full" type="submit">Personalizuj i wyślij zamówienie</button>
         <p class="small-note">Po wysłaniu zamówienia skontaktujemy się w celu potwierdzenia realizacji i płatności.</p>
       </form>

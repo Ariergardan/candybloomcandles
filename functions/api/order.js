@@ -137,7 +137,7 @@ function buildCustomerEmail(order) {
     <p style="line-height:1.7;color:#6f5c51">${escapeHtml(c.name)}<br>${nl2br(c.address)}<br>tel. ${escapeHtml(c.phone)}</p>
     ${deliveryBlock(order)}
 
-    <p style="line-height:1.7;color:#6f5c51">Po weryfikacji zamówienia prześlemy dane do płatności. Na opłacenie zamówienia przysługuje 24 godziny od otrzymania danych do płatności.</p>
+    <p style="line-height:1.7;color:#6f5c51">Po weryfikacji zamówienia prześlemy dane do płatności oraz potwierdzimy ostateczny koszt dostawy zgodny z aktualnym cennikiem przewoźnika. Na opłacenie zamówienia przysługuje 24 godziny od otrzymania danych do płatności.</p>
     <p style="line-height:1.7;color:#6f5c51">Realizacja rozpoczyna się po zaksięgowaniu płatności i trwa od 1 do 7 dni roboczych. W przypadku większych lub bardziej personalizowanych zamówień termin może się wydłużyć — poinformujemy Cię o tym mailowo lub telefonicznie.</p>
   `);
 }

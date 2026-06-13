@@ -1,63 +1,6 @@
 {
   "orders": [
     {
-      "orderNumber": "CB-20260613-4504",
-      "createdAt": "2026-06-13T10:36:33.296Z",
-      "updatedAt": "2026-06-13T10:36:33.296Z",
-      "status": "Nowe",
-      "total": "44,99 zł",
-      "cartText": "Świeca kwiatowe połaczenie | waga: 19 g | kolor: Zapytaj o kolor: brak wpisanego koloru | zapach: Zapytaj o zapach: brak wpisanego zapachu | ilość: 1 | cena szt.: 5 zł | razem: 5 zł\nŚwieca harmony | waga: 155 g | kolor: Domyślny (jak na zdjęciu) | zapach: Bez zapachu (+0 zł) | ilość: 1 | cena szt.: 23 zł | razem: 23 zł\nDostawa: InPost Paczkomat | koszt: 16,99 zł\nProdukty: 28 zł | Dostawa: 16,99 zł | Razem: 44,99 zł",
-      "cartItems": [
-        {
-          "id": 1781346554952,
-          "name": "Świeca kwiatowe połaczenie",
-          "price": 5,
-          "weight": 19,
-          "image": "/assets/images/nowy-prodkt-1781304148901.png",
-          "imagePosition": "50% 54%",
-          "imageZoom": 1,
-          "scent": "Zapytaj o zapach",
-          "customScent": "",
-          "colorChoice": "Zapytaj o kolor",
-          "customColor": "",
-          "qty": 1
-        },
-        {
-          "id": 1781346849070,
-          "name": "Świeca harmony",
-          "price": 23,
-          "weight": 155,
-          "image": "/assets/images/s-wieca-harmony-1781302015488.png",
-          "imagePosition": "50% 81%",
-          "imageZoom": 1,
-          "scent": "Bez zapachu",
-          "customScent": "",
-          "colorChoice": "Domyślny (jak na zdjęciu)",
-          "customColor": "",
-          "qty": 1
-        }
-      ],
-      "delivery": {
-        "method": "paczkomat",
-        "label": "InPost Paczkomat",
-        "price": 16.99
-      },
-      "customer": {
-        "name": "Dghh",
-        "email": "sdgg@pl.com",
-        "phone": "697 972 852 ",
-        "address": "Hhgfcvb",
-        "notes": ""
-      },
-      "history": [
-        {
-          "status": "Nowe",
-          "date": "2026-06-13T10:36:33.296Z",
-          "note": "Zamówienie zapisane automatycznie"
-        }
-      ]
-    },
-    {
       "orderNumber": "CB-20260613-9484",
       "createdAt": "2026-06-13T08:43:53.543Z",
       "updatedAt": "2026-06-13T08:44:42.944Z",

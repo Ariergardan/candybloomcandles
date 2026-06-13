@@ -3,8 +3,8 @@
     {
       "orderNumber": "CB-20260613-4533",
       "createdAt": "2026-06-13T12:36:53.658Z",
-      "updatedAt": "2026-06-13T12:36:53.658Z",
-      "status": "Nowe",
+      "updatedAt": "2026-06-13T12:38:17.056Z",
+      "status": "Oczekuje na płatność",
       "total": "68,49 zł",
       "cartText": "Świeca kula | waga: 133 g | kolor: Domyślny (jak na zdjęciu) | zapach: Lychee & Mango (+6 zł) | ilość: 1 | cena szt.: 23 zł | razem: 23 zł\nŚwieca harmony | waga: 155 g | kolor: Domyślny (jak na zdjęciu) | zapach: Lemon Sorbet (+6 zł) | ilość: 1 | cena szt.: 29 zł | razem: 29 zł\nDostawa: InPost Paczkomat | koszt: 16,49 zł\nProdukty: 52 zł | Dostawa: 16,49 zł | Razem: 68,49 zł",
       "cartItems": [
@@ -40,7 +40,9 @@
       "delivery": {
         "method": "paczkomat",
         "label": "InPost Paczkomat",
-        "price": 16.49
+        "price": 16.49,
+        "paymentPrice": 16.49,
+        "paymentNote": "z powodu dużego zamóeiwawdkaskfdskdf sd fdskgvdskgvkds"
       },
       "customer": {
         "name": "Paweł Czapliński",
@@ -54,6 +56,11 @@
           "status": "Nowe",
           "date": "2026-06-13T12:36:53.658Z",
           "note": "Zamówienie zapisane automatycznie"
+        },
+        {
+          "status": "Oczekuje na płatność",
+          "date": "2026-06-13T12:38:17.056Z",
+          "note": "Wysłano dane do płatności. z powodu dużego zamóeiwawdkaskfdskdf sd fdskgvdskgvkds"
         }
       ]
     },

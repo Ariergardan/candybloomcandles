@@ -241,6 +241,17 @@
       "visible": true,
       "imagePosition": "50% 74%",
       "imageZoom": 1
+    },
+    {
+      "name": "Zestaw bloom",
+      "category": "Zestawy",
+      "price": 16,
+      "weight": 75,
+      "image": "/assets/images/nowy-prodkt-1781367874264.png",
+      "description": "Wyjątkowa kolekcja dekoracyjnych świec sojowych inspirowanych pięknem kwiatów. Każda świeca została wykonana z dbałością o najmniejszy detal, tworząc efektowną kompozycję, która zachwyca elegancją i subtelnym urokiem. Idealna na prezent lub jako ozdoba wnętrza.\nZestaw zawiera 3 świece: magnolia, stokrotka, kwiatowe połączenie.",
+      "visible": true,
+      "imagePosition": "50% 65%",
+      "imageZoom": 1
     }
   ]
 }

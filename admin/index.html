@@ -214,7 +214,7 @@
         <div class="admin-card">
           <h2>📦 Historia zamówień</h2>
           <p class="muted">Tutaj zapisują się zamówienia z formularza oraz aktualizacje statusów wysyłane mailowo.</p>
-          <div class="orders-stats" id="ordersStats"></div>
+          <div class="orders-stats" id="ordersStats"><div class="stat-card"><small>Zamówienia</small><strong>0</strong></div><div class="stat-card"><small>Sprzedaż</small><strong>0 zł</strong></div><div class="stat-card"><small>Oczekuje</small><strong>0</strong></div><div class="stat-card"><small>W realizacji</small><strong>0</strong></div><div class="stat-card"><small>Wysłane</small><strong>0</strong></div></div>
           <div class="orders-tools">
             <input id="ordersSearch" placeholder="Szukaj po numerze, kliencie lub e-mailu">
             <select id="ordersStatusFilter">
@@ -299,7 +299,7 @@ function candyShowTab(name, clickedButton){
 </script>
 
 <script>
-console.log('CandyBloom admin image preview fix v1.4.6 loaded');
+console.log('CandyBloom admin stats restore v1.4.7 loaded');
 let productsData = { products: [] };
 let settingsData = {};
 let ordersData = { orders: [] };
@@ -346,7 +346,7 @@ function renderAll(){
   renderProductForm();
   renderSettings();
   renderScentPricing();
-  renderOrders();
+  if(typeof renderOrders === 'function') renderOrders();
 }
 
 function renderProductsList(){
@@ -641,6 +641,112 @@ function renderScentPricing(){
   });
 }
 
+
+function parseMoneyValue(value){
+  const number = String(value || '0').replace(',', '.').replace(/[^0-9.]/g, '');
+  return Number(number || 0);
+}
+
+function formatDate(value){
+  if(!value) return '';
+  try{
+    return new Date(value).toLocaleString('pl-PL', {dateStyle:'short', timeStyle:'short'});
+  }catch{return value}
+}
+
+function renderOrders(){
+  const orders = Array.isArray(ordersData.orders) ? ordersData.orders : [];
+  const query = ($('ordersSearch')?.value || '').toLowerCase().trim();
+  const statusFilter = $('ordersStatusFilter')?.value || '';
+
+  const filtered = orders.filter(order => {
+    const c = order.customer || {};
+    const haystack = `${order.orderNumber || ''} ${c.name || ''} ${c.email || ''} ${c.phone || ''}`.toLowerCase();
+    const matchesQuery = !query || haystack.includes(query);
+    const matchesStatus = !statusFilter || order.status === statusFilter;
+    return matchesQuery && matchesStatus;
+  });
+
+  const stats = {
+    all: orders.length,
+    sales: orders.reduce((sum, o) => sum + parseMoneyValue(o.total), 0),
+    payment: orders.filter(o => o.status === 'Oczekuje na płatność').length,
+    progress: orders.filter(o => o.status === 'W realizacji').length,
+    shipped: orders.filter(o => o.status === 'Wysłane').length
+  };
+
+  if($('ordersStats')){
+    $('ordersStats').innerHTML = `
+      <div class="stat-card"><small>Zamówienia</small><strong>${stats.all}</strong></div>
+      <div class="stat-card"><small>Sprzedaż</small><strong>${money(stats.sales)}</strong></div>
+      <div class="stat-card"><small>Oczekuje</small><strong>${stats.payment}</strong></div>
+      <div class="stat-card"><small>W realizacji</small><strong>${stats.progress}</strong></div>
+      <div class="stat-card"><small>Wysłane</small><strong>${stats.shipped}</strong></div>
+    `;
+  }
+
+  if($('ordersList')){
+    $('ordersList').innerHTML = filtered.length ? filtered.map(order => {
+      const c = order.customer || {};
+      return `
+        <button class="order-row" type="button" data-order-number="${order.orderNumber || ''}">
+          <span><strong>${order.orderNumber || 'Brak numeru'}</strong><small>${formatDate(order.createdAt)}</small></span>
+          <span>${c.name || 'Brak klienta'}<small>${c.email || ''}</small></span>
+          <strong>${order.total || '0 zł'}</strong>
+          <span class="status-pill">${order.status || 'Nowe'}</span>
+          <small>${(order.delivery || {}).label || ''}</small>
+        </button>
+      `;
+    }).join('') : '<p class="muted">Brak zamówień do wyświetlenia.</p>';
+
+    document.querySelectorAll('.order-row').forEach(btn => {
+      btn.addEventListener('click', () => showOrderDetails(btn.dataset.orderNumber));
+    });
+  }
+}
+
+function showOrderDetails(orderNumber){
+  const order = (ordersData.orders || []).find(o => o.orderNumber === orderNumber);
+  const box = $('orderDetails');
+  if(!order || !box) return;
+  const c = order.customer || {};
+  const d = order.delivery || {};
+  const history = Array.isArray(order.history) ? order.history : [];
+
+  box.classList.remove('hidden-admin');
+  box.innerHTML = `
+<strong>Zamówienie:</strong> ${order.orderNumber || ''}
+<strong>Status:</strong> ${order.status || 'Nowe'}
+<strong>Data:</strong> ${formatDate(order.createdAt)}
+<strong>Kwota:</strong> ${order.total || ''}
+
+<strong>Klient:</strong>
+${c.name || ''}
+${c.email || ''}
+${c.phone || ''}
+
+<strong>Adres / paczkomat / odbiór:</strong>
+${c.address || ''}
+
+<strong>Dostawa:</strong>
+${d.label || ''} ${d.price !== undefined ? '(' + d.price + ' zł)' : ''}
+
+<strong>Produkty:</strong>
+${order.cartText || ''}
+
+<strong>Uwagi:</strong>
+${c.notes || 'Brak'}
+
+<strong>Numer przesyłki:</strong>
+${order.trackingNumber || 'Brak'}
+
+<strong>Historia:</strong>
+${history.length ? history.map(h => `- ${formatDate(h.date)} — ${h.status || ''}${h.trackingNumber ? ' — ' + h.trackingNumber : ''}`).join('\n') : 'Brak historii'}
+  `;
+}
+
+window.candyAdminRenderOrders = renderOrders;
+
 async function saveAll(){
   collectProductForm();
   showMsg('', false);
@@ -688,7 +794,7 @@ $('ordersStatusFilter')?.addEventListener('change', renderOrders);
 $('refreshOrdersBtn')?.addEventListener('click', async () => {
   const res = await fetch('/data/orders.json?cb=' + Date.now()).catch(() => null);
   ordersData = res && res.ok ? await res.json() : {orders: []};
-  renderOrders();
+  if(typeof renderOrders === 'function') renderOrders();
 });
 
 document.querySelectorAll('.admin-tab').forEach(tab => {

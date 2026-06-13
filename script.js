@@ -6,7 +6,7 @@ let cart = JSON.parse(localStorage.getItem('candy_cart') || '[]');
 const deliveryOptions = {
   paczkomat: { label: 'InPost Paczkomat', price: 16.99 },
   kurier: { label: 'InPost Kurier', price: 18.99 },
-  odbior: { label: 'Odbiór osobisty', price: 0 }
+  odbior: { label: 'Odbiór osobisty (Katowice)', price: 0 }
 };
 
 let deliveryMethod = localStorage.getItem('candy_delivery_method') || 'paczkomat';

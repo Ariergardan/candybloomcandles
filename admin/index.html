@@ -706,19 +706,38 @@ function renderOrders(){
 }
 
 function showOrderDetails(orderNumber){
-  const order = (ordersData.orders || []).find(o => o.orderNumber === orderNumber);
   const box = $('orderDetails');
-  if(!order || !box) return;
+  if(!box) return;
+
+  if(box.dataset.orderNumber === orderNumber && !box.classList.contains('hidden-admin')){
+    box.classList.add('hidden-admin');
+    box.dataset.orderNumber = '';
+    box.innerHTML = '';
+    return;
+  }
+
+  const order = (ordersData.orders || []).find(o => o.orderNumber === orderNumber);
+  if(!order) return;
+  box.dataset.orderNumber = orderNumber;
+
   const c = order.customer || {};
   const d = order.delivery || {};
   const history = Array.isArray(order.history) ? order.history : [];
 
   box.classList.remove('hidden-admin');
   box.innerHTML = `
+<div style="display:flex;justify-content:space-between;gap:12px;align-items:flex-start;flex-wrap:wrap">
+  <div>
 <strong>Zamówienie:</strong> ${order.orderNumber || ''}
 <strong>Status:</strong> ${order.status || 'Nowe'}
 <strong>Data:</strong> ${formatDate(order.createdAt)}
 <strong>Kwota:</strong> ${order.total || ''}
+  </div>
+  <div style="display:flex;gap:10px;flex-wrap:wrap">
+    <button class="secondary" type="button" id="closeOrderDetailsBtn">Zwiń</button>
+    <button class="danger" type="button" id="deleteOrderBtn">Usuń zamówienie</button>
+  </div>
+</div>
 
 <strong>Klient:</strong>
 ${c.name || ''}
@@ -743,6 +762,57 @@ ${order.trackingNumber || 'Brak'}
 <strong>Historia:</strong>
 ${history.length ? history.map(h => `- ${formatDate(h.date)} — ${h.status || ''}${h.trackingNumber ? ' — ' + h.trackingNumber : ''}`).join('\n') : 'Brak historii'}
   `;
+
+  $('closeOrderDetailsBtn')?.addEventListener('click', () => {
+    box.classList.add('hidden-admin');
+    box.dataset.orderNumber = '';
+    box.innerHTML = '';
+  });
+
+  $('deleteOrderBtn')?.addEventListener('click', () => deleteOrder(order.orderNumber));
+}
+
+async function saveOrdersData(message = '✅ Zamówienia zapisane. Cloudflare zaraz opublikuje stronę.'){
+  showMsg('', false);
+
+  const res = await fetch('/api/save-store', {
+    method: 'POST',
+    headers: {'Content-Type':'application/json'},
+    body: JSON.stringify({
+      password: adminPassword || window.candyAdminPasswordValue || $('adminPassword')?.value || '',
+      ordersData
+    })
+  });
+
+  const data = await res.json().catch(() => ({}));
+  if(!res.ok){
+    showMsg(data.error || 'Nie udało się zapisać zamówień. Sprawdź hasło ADMIN_PASSWORD w Cloudflare.', true);
+    return false;
+  }
+
+  showMsg(message, false);
+  return true;
+}
+
+async function deleteOrder(orderNumber){
+  const order = (ordersData.orders || []).find(o => o.orderNumber === orderNumber);
+  if(!order) return;
+
+  const ok = confirm(`Czy na pewno usunąć zamówienie ${orderNumber}? Tej operacji nie da się cofnąć.`);
+  if(!ok) return;
+
+  ordersData.orders = (ordersData.orders || []).filter(o => o.orderNumber !== orderNumber);
+
+  const saved = await saveOrdersData('✅ Zamówienie usunięte. Cloudflare zaraz opublikuje stronę.');
+  if(saved){
+    const box = $('orderDetails');
+    if(box){
+      box.classList.add('hidden-admin');
+      box.dataset.orderNumber = '';
+      box.innerHTML = '';
+    }
+    renderOrders();
+  }
 }
 
 window.candyAdminRenderOrders = renderOrders;

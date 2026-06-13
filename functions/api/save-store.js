@@ -133,6 +133,14 @@ export async function onRequestPost(context) {
       );
     }
 
+    if (body.ordersData) {
+      await putFile(
+        "data/orders.json",
+        JSON.stringify(body.ordersData, null, 2),
+        "CandyBloom CMS: aktualizacja zamówień"
+      );
+    }
+
     return jsonResponse({ ok: true });
   } catch (error) {
     return jsonResponse({ error: error.message || "Błąd zapisu." }, 500);

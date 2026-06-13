@@ -1,0 +1,24 @@
+CandyBloom — odbiór osobisty Katowice + usuwanie zamówień
+
+Podmień:
+- index.html
+- script.js
+- admin/index.html
+- functions/api/save-store.js
+
+Co dodaje:
+1. W dostawie pojawia się „Odbiór osobisty (Katowice) — 0 zł”.
+2. W panelu admina po kliknięciu tego samego zamówienia szczegóły się zwijają.
+3. W szczegółach zamówienia jest przycisk „Usuń zamówienie”.
+4. Usunięcie zamówienia zapisuje data/orders.json przez /api/save-store.
+
+Ważne:
+- Usunięcie jest trwałe po zapisaniu do GitHuba.
+- Potrzebny jest działający GITHUB_TOKEN i ADMIN_PASSWORD, tak jak przy zapisywaniu produktów.
+
+Po wgraniu:
+1. Commit + push.
+2. Poczekaj na deploy.
+3. Ctrl+Shift+R.
+4. Sprawdź koszyk → odbiór osobisty.
+5. Wejdź w Admin → Zamówienia → kliknij zamówienie → Usuń zamówienie.

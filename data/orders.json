@@ -3,8 +3,8 @@
     {
       "orderNumber": "CB-20260613-9484",
       "createdAt": "2026-06-13T08:43:53.543Z",
-      "updatedAt": "2026-06-13T08:43:53.543Z",
-      "status": "Nowe",
+      "updatedAt": "2026-06-13T08:44:42.944Z",
+      "status": "W realizacji",
       "total": "73,99 zł",
       "cartText": "Świeca harmony | waga: 155 g | kolor: Domyślny (jak na zdjęciu) | zapach: Evergreen (+6 zł) | ilość: 1 | cena szt.: 29 zł | razem: 29 zł\nŚwieca kula | waga: 133 g | kolor: Domyślny (jak na zdjęciu) | zapach: Bez zapachu (+0 zł) | ilość: 1 | cena szt.: 17 zł | razem: 17 zł\nŚwieca kaktus | waga: 38 g | kolor: Domyślny (jak na zdjęciu) | zapach: Lychee & Mango (+2 zł) | ilość: 1 | cena szt.: 9 zł | razem: 9 zł\nDostawa: InPost Kurier | koszt: 18,99 zł\nProdukty: 55 zł | Dostawa: 18,99 zł | Razem: 73,99 zł",
       "cartItems": [
@@ -68,8 +68,14 @@
           "status": "Nowe",
           "date": "2026-06-13T08:43:53.543Z",
           "note": "Zamówienie zapisane automatycznie"
+        },
+        {
+          "status": "W realizacji",
+          "date": "2026-06-13T08:44:42.944Z",
+          "trackingNumber": ""
         }
-      ]
+      ],
+      "trackingNumber": ""
     }
   ]
 }

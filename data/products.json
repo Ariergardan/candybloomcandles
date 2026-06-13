@@ -265,7 +265,7 @@
       "imageZoom": 1
     },
     {
-      "name": "Nowy produkt",
+      "name": "Zestaw harmonia",
       "category": "Zestawy",
       "price": 46,
       "weight": 376,
@@ -295,6 +295,17 @@
       "description": "Delikatny i romantyczny zestaw świec sojowych symbolizujący bliskość, ciepło i piękne wspomnienia. Dzięki subtelnemu wzornictwu będzie idealnym prezentem dla partnera, przyjaciółki lub bliskiej osoby.\nZestaw zawiera 3 świece: miś (duży), serce amour, słodkie serce.",
       "visible": true,
       "imagePosition": "50% 84%",
+      "imageZoom": 1
+    },
+    {
+      "name": "Nowy produkt",
+      "category": "Miłosne",
+      "price": 25,
+      "weight": 60,
+      "image": "/assets/images/nowy-prodkt-1781369297945.png",
+      "description": "",
+      "visible": true,
+      "imagePosition": "50% 50%",
       "imageZoom": 1
     }
   ]

@@ -1,6 +1,63 @@
 {
   "orders": [
     {
+      "orderNumber": "CB-20260613-4533",
+      "createdAt": "2026-06-13T12:36:53.658Z",
+      "updatedAt": "2026-06-13T12:36:53.658Z",
+      "status": "Nowe",
+      "total": "68,49 zł",
+      "cartText": "Świeca kula | waga: 133 g | kolor: Domyślny (jak na zdjęciu) | zapach: Lychee & Mango (+6 zł) | ilość: 1 | cena szt.: 23 zł | razem: 23 zł\nŚwieca harmony | waga: 155 g | kolor: Domyślny (jak na zdjęciu) | zapach: Lemon Sorbet (+6 zł) | ilość: 1 | cena szt.: 29 zł | razem: 29 zł\nDostawa: InPost Paczkomat | koszt: 16,49 zł\nProdukty: 52 zł | Dostawa: 16,49 zł | Razem: 68,49 zł",
+      "cartItems": [
+        {
+          "id": 1781354170368,
+          "name": "Świeca kula",
+          "price": 17,
+          "weight": 133,
+          "image": "/assets/images/s-wieca-kla-1781300954725.png",
+          "imagePosition": "50% 47%",
+          "imageZoom": 1,
+          "scent": "Lychee & Mango",
+          "customScent": "",
+          "colorChoice": "Domyślny (jak na zdjęciu)",
+          "customColor": "",
+          "qty": 1
+        },
+        {
+          "id": 1781354173829,
+          "name": "Świeca harmony",
+          "price": 23,
+          "weight": 155,
+          "image": "/assets/images/s-wieca-harmony-1781302015488.png",
+          "imagePosition": "50% 81%",
+          "imageZoom": 1,
+          "scent": "Lemon Sorbet",
+          "customScent": "",
+          "colorChoice": "Domyślny (jak na zdjęciu)",
+          "customColor": "",
+          "qty": 1
+        }
+      ],
+      "delivery": {
+        "method": "paczkomat",
+        "label": "InPost Paczkomat",
+        "price": 16.49
+      },
+      "customer": {
+        "name": "Paweł Czapliński",
+        "email": "szalona.babcia14@gmail.com",
+        "phone": "512184340",
+        "address": "Justynówka\n23A",
+        "notes": ""
+      },
+      "history": [
+        {
+          "status": "Nowe",
+          "date": "2026-06-13T12:36:53.658Z",
+          "note": "Zamówienie zapisane automatycznie"
+        }
+      ]
+    },
+    {
       "orderNumber": "CB-20260613-4489",
       "createdAt": "2026-06-13T12:05:54.446Z",
       "updatedAt": "2026-06-13T12:05:54.446Z",

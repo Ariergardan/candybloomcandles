@@ -318,6 +318,17 @@
       "visible": true,
       "imagePosition": "50% 71%",
       "imageZoom": 1
+    },
+    {
+      "name": "Zestaw Forever Together",
+      "category": "Gift box",
+      "price": 40,
+      "weight": 327,
+      "image": "/assets/images/swieca-1781370826139.png",
+      "description": "Dwa misie, jedno wyjątkowe przesłanie. „Forever Together” to uroczy zestaw dekoracyjnych świec sojowych symbolizujący bliskość, miłość i najpiękniejsze wspomnienia. Starannie wykonane detale oraz subtelne serca sprawiają, że zestaw zachwyca swoim romantycznym charakterem i doskonale prezentuje się jako dekoracja wnętrza.\nTo idealny prezent dla ukochanej osoby, na rocznicę, walentynki, ślub, zaręczyny lub po prostu jako wyjątkowy gest prosto z serca. Delikatna forma i elegancki wygląd sprawiają, że zestaw będzie piękną pamiątką na długi czas.\nZestaw zawiera 2 świece: miś (mały), miś (duży)",
+      "visible": true,
+      "imagePosition": "50% 76%",
+      "imageZoom": 1
     }
   ]
 }

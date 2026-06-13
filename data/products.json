@@ -255,13 +255,24 @@
     },
     {
       "name": "Zestaw love story",
-      "category": "Miłosne",
+      "category": "Zestawy",
       "price": 47,
       "weight": 357,
       "image": "/assets/images/nowy-prodkt-1781368246025.png",
       "description": "Pełen uroku zestaw dekoracyjnych świec sojowych, który zachwyca romantycznym charakterem i dopracowanymi detalami. To wyjątkowa propozycja dla osób szukających oryginalnego prezentu, który wywoła uśmiech i pozostanie piękną pamiątką na długo.\nZestaw zawiera 3 świece: miś (mały), koszyczek róż, kosz serc.",
       "visible": true,
       "imagePosition": "50% 70%",
+      "imageZoom": 1
+    },
+    {
+      "name": "Nowy produkt",
+      "category": "Zestawy",
+      "price": 46,
+      "weight": 376,
+      "image": "/assets/images/nowy-prodkt-1781368610184.png",
+      "description": "Połączenie nowoczesnych linii i klasycznej elegancji. Ten starannie skomponowany zestaw dekoracyjnych świec sojowych przyciąga uwagę minimalistycznym designem i subtelnym urokiem. Idealnie prezentuje się na komodzie, stoliku kawowym lub półce.\nZestaw zawiera 3 świece: harmony, kula, spiralna.",
+      "visible": true,
+      "imagePosition": "50% 50%",
       "imageZoom": 1
     }
   ]

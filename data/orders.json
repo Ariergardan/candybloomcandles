@@ -1,3 +1,47 @@
 {
-  "orders": []
+  "orders": [
+    {
+      "orderNumber": "CB-20260613-4489",
+      "createdAt": "2026-06-13T12:05:54.446Z",
+      "updatedAt": "2026-06-13T12:05:54.446Z",
+      "status": "Nowe",
+      "total": "39,99 zł",
+      "cartText": "Świeca harmony | waga: 155 g | kolor: Domyślny (jak na zdjęciu) | zapach: Bez zapachu (+0 zł) | ilość: 1 | cena szt.: 23 zł | razem: 23 zł\nDostawa: InPost Paczkomat | koszt: 16,99 zł\nProdukty: 23 zł | Dostawa: 16,99 zł | Razem: 39,99 zł",
+      "cartItems": [
+        {
+          "id": 1781352286365,
+          "name": "Świeca harmony",
+          "price": 23,
+          "weight": 155,
+          "image": "/assets/images/s-wieca-harmony-1781302015488.png",
+          "imagePosition": "50% 81%",
+          "imageZoom": 1,
+          "scent": "Bez zapachu",
+          "customScent": "",
+          "colorChoice": "Domyślny (jak na zdjęciu)",
+          "customColor": "",
+          "qty": 1
+        }
+      ],
+      "delivery": {
+        "method": "paczkomat",
+        "label": "InPost Paczkomat",
+        "price": 16.99
+      },
+      "customer": {
+        "name": "Paweł Czapliński",
+        "email": "szalona.babcia14@gmail.com",
+        "phone": "512184340",
+        "address": "Justynówka\n23A",
+        "notes": ""
+      },
+      "history": [
+        {
+          "status": "Nowe",
+          "date": "2026-06-13T12:05:54.446Z",
+          "note": "Zamówienie zapisane automatycznie"
+        }
+      ]
+    }
+  ]
 }

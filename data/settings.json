@@ -8,17 +8,15 @@
     "Lemon Sorbet",
     "Evergreen",
     "Lychee & Mango",
-    "Magnolia & Peach",
+    "Magnolia & Brzoskwinia",
     "Świeża Bawełna",
-    "Zapytaj o zapach",
-    "ewe"
+    "Zapytaj o zapach"
   ],
   "categories": [
     "Miłosne",
     "Kwiaty",
-    "Dekoracyjne",
-    "Podziękowania dla gości",
-    "Zestawy prezentowe"
+    "Minimalistyczne",
+    "Podziękowania dla gości"
   ],
   "colorOptions": [
     "Domyślny (jak na zdjęciu)",
@@ -38,6 +36,10 @@
         {
           "maxWeight": 200,
           "price": 6
+        },
+        {
+          "maxWeight": 300,
+          "price": 10
         }
       ]
     },
@@ -52,8 +54,12 @@
           "price": 4
         },
         {
-          "maxWeight": 99999,
+          "maxWeight": 200,
           "price": 6
+        },
+        {
+          "maxWeight": 300,
+          "price": 10
         }
       ]
     },
@@ -68,8 +74,12 @@
           "price": 4
         },
         {
-          "maxWeight": 99999,
+          "maxWeight": 200,
           "price": 6
+        },
+        {
+          "maxWeight": 300,
+          "price": 10
         }
       ]
     },
@@ -84,8 +94,12 @@
           "price": 4
         },
         {
-          "maxWeight": 99999,
+          "maxWeight": 200,
           "price": 6
+        },
+        {
+          "maxWeight": 300,
+          "price": 10
         }
       ]
     },
@@ -100,8 +114,12 @@
           "price": 4
         },
         {
-          "maxWeight": 99999,
+          "maxWeight": 200,
           "price": 6
+        },
+        {
+          "maxWeight": 300,
+          "price": 10
         }
       ]
     },
@@ -116,12 +134,16 @@
           "price": 4
         },
         {
-          "maxWeight": 99999,
+          "maxWeight": 200,
           "price": 6
+        },
+        {
+          "maxWeight": 300,
+          "price": 10
         }
       ]
     },
-    "ewe": {
+    "Magnolia & Brzoskwinia": {
       "tiers": [
         {
           "maxWeight": 60,
@@ -132,8 +154,12 @@
           "price": 4
         },
         {
-          "maxWeight": 99999,
+          "maxWeight": 200,
           "price": 6
+        },
+        {
+          "maxWeight": 300,
+          "price": 10
         }
       ]
     }

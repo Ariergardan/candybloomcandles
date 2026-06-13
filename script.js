@@ -18,6 +18,14 @@ const money = value => {
   return `${number.toFixed(2).replace('.', ',')} zł`;
 };
 
+function syncDeliveryFromSelect(){
+  const select = document.getElementById('deliveryMethod');
+  if(select && deliveryOptions[select.value]){
+    deliveryMethod = select.value;
+    localStorage.setItem('candy_delivery_method', deliveryMethod);
+  }
+}
+
 function getDeliveryOption(){
   return deliveryOptions[deliveryMethod] || deliveryOptions.paczkomat;
 }
@@ -49,7 +57,7 @@ function updateDeliveryUI(){
   const select = document.getElementById('deliveryMethod');
   const summary = document.getElementById('deliverySummary');
 
-  if(select && select.value !== deliveryMethod){
+  if(select && deliveryOptions[deliveryMethod] && select.value !== deliveryMethod){
     select.value = deliveryMethod;
   }
 
@@ -210,7 +218,15 @@ function updateCartItem(id, updates, shouldRender = true){
   saveCart(shouldRender);
 }
 
+function toggleCartFormVisibility(){
+  const form = document.getElementById('orderForm');
+  if(form){
+    form.style.display = cart.length ? '' : 'none';
+  }
+}
+
 function updateHiddenOrderFields(){
+  syncDeliveryFromSelect();
   const productsTotal = getProductsTotal();
   const delivery = getDeliveryOption();
   const total = cart.length ? productsTotal + delivery.price : 0;
@@ -374,6 +390,8 @@ function renderCart(){
     })
   );
 
+  toggleCartFormVisibility();
+  toggleCartFormVisibility();
   updateHiddenOrderFields();
 }
 

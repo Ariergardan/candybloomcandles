@@ -1,0 +1,20 @@
+CandyBloom — poprawka pustego koszyka i dostawy
+
+Podmień:
+- script.js
+- index.html
+- style.css
+
+Co poprawia:
+1. Pusty koszyk pokazuje Razem: 0 zł.
+2. Formularz zamówienia chowa się, gdy koszyk jest pusty.
+3. Dostawa nie dolicza się przy pustym koszyku.
+4. Po zmianie Paczkomat/Kurier/Odbiór summary pokazuje aktualnie wybraną opcję.
+5. Minimum 20 zł dalej liczy tylko produkty, bez dostawy.
+
+Test:
+1. Otwórz pusty koszyk — ma być 0 zł i brak formularza.
+2. Dodaj produkt poniżej 20 zł — ma pokazać ile brakuje.
+3. Zmień dostawę — summary ma zmieniać cenę zgodnie z selectem.
+4. Spróbuj wysłać poniżej 20 zł — ma blokować.
+5. Dodaj produkty za min. 20 zł — zamówienie ma przejść.

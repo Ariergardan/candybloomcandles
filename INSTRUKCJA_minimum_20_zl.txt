@@ -1,0 +1,20 @@
+CandyBloom — minimalna wartość zamówienia 20 zł
+
+Podmień:
+- index.html
+- script.js
+- style.css
+- regulamin.html
+
+Co dodaje:
+- minimalna wartość produktów w koszyku: 20 zł,
+- koszt dostawy nie wlicza się do minimum,
+- komunikat w koszyku pokazuje, czy brakuje do minimum,
+- formularz nie wyśle zamówienia poniżej 20 zł produktów,
+- zapis w regulaminie.
+
+Test:
+1. Dodaj produkt za mniej niż 20 zł.
+2. Wybierz dostawę — mimo dostawy formularz powinien blokować wysyłkę.
+3. Dodaj produkty za minimum 20 zł.
+4. Zamówienie powinno przejść.

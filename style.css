@@ -351,3 +351,20 @@ nav a {
   color:var(--muted);
   font-weight:700;
 }
+
+/* CandyBloom — minimum zamówienia */
+.minimum-order-note{
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:16px;
+  padding:12px 14px;
+  margin:10px 0 16px;
+}
+.minimum-order-note.warning{
+  border-color:#d8b6a6;
+  color:#8b2f1d;
+}
+.minimum-order-note.ok{
+  border-color:#bde8ca;
+  color:#1e6b3a;
+}

@@ -10,6 +10,7 @@ const deliveryOptions = {
 };
 
 let deliveryMethod = localStorage.getItem('candy_delivery_method') || 'paczkomat';
+const MIN_ORDER_PRODUCTS_VALUE = 20;
 
 const money = value => {
   const number = Number(value || 0);
@@ -27,6 +28,21 @@ function getProductsTotal(){
 
 function getOrderTotal(){
   return getProductsTotal() + getDeliveryOption().price;
+}
+
+function getMinimumOrderMessage(){
+  const productsTotal = getProductsTotal();
+  const missing = Math.max(0, MIN_ORDER_PRODUCTS_VALUE - productsTotal);
+
+  if(!cart.length){
+    return `Minimalna wartość zamówienia wynosi ${money(MIN_ORDER_PRODUCTS_VALUE)} bez kosztów dostawy.`;
+  }
+
+  if(productsTotal < MIN_ORDER_PRODUCTS_VALUE){
+    return `Do minimalnej wartości zamówienia brakuje jeszcze ${money(missing)}. Minimalna wartość produktów to ${money(MIN_ORDER_PRODUCTS_VALUE)} bez kosztów dostawy.`;
+  }
+
+  return `Minimalna wartość zamówienia ${money(MIN_ORDER_PRODUCTS_VALUE)} została osiągnięta.`;
 }
 
 function updateDeliveryUI(){
@@ -219,6 +235,13 @@ function updateHiddenOrderFields(){
   document.getElementById('cartAmount').value = money(total);
 
   updateDeliveryUI();
+
+  const minNote = document.getElementById('minimumOrderNote');
+  if(minNote){
+    minNote.textContent = `📦 ${getMinimumOrderMessage()}`;
+    minNote.classList.toggle('warning', cart.length > 0 && productsTotal < MIN_ORDER_PRODUCTS_VALUE);
+    minNote.classList.toggle('ok', cart.length > 0 && productsTotal >= MIN_ORDER_PRODUCTS_VALUE);
+  }
 }
 
 function renderCart(){
@@ -388,6 +411,12 @@ document.getElementById('orderForm').addEventListener('submit', async e => {
 
   if(!cart.length){
     alert('Dodaj najpierw świecę do koszyka.');
+    return;
+  }
+
+  if(getProductsTotal() < MIN_ORDER_PRODUCTS_VALUE){
+    alert(`Minimalna wartość zamówienia wynosi ${money(MIN_ORDER_PRODUCTS_VALUE)} bez kosztów dostawy. Dodaj produkty do koszyka, aby kontynuować.`);
+    updateHiddenOrderFields();
     return;
   }
 

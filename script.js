@@ -134,6 +134,10 @@ function getScentExtraPrice(scent, weight){
   return matched ? matched.price : (tiers.length ? tiers[tiers.length - 1].price : 0);
 }
 
+function getItemUnitPrice(item){
+  return Number(item.price || 0) + getScentExtraPrice(item.scent, item.weight);
+}
+
 function getScentLabel(scent, weight){
   const extra = getScentExtraPrice(scent, weight);
   if (scent === 'Bez zapachu') return 'Bez zapachu (+0 zł)';
@@ -527,3 +531,13 @@ function initCookieBanner(){
 initCookieBanner();
 
 loadData();
+
+
+// CandyBloom cart final emergency refresh
+setTimeout(() => {
+  try {
+    updateHiddenOrderFields();
+  } catch (error) {
+    console.error('CandyBloom cart refresh error:', error);
+  }
+}, 100);

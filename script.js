@@ -27,7 +27,7 @@ function getProductsTotal(){
 }
 
 function getOrderTotal(){
-  return getProductsTotal() + getDeliveryOption().price;
+  return cart.length ? getProductsTotal() + getDeliveryOption().price : 0;
 }
 
 function getMinimumOrderMessage(){
@@ -55,7 +55,9 @@ function updateDeliveryUI(){
 
   const option = getDeliveryOption();
   if(summary){
-    summary.textContent = `Dostawa: ${option.label} — ${money(option.price)}`;
+    summary.textContent = cart.length
+      ? `Dostawa: ${option.label} — ${money(option.price)}`
+      : `Dostawa zostanie doliczona po dodaniu produktu: ${option.label} — ${money(option.price)}`;
   }
 }
 
@@ -211,7 +213,7 @@ function updateCartItem(id, updates, shouldRender = true){
 function updateHiddenOrderFields(){
   const productsTotal = getProductsTotal();
   const delivery = getDeliveryOption();
-  const total = productsTotal + delivery.price;
+  const total = cart.length ? productsTotal + delivery.price : 0;
 
   document.getElementById('cartTotal').textContent = money(total);
 
@@ -228,8 +230,10 @@ function updateHiddenOrderFields(){
     return `${i.name} | waga: ${i.weight || 0} g | kolor: ${colorText} | zapach: ${scentText} | ilość: ${i.qty} | cena szt.: ${money(getItemUnitPrice(i))} | razem: ${money(getItemUnitPrice(i)*i.qty)}`;
   }).join('\n');
 
-  const deliveryText = `Dostawa: ${delivery.label} | koszt: ${money(delivery.price)}`;
-  const summaryText = `Produkty: ${money(productsTotal)} | Dostawa: ${money(delivery.price)} | Razem: ${money(total)}`;
+  const deliveryText = cart.length ? `Dostawa: ${delivery.label} | koszt: ${money(delivery.price)}` : '';
+  const summaryText = cart.length
+    ? `Produkty: ${money(productsTotal)} | Dostawa: ${money(delivery.price)} | Razem: ${money(total)}`
+    : '';
 
   document.getElementById('cartData').value = [productsText, deliveryText, summaryText].filter(Boolean).join('\n');
   document.getElementById('cartAmount').value = money(total);

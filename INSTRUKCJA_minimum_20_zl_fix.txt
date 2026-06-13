@@ -1,0 +1,6 @@
+CandyBloom minimum 20 zł — poprawka
+OK: pusty koszyk pokazuje 0 zł zamiast kosztu dostawy
+OK: dostawa nie wlicza się do minimum 20 zł
+OK: komunikat minimum w koszyku
+OK: blokada wysłania zamówienia poniżej 20 zł produktów
+OK: dopisek w regulaminie, jeśli go brakowało

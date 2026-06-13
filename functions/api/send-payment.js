@@ -17,6 +17,42 @@ function formatPrice(value) {
   return `${number.toFixed(2).replace(".", ",")} zł`;
 }
 
+function parseMoney(value) {
+  const cleaned = String(value || "0").replace(",", ".").replace(/[^0-9.]/g, "");
+  return Number(cleaned || 0);
+}
+
+function getProductsTotalFromOrder(order) {
+  const match = String(order.cartText || "").match(/Produkty:\s*([0-9]+(?:[,.][0-9]{1,2})?)/i);
+  if (match) return parseMoney(match[1]);
+  const total = parseMoney(order.total);
+  const delivery = parseMoney(order.delivery?.price);
+  return Math.max(0, total - delivery);
+}
+
+function applyPaymentDeliveryOverride(order, deliveryPrice, deliveryNote) {
+  const productsTotal = getProductsTotalFromOrder(order);
+  const price = Number(deliveryPrice);
+  if (!Number.isNaN(price) && price >= 0) {
+    order.delivery = {
+      ...(order.delivery || {}),
+      price,
+      paymentPrice: price,
+      paymentNote: deliveryNote || ""
+    };
+    order.total = formatPrice(productsTotal + price);
+  }
+  return order;
+}
+
+
+function base64UrlEncode(value) {
+  const json = JSON.stringify(value);
+  return btoa(unescape(encodeURIComponent(json)))
+    .replaceAll("+", "-")
+    .replaceAll("/", "_")
+    .replaceAll("=", "");
+}
 
 function base64UrlDecode(value) {
   let b64 = String(value || "").replaceAll("-", "+").replaceAll("_", "/");
@@ -57,7 +93,8 @@ function deliveryBlock(order) {
     <h3 style="color:#4d3528;margin-top:24px">Dostawa</h3>
     <p style="line-height:1.7;color:#6f5c51">
       ${escapeHtml(d.label)}<br>
-      Koszt dostawy: <strong>${escapeHtml(formatPrice(d.price))}</strong>
+      Koszt dostawy do płatności: <strong>${escapeHtml(formatPrice(d.price))}</strong>
+      ${d.paymentNote ? `<br><span style="color:#8a7468">Informacja: ${escapeHtml(d.paymentNote)}</span>` : ""}
     </p>
   `;
 }
@@ -84,7 +121,7 @@ function buildPaymentEmail(order) {
   const c = order.customer || {};
   return emailShell(`
     <h1 style="font-family:Georgia,serif;color:#4d3528;font-size:34px;margin:0 0 12px">Dane do płatności 🤍</h1>
-    <p style="line-height:1.7;color:#6f5c51">Dzień dobry ${escapeHtml(c.name)}, Twoje zamówienie zostało zweryfikowane i jest gotowe do realizacji.</p>
+    <p style="line-height:1.7;color:#6f5c51">Dzień dobry ${escapeHtml(c.name)}, Twoje zamówienie zostało zweryfikowane. Poniżej przesyłamy dane do płatności oraz potwierdzony koszt dostawy.</p>
 
     <p><span style="display:inline-block;background:#fff3cd;color:#6a4b00;border-radius:999px;padding:8px 12px;font-weight:700;font-size:13px">Status: oczekuje na płatność</span></p>
 
@@ -164,9 +201,51 @@ body{margin:0;background:#fbf6f0;color:#4d3528;font-family:Arial,sans-serif;disp
 .card{max-width:620px;background:#fffaf5;border:1px solid #eadfd7;border-radius:28px;padding:34px;text-align:center}
 h1{font-family:Georgia,serif;font-size:42px;margin:0 0 14px}
 p{color:#6f5c51;line-height:1.7}
-a{display:inline-block;margin-top:18px;background:#4d3528;color:#fff;text-decoration:none;border-radius:999px;padding:14px 20px;font-weight:700}
+a,.btn{display:inline-block;margin-top:18px;background:#4d3528;color:#fff;text-decoration:none;border-radius:999px;padding:14px 20px;font-weight:700;border:0;cursor:pointer}
 </style></head><body><main class="card"><h1>${ok ? "Wysłano 🤍" : "Błąd"}</h1><p>${escapeHtml(message)}</p><a href="/">Wróć do sklepu</a></main></body></html>`, {
     status: ok ? 200 : 500,
+    headers: {"Content-Type": "text/html; charset=utf-8"}
+  });
+}
+
+function paymentFormResponse(order, actionUrl, defaultDeliveryPrice) {
+  const d = order.delivery || {};
+  return new Response(`<!doctype html>
+<html lang="pl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Dane do płatności — ${escapeHtml(order.orderNumber)}</title>
+<style>
+body{margin:0;background:#fbf6f0;color:#4d3528;font-family:Arial,sans-serif;display:grid;place-items:center;min-height:100vh;padding:24px}
+.card{width:min(720px,100%);background:#fffaf5;border:1px solid #eadfd7;border-radius:28px;padding:34px;box-shadow:0 22px 60px rgba(77,53,40,.10)}
+h1{font-family:Georgia,serif;font-size:40px;margin:0 0 10px}
+p{color:#6f5c51;line-height:1.7}
+label{display:block;text-align:left;font-weight:700;margin-top:16px}
+input,textarea{width:100%;box-sizing:border-box;border:1px solid #eadfd7;border-radius:16px;background:#fff;padding:14px 16px;font-size:16px;color:#4d3528;margin-top:8px}
+textarea{min-height:90px;resize:vertical}
+.btn{width:100%;margin-top:20px;background:#4d3528;color:#fff;border:0;border-radius:999px;padding:15px 20px;font-weight:700;cursor:pointer;font-size:16px}
+.note{background:#f7eee8;border:1px solid #eadfd7;border-radius:18px;padding:14px;margin:18px 0;color:#6f5c51}
+.small{font-size:13px;color:#8a7468}
+</style></head>
+<body>
+<main class="card">
+  <h1>Wyślij dane do płatności</h1>
+  <p>Zamówienie <strong>${escapeHtml(order.orderNumber)}</strong></p>
+  <div class="note">
+    Wybrana dostawa: <strong>${escapeHtml(d.label || "Brak")}</strong><br>
+    Cena z zamówienia: <strong>${escapeHtml(formatPrice(d.price || 0))}</strong>
+  </div>
+  <form method="POST" action="${escapeHtml(actionUrl)}">
+    <input type="hidden" name="data" value="${escapeHtml(base64UrlEncode(order))}">
+    <label>Koszt dostawy do płatności
+      <input name="delivery_price" value="${escapeHtml(formatPrice(defaultDeliveryPrice).replace(" zł",""))}" placeholder="np. 16,49 lub 32,98" required>
+    </label>
+    <label>Informacja dla klienta, jeśli zmieniasz koszt dostawy
+      <textarea name="delivery_note" placeholder="Np. zamówienie wymaga wysyłki w dwóch paczkach albo większego gabarytu."></textarea>
+    </label>
+    <p class="small">Jeśli koszt się nie zmienia, zostaw cenę bez zmian i kliknij wyślij.</p>
+    <button class="btn" type="submit">Wyślij dane do płatności</button>
+  </form>
+</main>
+</body></html>`, {
     headers: {"Content-Type": "text/html; charset=utf-8"}
   });
 }
@@ -236,8 +315,10 @@ async function updatePaymentHistory(env, order) {
   if (index >= 0) {
     data.orders[index].status = "Oczekuje na płatność";
     data.orders[index].updatedAt = now;
+    data.orders[index].total = order.total || data.orders[index].total;
+    data.orders[index].delivery = order.delivery || data.orders[index].delivery;
     data.orders[index].history = Array.isArray(data.orders[index].history) ? data.orders[index].history : [];
-    data.orders[index].history.push({ status: "Oczekuje na płatność", date: now, note: "Wysłano dane do płatności" });
+    data.orders[index].history.push({ status: "Oczekuje na płatność", date: now, note: order.delivery?.paymentNote ? `Wysłano dane do płatności. ${order.delivery.paymentNote}` : "Wysłano dane do płatności" });
   } else {
     data.orders.unshift({
       orderNumber: order.orderNumber,
@@ -270,6 +351,35 @@ export async function onRequestGet(context) {
     if (!customer.email || !order.orderNumber || !order.total) {
       return htmlResponse("Błąd", "Brakuje danych zamówienia.", false);
     }
+
+    const actionUrl = `/api/send-payment?token=${encodeURIComponent(token)}`;
+    return paymentFormResponse(order, actionUrl, Number(order.delivery?.price || 0));
+  } catch (error) {
+    return htmlResponse("Błąd", "Nie udało się otworzyć formularza płatności: " + (error.message || error), false);
+  }
+}
+
+export async function onRequestPost(context) {
+  try {
+    const url = new URL(context.request.url);
+    const token = url.searchParams.get("token");
+    const expected = context.env.ORDER_ACTION_TOKEN;
+
+    if (!expected || token !== expected) {
+      return htmlResponse("Błąd", "Brak autoryzacji do wysłania danych płatności.", false);
+    }
+
+    const form = await context.request.formData();
+    const order = base64UrlDecode(form.get("data"));
+    const customer = order.customer || {};
+    const deliveryPrice = parseMoney(form.get("delivery_price"));
+    const deliveryNote = String(form.get("delivery_note") || "").trim();
+
+    if (!customer.email || !order.orderNumber || !order.total) {
+      return htmlResponse("Błąd", "Brakuje danych zamówienia.", false);
+    }
+
+    applyPaymentDeliveryOverride(order, deliveryPrice, deliveryNote);
 
     await sendEmail({
       env: context.env,

@@ -1,0 +1,22 @@
+CandyBloom — koszt dostawy przed wysłaniem danych do płatności
+
+Podmień:
+- functions/api/order.js
+- functions/api/send-payment.js
+
+Jak działa:
+1. W mailu admina klikasz przycisk „Ustaw koszt dostawy i wyślij dane do płatności”.
+2. Otwiera się strona z formularzem.
+3. Pole „Koszt dostawy do płatności” domyślnie ma cenę z zamówienia.
+4. Możesz zostawić cenę albo wpisać inną, np. 32,98.
+5. Opcjonalnie wpisujesz informację dla klienta, np. „zamówienie wymaga wysyłki w dwóch paczkach”.
+6. Klikasz „Wyślij dane do płatności”.
+7. Klient dostaje mail z poprawioną kwotą do zapłaty.
+8. Historia zamówienia zapisuje status „Oczekuje na płatność” i aktualizuje kwotę/dostawę.
+
+Po wgraniu:
+1. Commit + push.
+2. Poczekaj na deploy Cloudflare.
+3. Złóż testowe zamówienie.
+4. W mailu kliknij przycisk płatności.
+5. Sprawdź formularz kosztu dostawy.

@@ -185,9 +185,9 @@ function buildOwnerEmail(order, paymentUrl, statusUrls) {
 
     <div style="text-align:center;margin:28px 0">
       <a href="${escapeHtml(paymentUrl)}" style="display:inline-block;background:#4d3528;color:#fff;text-decoration:none;border-radius:999px;padding:16px 24px;font-weight:700">
-        Wyślij dane do płatności
+        Ustaw koszt dostawy i wyślij dane do płatności
       </a>
-      <p style="font-size:13px;color:#8a7468;margin-top:10px">Po kliknięciu klient dostanie elegancki mail z BLIK/przelewem i statusem „oczekuje na płatność”.</p>
+      <p style="font-size:13px;color:#8a7468;margin-top:10px">Po kliknięciu ustawisz/potwierdzisz koszt dostawy, a potem klient dostanie mail z BLIK/przelewem i statusem „oczekuje na płatność”.</p>
     </div>
 
     <div style="text-align:center;margin:26px 0">

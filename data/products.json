@@ -219,6 +219,17 @@
       "visible": true,
       "imagePosition": "50% 84%",
       "imageZoom": 1
+    },
+    {
+      "name": "Zestaw okrągłe piękno",
+      "category": "Zestawy",
+      "price": 25,
+      "weight": 221,
+      "image": "/assets/images/nowy-prodkt-1781367295381.png",
+      "description": "Subtelny duet dekoracyjnych świec sojowych zachwycający prostotą i ponadczasową formą. Delikatne żłobienia oraz naturalny wygląd sprawiają, że zestaw doskonale wpisuje się w styl skandynawski, boho i modern. Idealny dla osób ceniących minimalizm i elegancję.\nZestaw zawiera 2 świece: kula, spiralna.",
+      "visible": true,
+      "imagePosition": "50% 72%",
+      "imageZoom": 1
     }
   ]
 }

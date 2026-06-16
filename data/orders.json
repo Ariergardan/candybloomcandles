@@ -3,9 +3,9 @@
     {
       "orderNumber": "CB-20260616-2793",
       "createdAt": "2026-06-16T19:40:28.903Z",
-      "updatedAt": "2026-06-16T19:50:26.303Z",
-      "status": "Oczekuje na płatność",
-      "total": "80 zł",
+      "updatedAt": "2026-06-16T19:53:08.539Z",
+      "status": "W realizacji",
+      "total": "96,49 zł",
       "cartText": "Świeca kosz serc | waga: 194 g | kolor: Domyślny (jak na zdjęciu) | zapach: Bez zapachu (+0 zł) | ilość: 1 | cena szt.: 27 zł | razem: 27 zł\nŚwieca koszyczek róż | waga: 110 g | kolor: Domyślny (jak na zdjęciu) | zapach: Bez zapachu (+0 zł) | ilość: 1 | cena szt.: 16 zł | razem: 16 zł\nŚwieca bukiet tulipanów | waga: 165 g | kolor: Domyślny (jak na zdjęciu) | zapach: Bez zapachu (+0 zł) | ilość: 1 | cena szt.: 24 zł | razem: 24 zł\nŚwieca kwiat warstwowy | waga: 80 g | kolor: Domyślny (jak na zdjęciu) | zapach: Bez zapachu (+0 zł) | ilość: 1 | cena szt.: 13 zł | razem: 13 zł\nDostawa: InPost Paczkomat | koszt: 16,49 zł\nProdukty: 80 zł | Dostawa: 16,49 zł | Razem: 96,49 zł",
       "cartItems": [
         {
@@ -68,9 +68,7 @@
       "delivery": {
         "method": "paczkomat",
         "label": "InPost Paczkomat",
-        "price": 0,
-        "paymentPrice": 0,
-        "paymentNote": ""
+        "price": 16.49
       },
       "customer": {
         "name": "Anna Żabicka",
@@ -89,8 +87,14 @@
           "status": "Oczekuje na płatność",
           "date": "2026-06-16T19:50:26.303Z",
           "note": "Wysłano dane do płatności"
+        },
+        {
+          "status": "W realizacji",
+          "date": "2026-06-16T19:53:08.539Z",
+          "trackingNumber": ""
         }
-      ]
+      ],
+      "trackingNumber": ""
     }
   ]
 }

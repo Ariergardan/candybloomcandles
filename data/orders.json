@@ -3,9 +3,9 @@
     {
       "orderNumber": "CB-20260617-8570",
       "createdAt": "2026-06-17T19:36:05.417Z",
-      "updatedAt": "2026-06-17T19:36:05.417Z",
-      "status": "Nowe",
-      "total": "71,49 zł",
+      "updatedAt": "2026-06-17T19:36:59.602Z",
+      "status": "Oczekuje na płatność",
+      "total": "52 zł",
       "cartText": "Świeca kula | waga: 133 g | kolor: Domyślny (jak na zdjęciu) | zapach: Lychee & Mango (+6 zł) | ilość: 1 | cena szt.: 23 zł | razem: 23 zł\nŚwieca harmony | waga: 155 g | kolor: Domyślny (jak na zdjęciu) | zapach: Lychee & Mango (+6 zł) | ilość: 1 | cena szt.: 29 zł | razem: 29 zł\nDostawa: InPost Kurier | koszt: 19,49 zł\nProdukty: 52 zł | Dostawa: 19,49 zł | Razem: 71,49 zł",
       "cartItems": [
         {
@@ -40,7 +40,9 @@
       "delivery": {
         "method": "kurier",
         "label": "InPost Kurier",
-        "price": 19.49
+        "price": 0,
+        "paymentPrice": 0,
+        "paymentNote": ""
       },
       "customer": {
         "name": "Paweł Czapliński",
@@ -54,6 +56,11 @@
           "status": "Nowe",
           "date": "2026-06-17T19:36:05.417Z",
           "note": "Zamówienie zapisane automatycznie"
+        },
+        {
+          "status": "Oczekuje na płatność",
+          "date": "2026-06-17T19:36:59.602Z",
+          "note": "Wysłano dane do płatności"
         }
       ]
     },

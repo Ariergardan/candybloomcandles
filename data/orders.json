@@ -3,9 +3,9 @@
     {
       "orderNumber": "CB-20260619-6887",
       "createdAt": "2026-06-19T13:29:45.325Z",
-      "updatedAt": "2026-06-19T13:29:45.325Z",
-      "status": "Nowe",
-      "total": "77,49 zł",
+      "updatedAt": "2026-06-19T13:30:45.708Z",
+      "status": "Oczekuje na płatność",
+      "total": "61 zł",
       "cartText": "Świeca kula | waga: 133 g | kolor: Domyślny (jak na zdjęciu) | zapach: Evergreen (+6 zł) | ilość: 1 | cena szt.: 23 zł | razem: 23 zł\nŚwieca harmony | waga: 155 g | kolor: Domyślny (jak na zdjęciu) | zapach: Evergreen (+6 zł) | ilość: 1 | cena szt.: 29 zł | razem: 29 zł\nŚwieca kaktus | waga: 38 g | kolor: Domyślny (jak na zdjęciu) | zapach: Lemon Sorbet (+2 zł) | ilość: 1 | cena szt.: 9 zł | razem: 9 zł\nDostawa: InPost Paczkomat | koszt: 16,49 zł\nProdukty: 61 zł | Dostawa: 16,49 zł | Razem: 77,49 zł",
       "cartItems": [
         {
@@ -54,7 +54,9 @@
       "delivery": {
         "method": "paczkomat",
         "label": "InPost Paczkomat",
-        "price": 16.49
+        "price": 0,
+        "paymentPrice": 0,
+        "paymentNote": "awdadafsgdfhdfgsfsefs"
       },
       "customer": {
         "name": "Paweł Czapliński",
@@ -68,6 +70,11 @@
           "status": "Nowe",
           "date": "2026-06-19T13:29:45.325Z",
           "note": "Zamówienie zapisane automatycznie"
+        },
+        {
+          "status": "Oczekuje na płatność",
+          "date": "2026-06-19T13:30:45.708Z",
+          "note": "Wysłano dane do płatności. awdadafsgdfhdfgsfsefs"
         }
       ]
     },

@@ -15,7 +15,8 @@
   "categories": [
     "Miłosne",
     "Kwiaty",
-    "Minimalistyczne"
+    "Minimalistyczne",
+    "Gift box"
   ],
   "colorOptions": [
     "Domyślny (jak na zdjęciu)",
@@ -39,6 +40,14 @@
         {
           "maxWeight": 300,
           "price": 10
+        },
+        {
+          "maxWeight": 400,
+          "price": 12
+        },
+        {
+          "maxWeight": 500,
+          "price": 15
         }
       ]
     },
@@ -59,6 +68,14 @@
         {
           "maxWeight": 300,
           "price": 10
+        },
+        {
+          "maxWeight": 400,
+          "price": 12
+        },
+        {
+          "maxWeight": 500,
+          "price": 15
         }
       ]
     },
@@ -79,6 +96,14 @@
         {
           "maxWeight": 300,
           "price": 10
+        },
+        {
+          "maxWeight": 400,
+          "price": 12
+        },
+        {
+          "maxWeight": 500,
+          "price": 15
         }
       ]
     },
@@ -99,6 +124,14 @@
         {
           "maxWeight": 300,
           "price": 10
+        },
+        {
+          "maxWeight": 400,
+          "price": 12
+        },
+        {
+          "maxWeight": 500,
+          "price": 15
         }
       ]
     },
@@ -119,6 +152,14 @@
         {
           "maxWeight": 300,
           "price": 10
+        },
+        {
+          "maxWeight": 400,
+          "price": 12
+        },
+        {
+          "maxWeight": 500,
+          "price": 15
         }
       ]
     },
@@ -139,6 +180,14 @@
         {
           "maxWeight": 300,
           "price": 10
+        },
+        {
+          "maxWeight": 400,
+          "price": 12
+        },
+        {
+          "maxWeight": 500,
+          "price": 15
         }
       ]
     },
@@ -159,6 +208,14 @@
         {
           "maxWeight": 300,
           "price": 10
+        },
+        {
+          "maxWeight": 400,
+          "price": 12
+        },
+        {
+          "maxWeight": 500,
+          "price": 15
         }
       ]
     }

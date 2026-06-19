@@ -208,6 +208,127 @@
       "visible": true,
       "imagePosition": "50% 86%",
       "imageZoom": 1
+    },
+    {
+      "name": "Zestaw home decor",
+      "category": "Gift box",
+      "price": 60,
+      "weight": 470,
+      "image": "/assets/images/nowy-prodkt-1781365830085.png",
+      "description": "Zestaw minimalistycznych, dekoracyjnych świec sojowych stworzony z myślą o miłośnikach nowoczesnego designu. Połączenie geometrycznych form i delikatnych detali tworzy harmonijną kompozycję, która pięknie ozdobi wnętrze salonu, sypialni lub biura. Idealny jako wyjątkowy prezent lub elegancki dodatek do własnej przestrzeni.\nZestaw zawiera 5 świec: kula, harmony, kaktus, spiralna, supełek.",
+      "visible": true,
+      "imagePosition": "50% 84%",
+      "imageZoom": 1
+    },
+    {
+      "name": "Zestaw okrągłe piękno",
+      "category": "Gift box",
+      "price": 25,
+      "weight": 221,
+      "image": "/assets/images/nowy-prodkt-1781367295381.png",
+      "description": "Subtelny duet dekoracyjnych świec sojowych zachwycający prostotą i ponadczasową formą. Delikatne żłobienia oraz naturalny wygląd sprawiają, że zestaw doskonale wpisuje się w styl skandynawski, boho i modern. Idealny dla osób ceniących minimalizm i elegancję.\nZestaw zawiera 2 świece: kula, spiralna.",
+      "visible": true,
+      "imagePosition": "50% 72%",
+      "imageZoom": 1
+    },
+    {
+      "name": "Zestaw sweet love",
+      "category": "Gift box",
+      "price": 13,
+      "weight": 76,
+      "image": "/assets/images/nowy-prodkt-1781367654234.png",
+      "description": "Uroczy zestaw stworzony z myślą o wyjątkowych chwilach. Słodki miś i dekoracyjne serce tworzą romantyczną kompozycję, która świetnie sprawdzi się jako prezent dla ukochanej osoby, na walentynki, rocznicę lub bez okazji – po prostu z miłości.\nZestaw zawiera 2 świece: miś (mały), słodkie serce.",
+      "visible": true,
+      "imagePosition": "50% 74%",
+      "imageZoom": 1
+    },
+    {
+      "name": "Zestaw bloom",
+      "category": "Gift box",
+      "price": 16,
+      "weight": 75,
+      "image": "/assets/images/nowy-prodkt-1781367874264.png",
+      "description": "Wyjątkowa kolekcja dekoracyjnych świec sojowych inspirowanych pięknem kwiatów. Każda świeca została wykonana z dbałością o najmniejszy detal, tworząc efektowną kompozycję, która zachwyca elegancją i subtelnym urokiem. Idealna na prezent lub jako ozdoba wnętrza.\nZestaw zawiera 3 świece: magnolia, stokrotka, kwiatowe połączenie.",
+      "visible": true,
+      "imagePosition": "50% 65%",
+      "imageZoom": 1
+    },
+    {
+      "name": "Zestaw love story",
+      "category": "Gift box",
+      "price": 47,
+      "weight": 357,
+      "image": "/assets/images/nowy-prodkt-1781368246025.png",
+      "description": "Pełen uroku zestaw dekoracyjnych świec sojowych, który zachwyca romantycznym charakterem i dopracowanymi detalami. To wyjątkowa propozycja dla osób szukających oryginalnego prezentu, który wywoła uśmiech i pozostanie piękną pamiątką na długo.\nZestaw zawiera 3 świece: miś (mały), koszyczek róż, kosz serc.",
+      "visible": true,
+      "imagePosition": "50% 70%",
+      "imageZoom": 1
+    },
+    {
+      "name": "Zestaw harmonia",
+      "category": "Gift box",
+      "price": 46,
+      "weight": 376,
+      "image": "/assets/images/nowy-prodkt-1781368610184.png",
+      "description": "Połączenie nowoczesnych linii i klasycznej elegancji. Ten starannie skomponowany zestaw dekoracyjnych świec sojowych przyciąga uwagę minimalistycznym designem i subtelnym urokiem. Idealnie prezentuje się na komodzie, stoliku kawowym lub półce.\nZestaw zawiera 3 świece: harmony, kula, spiralna.",
+      "visible": true,
+      "imagePosition": "50% 73%",
+      "imageZoom": 1
+    },
+    {
+      "name": "Zestaw kwiatowy duet",
+      "category": "Gift box",
+      "price": 18,
+      "weight": 113,
+      "image": "/assets/images/nowy-prodkt-1781368828782.png",
+      "description": "Zestaw inspirowany wiosennym ogrodem pełnym kwitnących kwiatów. Delikatne formy i eleganckie wykonanie sprawiają, że świece stanowią wyjątkową dekorację wnętrza, wprowadzając do niego lekkość, świeżość i naturalne piękno.\nZestaw zawiera 2 świece: piwonia, kwiat warstwowy.",
+      "visible": true,
+      "imagePosition": "50% 67%",
+      "imageZoom": 1
+    },
+    {
+      "name": "Zestaw wyjątkowy moment",
+      "category": "Gift box",
+      "price": 59,
+      "weight": 451,
+      "image": "/assets/images/nowy-prodkt-1781369043132.png",
+      "description": "Delikatny i romantyczny zestaw świec sojowych symbolizujący bliskość, ciepło i piękne wspomnienia. Dzięki subtelnemu wzornictwu będzie idealnym prezentem dla partnera, przyjaciółki lub bliskiej osoby.\nZestaw zawiera 3 świece: miś (duży), serce amour, słodkie serce.",
+      "visible": true,
+      "imagePosition": "50% 84%",
+      "imageZoom": 1
+    },
+    {
+      "name": "Zestaw cozy home",
+      "category": "Gift box",
+      "price": 30,
+      "weight": 259,
+      "image": "/assets/images/nowy-prodkt-1781369297945.png",
+      "description": "Elegancki zestaw świec inspirowany naturalnymi kształtami i spokojem natury. Starannie wykonane detale nadają świecom wyjątkowego charakteru, dzięki czemu stanowią piękną dekorację wnętrza. Doskonały pomysł na prezent na każdą okazję.\nZestaw zawiera 3 świece: kula, spiralna, kaktus.",
+      "visible": true,
+      "imagePosition": "50% 74%",
+      "imageZoom": 1
+    },
+    {
+      "name": "Zestaw romantyczny ogród",
+      "category": "Gift box",
+      "price": 19,
+      "weight": 94,
+      "image": "/assets/images/nowy-prodkt-1781369671269.png",
+      "description": "Połączenie romantycznego serca i kwiatowych detali tworzy niezwykle kobiecą oraz elegancką kompozycję. Ten zestaw świec sojowych doskonale sprawdzi się jako prezent dla bliskiej osoby lub dekoracja nadająca wnętrzu przytulnego charakteru.\nZestaw zawiera 3 świece: piwonia, magnolia, słodkie serce.",
+      "visible": true,
+      "imagePosition": "50% 71%",
+      "imageZoom": 1
+    },
+    {
+      "name": "Zestaw Forever Together",
+      "category": "Gift box",
+      "price": 40,
+      "weight": 327,
+      "image": "/assets/images/swieca-1781370826139.png",
+      "description": "Dwa misie, jedno wyjątkowe przesłanie. „Forever Together” to uroczy zestaw dekoracyjnych świec sojowych symbolizujący bliskość, miłość i najpiękniejsze wspomnienia. Starannie wykonane detale oraz subtelne serca sprawiają, że zestaw zachwyca swoim romantycznym charakterem i doskonale prezentuje się jako dekoracja wnętrza.\nTo idealny prezent dla ukochanej osoby, na rocznicę, walentynki, ślub, zaręczyny lub po prostu jako wyjątkowy gest prosto z serca. Delikatna forma i elegancki wygląd sprawiają, że zestaw będzie piękną pamiątką na długi czas.\nZestaw zawiera 2 świece: miś (mały), miś (duży)",
+      "visible": true,
+      "imagePosition": "50% 76%",
+      "imageZoom": 1
     }
   ]
 }

@@ -1,3 +1,168 @@
 {
-  "orders": []
+  "orders": [
+    {
+      "orderNumber": "CB-20260617-8570",
+      "createdAt": "2026-06-17T19:36:05.417Z",
+      "updatedAt": "2026-06-17T19:38:14.661Z",
+      "status": "W realizacji",
+      "total": "71,49 zł",
+      "cartText": "Świeca kula | waga: 133 g | kolor: Domyślny (jak na zdjęciu) | zapach: Lychee & Mango (+6 zł) | ilość: 1 | cena szt.: 23 zł | razem: 23 zł\nŚwieca harmony | waga: 155 g | kolor: Domyślny (jak na zdjęciu) | zapach: Lychee & Mango (+6 zł) | ilość: 1 | cena szt.: 29 zł | razem: 29 zł\nDostawa: InPost Kurier | koszt: 19,49 zł\nProdukty: 52 zł | Dostawa: 19,49 zł | Razem: 71,49 zł",
+      "cartItems": [
+        {
+          "id": 1781724949764,
+          "name": "Świeca kula",
+          "price": 17,
+          "weight": 133,
+          "image": "/assets/images/s-wieca-kla-1781300954725.png",
+          "imagePosition": "50% 47%",
+          "imageZoom": 1,
+          "scent": "Lychee & Mango",
+          "customScent": "",
+          "colorChoice": "Domyślny (jak na zdjęciu)",
+          "customColor": "",
+          "qty": 1
+        },
+        {
+          "id": 1781724950525,
+          "name": "Świeca harmony",
+          "price": 23,
+          "weight": 155,
+          "image": "/assets/images/s-wieca-harmony-1781302015488.png",
+          "imagePosition": "50% 81%",
+          "imageZoom": 1,
+          "scent": "Lychee & Mango",
+          "customScent": "",
+          "colorChoice": "Domyślny (jak na zdjęciu)",
+          "customColor": "",
+          "qty": 1
+        }
+      ],
+      "delivery": {
+        "method": "kurier",
+        "label": "InPost Kurier",
+        "price": 19.49
+      },
+      "customer": {
+        "name": "Paweł Czapliński",
+        "email": "szalona.babcia14@gmail.com",
+        "phone": "512184340",
+        "address": "Justynówka\n23A",
+        "notes": ""
+      },
+      "history": [
+        {
+          "status": "Nowe",
+          "date": "2026-06-17T19:36:05.417Z",
+          "note": "Zamówienie zapisane automatycznie"
+        },
+        {
+          "status": "Oczekuje na płatność",
+          "date": "2026-06-17T19:36:59.602Z",
+          "note": "Wysłano dane do płatności"
+        },
+        {
+          "status": "W realizacji",
+          "date": "2026-06-17T19:38:14.661Z",
+          "trackingNumber": ""
+        }
+      ],
+      "trackingNumber": ""
+    },
+    {
+      "orderNumber": "CB-20260616-2793",
+      "createdAt": "2026-06-16T19:40:28.903Z",
+      "updatedAt": "2026-06-16T19:53:08.539Z",
+      "status": "W realizacji",
+      "total": "96,49 zł",
+      "cartText": "Świeca kosz serc | waga: 194 g | kolor: Domyślny (jak na zdjęciu) | zapach: Bez zapachu (+0 zł) | ilość: 1 | cena szt.: 27 zł | razem: 27 zł\nŚwieca koszyczek róż | waga: 110 g | kolor: Domyślny (jak na zdjęciu) | zapach: Bez zapachu (+0 zł) | ilość: 1 | cena szt.: 16 zł | razem: 16 zł\nŚwieca bukiet tulipanów | waga: 165 g | kolor: Domyślny (jak na zdjęciu) | zapach: Bez zapachu (+0 zł) | ilość: 1 | cena szt.: 24 zł | razem: 24 zł\nŚwieca kwiat warstwowy | waga: 80 g | kolor: Domyślny (jak na zdjęciu) | zapach: Bez zapachu (+0 zł) | ilość: 1 | cena szt.: 13 zł | razem: 13 zł\nDostawa: InPost Paczkomat | koszt: 16,49 zł\nProdukty: 80 zł | Dostawa: 16,49 zł | Razem: 96,49 zł",
+      "cartItems": [
+        {
+          "id": 1781638658312,
+          "name": "Świeca kosz serc",
+          "price": 27,
+          "weight": 194,
+          "image": "/assets/images/s-wieca-dla-gos-ci-1781302654711.png",
+          "imagePosition": "50% 68%",
+          "imageZoom": 1,
+          "scent": "Bez zapachu",
+          "customScent": "",
+          "colorChoice": "Domyślny (jak na zdjęciu)",
+          "customColor": "",
+          "qty": 1
+        },
+        {
+          "id": 1781638679373,
+          "name": "Świeca koszyczek róż",
+          "price": 16,
+          "weight": 110,
+          "image": "/assets/images/nowy-prodkt-1781303083304.jpg",
+          "imagePosition": "50% 57%",
+          "imageZoom": 1,
+          "scent": "Bez zapachu",
+          "customScent": "",
+          "colorChoice": "Domyślny (jak na zdjęciu)",
+          "customColor": "",
+          "qty": 1
+        },
+        {
+          "id": 1781638703176,
+          "name": "Świeca bukiet tulipanów",
+          "price": 24,
+          "weight": 165,
+          "image": "/assets/images/nowy-prodkt-1781303854002.png",
+          "imagePosition": "50% 61%",
+          "imageZoom": 1,
+          "scent": "Bez zapachu",
+          "customScent": "",
+          "colorChoice": "Domyślny (jak na zdjęciu)",
+          "customColor": "",
+          "qty": 1
+        },
+        {
+          "id": 1781638721261,
+          "name": "Świeca kwiat warstwowy",
+          "price": 13,
+          "weight": 80,
+          "image": "/assets/images/nowy-prodkt-1781304277205.png",
+          "imagePosition": "50% 86%",
+          "imageZoom": 1,
+          "scent": "Bez zapachu",
+          "customScent": "",
+          "colorChoice": "Domyślny (jak na zdjęciu)",
+          "customColor": "",
+          "qty": 1
+        }
+      ],
+      "delivery": {
+        "method": "paczkomat",
+        "label": "InPost Paczkomat",
+        "price": 16.49
+      },
+      "customer": {
+        "name": "Anna Żabicka",
+        "email": "anusia896@gmail.com",
+        "phone": "697972852",
+        "address": "22-600 Tomaszów Lubelski, Poland Asnyka 9",
+        "notes": ""
+      },
+      "history": [
+        {
+          "status": "Nowe",
+          "date": "2026-06-16T19:40:28.903Z",
+          "note": "Zamówienie zapisane automatycznie"
+        },
+        {
+          "status": "Oczekuje na płatność",
+          "date": "2026-06-16T19:50:26.303Z",
+          "note": "Wysłano dane do płatności"
+        },
+        {
+          "status": "W realizacji",
+          "date": "2026-06-16T19:53:08.539Z",
+          "trackingNumber": ""
+        }
+      ],
+      "trackingNumber": ""
+    }
+  ]
 }

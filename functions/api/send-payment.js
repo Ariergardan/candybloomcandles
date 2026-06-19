@@ -22,17 +22,33 @@ function parseMoney(value) {
   return Number(cleaned || 0);
 }
 
+function getDeliveryPriceFromOrder(order) {
+  const direct = parseMoney(order.delivery?.price);
+  if (direct > 0 || String(order.delivery?.price) === "0") return direct;
+
+  const cartText = String(order.cartText || "");
+  const deliveryMatch = cartText.match(/Dostawa:\s*([0-9]+(?:[,.][0-9]{1,2})?)/i);
+  if (deliveryMatch) return parseMoney(deliveryMatch[1]);
+
+  const summaryMatch = cartText.match(/koszt:\s*([0-9]+(?:[,.][0-9]{1,2})?)/i);
+  if (summaryMatch) return parseMoney(summaryMatch[1]);
+
+  const total = parseMoney(order.total);
+  const products = getProductsTotalFromOrder(order);
+  return Math.max(0, total - products);
+}
+
 function getProductsTotalFromOrder(order) {
   const match = String(order.cartText || "").match(/Produkty:\s*([0-9]+(?:[,.][0-9]{1,2})?)/i);
   if (match) return parseMoney(match[1]);
   const total = parseMoney(order.total);
-  const delivery = parseMoney(order.delivery?.price);
+  const delivery = getDeliveryPriceFromOrder(order);
   return Math.max(0, total - delivery);
 }
 
 function applyPaymentDeliveryOverride(order, deliveryPrice, deliveryNote) {
   const productsTotal = getProductsTotalFromOrder(order);
-  const price = Number(deliveryPrice);
+  const price = Number.isNaN(Number(deliveryPrice)) ? getDeliveryPriceFromOrder(order) : Number(deliveryPrice);
   if (!Number.isNaN(price) && price >= 0) {
     order.delivery = {
       ...(order.delivery || {}),
@@ -353,7 +369,7 @@ export async function onRequestGet(context) {
     }
 
     const actionUrl = `/api/send-payment?token=${encodeURIComponent(token)}`;
-    return paymentFormResponse(order, actionUrl, Number(order.delivery?.price || 0));
+    return paymentFormResponse(order, actionUrl, getDeliveryPriceFromOrder(order));
   } catch (error) {
     return htmlResponse("Błąd", "Nie udało się otworzyć formularza płatności: " + (error.message || error), false);
   }

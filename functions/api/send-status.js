@@ -13,6 +13,39 @@ function base64UrlDecode(value) {
   return JSON.parse(decodeURIComponent(escape(atob(b64))));
 }
 
+function formatPrice(value) {
+  const number = Number(value || 0);
+  if (Number.isInteger(number)) return `${number} zł`;
+  return `${number.toFixed(2).replace(".", ",")} zł`;
+}
+
+function parseMoney(value) {
+  const cleaned = String(value || "0").replace(",", ".").replace(/[^0-9.]/g, "");
+  return Number(cleaned || 0);
+}
+
+function getProductsTotalFromCartText(cartText) {
+  const match = String(cartText || "").match(/Produkty:\s*([0-9]+(?:[,.][0-9]{1,2})?)/i);
+  return match ? parseMoney(match[1]) : 0;
+}
+
+function syncCartTextTotals(order) {
+  const deliveryPrice = Number(order.delivery?.price || 0);
+  const productsTotal = getProductsTotalFromCartText(order.cartText);
+  const finalTotal = order.total || formatPrice(productsTotal + deliveryPrice);
+
+  return String(order.cartText || "").split("\n").filter(Boolean).map(line => {
+    if (line.startsWith("Dostawa:")) {
+      const label = order.delivery?.label || line.replace(/^Dostawa:\s*/, "").split("|")[0].trim();
+      return `Dostawa: ${label} | koszt: ${formatPrice(deliveryPrice)}`;
+    }
+    if (line.startsWith("Produkty:")) {
+      return `Produkty: ${formatPrice(productsTotal)} | Dostawa: ${formatPrice(deliveryPrice)} | Razem: ${finalTotal}`;
+    }
+    return line;
+  }).join("\n");
+}
+
 function parseCartRows(cartText) {
   return String(cartText || "").split("\n").filter(Boolean).map(line => {
     const parts = line.split("|").map(p => p.trim());
@@ -21,7 +54,7 @@ function parseCartRows(cartText) {
 }
 
 function productTable(order) {
-  const rows = parseCartRows(order.cartText);
+  const rows = parseCartRows(syncCartTextTotals(order));
   return `
     <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;margin:18px 0;background:#fff;border-radius:18px;overflow:hidden;border:1px solid #eadfd7">
       <thead><tr style="background:#f7eee8">
@@ -233,6 +266,38 @@ async function githubPutFile(env, path, content, message, sha = null) {
   return res.json();
 }
 
+async function getLatestOrderFromHistory(env, orderNumber) {
+  if (!env.GITHUB_TOKEN || !orderNumber) return null;
+
+  const path = "data/orders.json";
+  const file = await githubGetFile(env, path).catch(() => null);
+  if (!file?.content) return null;
+
+  let data = { orders: [] };
+  try { data = JSON.parse(file.content); } catch { return null; }
+
+  if (!Array.isArray(data.orders)) return null;
+  return data.orders.find(o => o.orderNumber === orderNumber) || null;
+}
+
+function mergeLatestOrder(original, latest) {
+  if (!latest) return original;
+  return {
+    ...original,
+    ...latest,
+    customer: {
+      ...(original.customer || {}),
+      ...(latest.customer || {})
+    },
+    delivery: {
+      ...(original.delivery || {}),
+      ...(latest.delivery || {})
+    },
+    cartText: latest.cartText || original.cartText,
+    total: latest.total || original.total
+  };
+}
+
 function statusLabel(status) {
   return {
     in_progress: "W realizacji",
@@ -305,7 +370,9 @@ async function handleSend(context, params) {
     return trackingForm(token, data, status);
   }
 
-  const order = base64UrlDecode(data);
+  const originalOrder = base64UrlDecode(data);
+  const latestOrder = await getLatestOrderFromHistory(context.env, originalOrder.orderNumber);
+  const order = mergeLatestOrder(originalOrder, latestOrder);
   const customer = order.customer || {};
 
   if (!customer.email || !order.orderNumber) {
